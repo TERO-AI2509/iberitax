@@ -33,14 +33,16 @@ jobs:
           pnpm -v
           which pnpm
 
-      - name: Install deps
+      - name: Install deps (workspace)
         run: pnpm install --frozen-lockfile
 
       - name: Prisma generate (web)
-        run: pnpm -C apps/web prisma generate
+        working-directory: apps/web
+        run: pnpm exec prisma generate
 
-      - name: Run tests
-        run: pnpm -C apps/web test -- --ci
+      - name: Run tests (web)
+        working-directory: apps/web
+        run: pnpm test -- --ci
 
   web-smoke:
     name: web-smoke
@@ -61,18 +63,21 @@ jobs:
           pnpm -v
           which pnpm
 
-      - name: Install deps
+      - name: Install deps (workspace)
         run: pnpm install --frozen-lockfile
 
       - name: Prisma generate (web)
-        run: pnpm -C apps/web prisma generate
+        working-directory: apps/web
+        run: pnpm exec prisma generate
 
       - name: Build web
-        run: pnpm -C apps/web build
+        working-directory: apps/web
+        run: pnpm build
 
       - name: Start web (port 3001)
+        working-directory: apps/web
         run: |
-          PORT=3001 pnpm -C apps/web start & echo $! > .app-pid
+          PORT=3001 pnpm start & echo $! > ../../.app-pid
 
       - name: Wait for health
         run: npx --yes wait-on http://localhost:3001/api/health -t 90000

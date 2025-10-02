@@ -1,0 +1,102 @@
+{\rtf1\ansi\ansicpg1252\cocoartf2822
+\cocoatextscaling0\cocoaplatform0{\fonttbl\f0\fswiss\fcharset0 Helvetica;}
+{\colortbl;\red255\green255\blue255;}
+{\*\expandedcolortbl;;}
+\paperw11900\paperh16840\margl1440\margr1440\vieww11520\viewh8400\viewkind0
+\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardirnatural\partightenfactor0
+
+\f0\fs24 \cf0 name: web\
+\
+on:\
+  push:\
+    branches: [ main ]\
+  pull_request:\
+    branches: [ main ]\
+\
+permissions:\
+  contents: read\
+\
+concurrency:\
+  group: web-$\{\{ github.ref \}\}\
+  cancel-in-progress: true\
+\
+jobs:\
+  test:\
+    name: Unit & Integration Tests\
+    runs-on: ubuntu-latest\
+    steps:\
+      - name: Checkout\
+        uses: actions/checkout@v4\
+\
+      - name: Setup Node\
+        uses: actions/setup-node@v4\
+        with:\
+          node-version: '20'\
+          cache: 'pnpm'\
+\
+      - name: Setup pnpm\
+        uses: pnpm/action-setup@v4\
+        with:\
+          version: 9\
+\
+      - name: Install deps\
+        run: pnpm install --frozen-lockfile\
+\
+      - name: Run tests\
+        # keep the existing green test signal\
+        run: pnpm -C apps/web test -- --ci\
+\
+  smoke:\
+    name: Web smoke (port 3001 + artifact)\
+    runs-on: ubuntu-latest\
+    needs: [test] # change to [] if you want smoke to run regardless of tests\
+    steps:\
+      - name: Checkout\
+        uses: actions/checkout@v4\
+\
+      - name: Setup Node\
+        uses: actions/setup-node@v4\
+        with:\
+          node-version: '20'\
+          cache: 'pnpm'\
+\
+      - name: Setup pnpm\
+        uses: pnpm/action-setup@v4\
+        with:\
+          version: 9\
+\
+      - name: Install deps\
+        run: pnpm install --frozen-lockfile\
+\
+      - name: Build web\
+        run: pnpm -C apps/web build\
+\
+      - name: Start web (port 3001)\
+        run: |\
+          PORT=3001 pnpm -C apps/web start & echo $! > .app-pid\
+\
+      - name: Wait for health\
+        run: |\
+          npx --yes wait-on http://localhost:3001/api/health -t 90000\
+\
+      - name: Run smoke (capture to smoke.log; fail on non-zero)\
+        env:\
+          BASE_URL: http://localhost:3001\
+        run: |\
+          set -o pipefail\
+          bash apps/web/tools/smoke.portable.sh |& tee smoke.log\
+\
+      - name: Upload smoke.log (always)\
+        if: always()\
+        uses: actions/upload-artifact@v4\
+        with:\
+          name: smoke.log\
+          path: smoke.log\
+          if-no-files-found: warn\
+          retention-days: 7\
+\
+      - name: Stop web\
+        if: always()\
+        run: |\
+          if [ -f .app-pid ]; then kill $(cat .app-pid) || true; fi\
+}

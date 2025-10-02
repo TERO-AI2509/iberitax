@@ -1,0 +1,9 @@
+{
+  "name": "@iberitax/clients",
+  "version": "0.1.0",
+  "type": "module",
+  "main": "dist/api.js",
+  "types": "dist/api.d.ts",
+  "files": ["dist", "src"],
+  "scripts": { "build": "tsc -p tsconfig.json" }
+}

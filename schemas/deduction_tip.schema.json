@@ -1,0 +1,23 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.iberitax.local/deduction_tip.schema.json",
+  "title": "DeductionTip",
+  "type": "object",
+  "properties": {
+    "id": { "type": "string" },
+    "title": { "type": "string" },
+    "description": { "type": "string" },
+    "eligibility": {
+      "type": "object",
+      "properties": {
+        "reason": { "type": "string" },
+        "meetsCriteria": { "type": "boolean" }
+      },
+      "required": ["reason", "meetsCriteria"],
+      "additionalProperties": false
+    },
+    "estimatedSavings": { "type": "number", "minimum": 0 }
+  },
+  "required": ["id", "title", "description", "eligibility"],
+  "additionalProperties": false
+}

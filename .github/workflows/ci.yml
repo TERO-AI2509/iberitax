@@ -36,6 +36,9 @@ jobs:
       - name: Install deps
         run: pnpm install --frozen-lockfile
 
+      - name: Prisma generate (web)
+        run: pnpm -C apps/web prisma generate
+
       - name: Run tests
         run: pnpm -C apps/web test -- --ci
 
@@ -60,6 +63,9 @@ jobs:
 
       - name: Install deps
         run: pnpm install --frozen-lockfile
+
+      - name: Prisma generate (web)
+        run: pnpm -C apps/web prisma generate
 
       - name: Build web
         run: pnpm -C apps/web build

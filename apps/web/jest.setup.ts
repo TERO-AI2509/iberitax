@@ -1,6 +1,10 @@
 import { TextEncoder, TextDecoder } from 'node:util';
+import { ReadableStream, WritableStream, TransformStream } from 'node:stream/web';
 Object.defineProperty(globalThis, 'TextEncoder', { value: TextEncoder, writable: true });
 Object.defineProperty(globalThis, 'TextDecoder', { value: TextDecoder, writable: true });
+Object.defineProperty(globalThis, 'ReadableStream', { value: ReadableStream, writable: true });
+Object.defineProperty(globalThis, 'WritableStream', { value: WritableStream, writable: true });
+Object.defineProperty(globalThis, 'TransformStream', { value: TransformStream, writable: true });
 import '@testing-library/jest-dom';
 import { fetch, Request, Response, Headers } from 'undici';
 Object.defineProperty(globalThis, 'fetch', { value: fetch, writable: true });

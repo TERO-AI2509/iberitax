@@ -28,6 +28,7 @@ jobs:
         run: pnpm exec prisma generate
       - working-directory: apps/web
         run: pnpm test -- --ci --runInBand --forceExit --detectOpenHandles --testPathIgnorePatterns="dashboard\.guard\.test\.(ts|tsx)|_?api\..*whoami.*\.test\.ts|auth\.redirect\.test\.ts"
+        run: pnpm test -- --ci --runInBand --forceExit --detectOpenHandles
 
   web-smoke:
     name: web-smoke

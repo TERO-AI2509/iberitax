@@ -1,87 +1,85 @@
-name: ci
+name: CI
 on:
   push:
-    branches: [ main ]
+    branches: [ main, "**" ]
   pull_request:
-    branches: [ main ]
-permissions:
-  contents: read
-concurrency:
-  group: ci-${{ github.ref }}
-  cancel-in-progress: true
 jobs:
   test:
     name: test
     runs-on: ubuntu-latest
-    timeout-minutes: 20
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 9
+      - name: Setup Node
+        uses: actions/setup-node@v4
         with:
           node-version: '20'
-      - run: |
-          npm i -g pnpm@9.12.0
-          pnpm -v
-          which pnpm
-      - run: pnpm install --frozen-lockfile
-      - working-directory: apps/web
-        run: pnpm exec prisma generate
-      - working-directory: apps/web
-        run: pnpm test -- --ci --runInBand --forceExit --detectOpenHandles --testPathIgnorePatterns="dashboard\.guard\.test\.(ts|tsx)|_?api\..*whoami.*\.test\.ts|auth\.redirect\.test\.ts"
-        run: pnpm test -- --ci --runInBand --forceExit --detectOpenHandles
-
+          cache: 'pnpm'
+      - name: Install
+        run: pnpm install --frozen-lockfile
+      - name: Run tests
+        run: pnpm -w test
   web-smoke:
     name: web-smoke
     runs-on: ubuntu-latest
-    timeout-minutes: 30
+    timeout-minutes: 20
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 9
+      - name: Setup Node
+        uses: actions/setup-node@v4
         with:
           node-version: '20'
-      - run: |
-          npm i -g pnpm@9.12.0
-          pnpm -v
-          which pnpm
-      - run: pnpm install --frozen-lockfile
-      - working-directory: apps/web
-        run: pnpm exec prisma generate
-      - working-directory: apps/web
-        run: pnpm build
-      - name: Start web
-        working-directory: apps/web
+          cache: 'pnpm'
+      - name: Install
+        run: pnpm install --frozen-lockfile
+      - name: Restore Next.js cache (.next/cache)
+        id: next_cache
+        uses: actions/cache@v4
+        with:
+          path: apps/web/.next/cache
+          key: ${{ runner.os }}-nextcache-web-${{ hashFiles('pnpm-lock.yaml') }}-${{ hashFiles('apps/web/next.config.*','apps/web/tsconfig.json','apps/web/package.json') }}
+          restore-keys: |
+            ${{ runner.os }}-nextcache-web-
+      - name: Measure & run web smoke
+        id: smoke_timed
+        shell: bash
         env:
-          NEXTAUTH_URL: http://localhost:3001
-          NEXTAUTH_SECRET: devsecret-1234567890
-          AUTH_GOOGLE_ID: stub
-          AUTH_GOOGLE_SECRET: stub
-          GOOGLE_CLIENT_ID: stub
-          GOOGLE_CLIENT_SECRET: stub
+          ART_DIR: artifacts/${{ github.run_id }}
         run: |
-          pnpm exec next start -p 3001 > ../../server.log 2>&1 & echo $! > ../../.app-pid
-      - name: Wait for health
-        run: npx --yes wait-on http://localhost:3001 -t 120000
-      - name: Show server.log on failure
-        if: failure()
-        run: |
-          echo "--- server.log (last 200 lines) ---"
-          tail -n 200 server.log || true
-      - name: Run smoke and capture log
-        env:
-          BASE_URL: http://localhost:3001
-        run: bash apps/web/tools/smoke.portable.sh |& tee smoke.log
-      - if: always()
+          set -euo pipefail
+          mkdir -p "$ART_DIR"
+          start_ts=$(date +%s)
+          if [ -x apps/web/tools/smoke.portable.sh ]; then
+            apps/web/tools/smoke.portable.sh --ci
+          else
+            apps/web/tools/smoke.sh --ci
+          fi
+          end_ts=$(date +%s)
+          total=$(( end_ts - start_ts ))
+          echo "$total" > "$ART_DIR/web_smoke_total_seconds.txt"
+          echo "total_seconds=$total" >> "$GITHUB_OUTPUT"
+      - name: Upload STEP41 artifacts
+        if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: smoke.log
-          path: smoke.log
-          retention-days: 7
-      - if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: server.log
-          path: server.log
-          retention-days: 7
-      - if: always()
+          name: step41-smoke-timings-${{ github.run_id }}
+          path: artifacts/${{ github.run_id }}/*
+      - name: STEP41 · Summary
+        if: always()
+        shell: bash
         run: |
-          if [ -f .app-pid ]; then kill $(cat .app-pid) || true; fi
+          {
+            echo "## STEP41 · Next.js cache experiment & timing"
+            echo ""
+            if [ "${{ steps.next_cache.outputs.cache-hit }}" = "true" ]; then
+              echo "- Cache restore: **HIT**"
+            else
+              echo "- Cache restore: **MISS**"
+            fi
+            echo "- web-smoke total (build+boot): **${{ steps.smoke_timed.outputs.total_seconds }}s**"
+          } >> "$GITHUB_STEP_SUMMARY"

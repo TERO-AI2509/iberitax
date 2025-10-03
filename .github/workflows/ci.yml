@@ -30,8 +30,7 @@ jobs:
       - name: Setup pnpm
         uses: pnpm/action-setup@v4
         with:
-          version: 9.0.0
-          version: 9
+          run_install: false
 
       - name: Get pnpm store path
         id: pnpm-cache
@@ -45,6 +44,9 @@ jobs:
           key: ${{ runner.os }}-pnpmstore-${{ hashFiles('**/pnpm-lock.yaml') }}
           restore-keys: |
             ${{ runner.os }}-pnpmstore-
+
+      - name: Report pnpm cache status
+        run: echo "pnpm_cache_hit=${{ steps.restore-cache.outputs['cache-hit'] }}"
 
       - name: Install
         run: pnpm install --frozen-lockfile
@@ -69,8 +71,7 @@ jobs:
       - name: Setup pnpm
         uses: pnpm/action-setup@v4
         with:
-          version: 9.0.0
-          version: 9
+          run_install: false
 
       - name: Get pnpm store path
         id: pnpm-cache
@@ -84,6 +85,9 @@ jobs:
           key: ${{ runner.os }}-pnpmstore-${{ hashFiles('**/pnpm-lock.yaml') }}
           restore-keys: |
             ${{ runner.os }}-pnpmstore-
+
+      - name: Report pnpm cache status
+        run: echo "pnpm_cache_hit=${{ steps.restore-cache.outputs['cache-hit'] }}"
 
       - name: Install
         run: pnpm install --frozen-lockfile
@@ -105,18 +109,18 @@ jobs:
           LOG: smoke.log
         run: bash apps/web/tools/smoke.portable.sh | tee -a smoke.log
 
-      - name: Ensure artifact files exist
-        if: always()
-        run: |
-          : > smoke.log
-          : > server.log
-
       - name: Append server.log tail to summary on failure
         if: failure()
         run: |
           echo '```' >> "$GITHUB_STEP_SUMMARY"
           tail -n 200 server.log >> "$GITHUB_STEP_SUMMARY"
           echo '```' >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Ensure artifact files exist
+        if: always()
+        run: |
+          : > smoke.log
+          : > server.log
 
       - name: Upload smoke.log
         if: always()
@@ -138,21 +142,3 @@ jobs:
         if: always()
         run: |
           if [ -f .app-pid ]; then kill "$(cat .app-pid)" || true; fi
-
-# Optional Next.js persistent cache (disabled by default)
-# To enable, add these two steps after "Install" in both jobs:
-#
-#   - name: Restore Next cache
-#     uses: actions/cache@v4
-#     with:
-#       path: apps/web/.next/cache
-#       key: ${{ runner.os }}-next-${{ hashFiles('apps/web/package.json') }}-${{ hashFiles('**/pnpm-lock.yaml') }}
-#       restore-keys: |
-#         ${{ runner.os }}-next-
-#
-#   - name: Save Next cache
-#     if: success()
-#     uses: actions/cache/save@v4
-#     with:
-#       path: apps/web/.next/cache
-#       key: ${{ runner.os }}-next-${{ hashFiles('apps/web/package.json') }}-${{ hashFiles('**/pnpm-lock.yaml') }}

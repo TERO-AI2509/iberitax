@@ -1,0 +1,1 @@
+import fs from "node:fs"; import { preprocessImageBuffer } from "../packages/ocr/dist/index.js"; const buf=fs.readFileSync("tests/fixtures/ocr/hola.png"); preprocessImageBuffer(buf,{deskew:true,blurRadius:1,binarize:true}).then(b=>{ console.log("bytes",b.length); process.exit(0); }).catch(e=>{ console.error(e); process.exit(1); });

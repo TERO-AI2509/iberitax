@@ -21,7 +21,9 @@
     "test": "pnpm -C packages/extractor test",
     "build:ocr": "pnpm --filter @iberitax/ocr build",
     "smoke:ocr": "node scripts/ocr.smoke.mjs",
-    "smoke:ocr:pdf": "node scripts/ocr.pdf.smoke.mjs"
+    "smoke:ocr:pdf": "node scripts/ocr.pdf.smoke.mjs",
+    "smoke:ocr:pre": "node scripts/ocr.pre.smoke.mjs",
+    "smoke:ocr:norm": "node scripts/ocr.norm.smoke.mjs"
   },
   "devDependencies": {
     "@babel/preset-env": "^7.28.3",

@@ -24,7 +24,8 @@
     "smoke:ocr:pdf": "node scripts/ocr.pdf.smoke.mjs",
     "smoke:ocr:pre": "node scripts/ocr.pre.smoke.mjs",
     "smoke:ocr:norm": "node scripts/ocr.normalize.smoke.mjs",
-    "smoke:ocr:norm:pdf": "node scripts/ocr.norm.pdf.smoke.mjs"
+    "smoke:ocr:norm:pdf": "node scripts/ocr.norm.pdf.smoke.mjs",
+    "smoke:ocr:all": "pnpm smoke:ocr:pre && pnpm smoke:ocr:norm"
   },
   "devDependencies": {
     "@babel/preset-env": "^7.28.3",

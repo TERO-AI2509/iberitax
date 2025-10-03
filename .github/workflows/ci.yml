@@ -40,6 +40,8 @@ jobs:
       - name: OCR preprocess smoke
       - name: OCR normalize smoke
         run: pnpm smoke:ocr:norm
+      - name: OCR normalize smoke
+        run: pnpm smoke:ocr:norm
         run: pnpm smoke:ocr:pre
       - name: OCR PDF smoke
         run: pnpm smoke:ocr:pdf

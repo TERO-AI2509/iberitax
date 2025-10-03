@@ -1,1 +1,24 @@
-export function normalizeSpanishText(t:string){ let s=t; s=s.replace(/[€\s]*([\d\.\s]+,\d{2})\s*€?/g,(m,v)=>{ const n=v.replace(/\./g,"").replace(/\s/g,"").replace(",","."); return n+" EUR"; }); s=s.replace(/\b(\d{1,2})\/(\d{1,2})\/(\d{4})\b/g,(_,d,m,y)=>{ const dd=d.padStart(2,"0"); const mm=m.padStart(2,"0"); return `${y}-${mm}-${dd}`; }); s=s.replace(/\b(\d{1,3}(\.\d{3})+)(?![,.\d])\b/g,(_,v)=>v.replace(/\./g,"")); s=s.replace(/\b(\d+),(\d{1,3})\b/g,(_,a,b)=>a+"."+b); s=s.replace(/€/g,"EUR"); return s; }
+export function normalizeSpanishText(input: string): string {
+  let t = input;
+
+  t = t.replace(/€/g, "EUR");
+
+  t = t.replace(/\b\d{1,3}(?:\.\d{3})+(?:,\d+)?\b/g, (m) => {
+    const noThousands = m.replace(/\./g, "");
+    return noThousands.replace(",", ".");
+  });
+
+  t = t.replace(/\b(\d+)\s*EUR\b/g, (_m, n) => `${n} EUR`);
+  t = t.replace(/\bEUR\s*(\d+(?:\.\d+)?)\b/g, (_m, n) => `EUR ${n}`);
+
+  t = t.replace(/\b([0-3]?\d)[\/\-]([01]?\d)[\/\-]((?:19|20)?\d{2})\b/g, (_m, d, m, y) => {
+    const day = String(d).padStart(2, "0");
+    const mon = String(m).padStart(2, "0");
+    let year = String(y);
+    if (year.length === 2) year = (parseInt(year, 10) >= 70 ? "19" : "20") + year;
+    return `${year}-${mon}-${day}`;
+  });
+
+  t = t.replace(/\s{2,}/g, " ");
+  return t.trim();
+}

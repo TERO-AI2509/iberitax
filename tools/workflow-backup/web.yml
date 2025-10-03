@@ -1,0 +1,92 @@
+name: web
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: web-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  test:
+    name: Unit & Integration Tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install pnpm
+        run: |
+          npm i -g pnpm@9.12.0
+          pnpm -v
+          which pnpm
+
+      - name: Install deps
+        run: pnpm install --frozen-lockfile
+
+      - name: Run tests
+        run: pnpm -C apps/web test -- --ci
+
+  smoke:
+    name: Web smoke (port 3001 + artifact)
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install pnpm
+        run: |
+          npm i -g pnpm@9.12.0
+          pnpm -v
+          which pnpm
+
+      - name: Install deps
+        run: pnpm install --frozen-lockfile
+
+      - name: Build web
+        run: pnpm -C apps/web build
+
+      - name: Start web (port 3001)
+        run: |
+          PORT=3001 pnpm -C apps/web start & echo $! > .app-pid
+
+      - name: Wait for health
+        run: npx --yes wait-on http://localhost:3001/api/health -t 90000
+
+      - name: Run smoke and capture log
+        env:
+          BASE_URL: http://localhost:3001
+        run: |
+          set -o pipefail
+          bash apps/web/tools/smoke.portable.sh |& tee smoke.log
+
+      - name: Upload smoke.log (always)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: smoke.log
+          path: smoke.log
+          retention-days: 7
+
+      - name: Stop web
+        if: always()
+        run: |
+          if [ -f .app-pid ]; then kill $(cat .app-pid) || true; fi

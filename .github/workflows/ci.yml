@@ -18,7 +18,6 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      # Install pnpm based on "packageManager" in package.json (no "version" input!)
       - name: Setup PNPM
         uses: pnpm/action-setup@v4
         with:
@@ -47,7 +46,6 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      # Install pnpm based on "packageManager" in package.json (no "version" input!)
       - name: Setup PNPM
         uses: pnpm/action-setup@v4
         with:
@@ -66,19 +64,20 @@ jobs:
         run: pnpm install --frozen-lockfile
 
       - name: Run smoke and save timing artifact
-	  if: always()
-	  run: |
-	    START_TS=$(date +%s)
-	    set +e
-	    chmod +x apps/web/tools/smoke.portable.sh
-	    bash apps/web/tools/smoke.portable.sh
-	    EXIT_CODE=$?
-	    END_TS=$(date +%s)
-	    TOTAL=$((END_TS - START_TS))
-	    mkdir -p "artifacts/${{ github.run_id }}"
-	    echo "$TOTAL" > "artifacts/${{ github.run_id }}/web_smoke_total_seconds.txt"
-	    printf "web-smoke total seconds: %s\n" "$TOTAL" >> "$GITHUB_STEP_SUMMARY"
-	    exit $EXIT_CODE
+        if: always()
+        shell: bash
+        run: |
+          START_TS=$(date +%s)
+          set +e
+          chmod +x apps/web/tools/smoke.portable.sh
+          bash apps/web/tools/smoke.portable.sh
+          EXIT_CODE=$?
+          END_TS=$(date +%s)
+          TOTAL=$((END_TS - START_TS))
+          mkdir -p "artifacts/${{ github.run_id }}"
+          echo "$TOTAL" > "artifacts/${{ github.run_id }}/web_smoke_total_seconds.txt"
+          printf "web-smoke total seconds: %s\n" "$TOTAL" >> "$GITHUB_STEP_SUMMARY"
+          exit $EXIT_CODE
 
       - name: Upload timing artifact
         if: always()
@@ -87,3 +86,4 @@ jobs:
           name: web-smoke-timing-${{ github.run_id }}
           path: artifacts/${{ github.run_id }}/web_smoke_total_seconds.txt
           if-no-files-found: error
+

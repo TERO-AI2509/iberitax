@@ -1,4 +1,4 @@
-/** Minimal Jest config for TS in Next.js without Babel */
+/** Jest config for TS in Next.js without Babel */
 module.exports = {
   rootDir: '.',
   testEnvironment: 'jsdom',

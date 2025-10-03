@@ -63,9 +63,32 @@ jobs:
       - name: Install
         run: pnpm install --frozen-lockfile
 
+      - name: Build web
+        run: pnpm --filter @iberitax/web build
+
+      - name: Start Next server (port 3001)
+        run: |
+          nohup pnpm --filter @iberitax/web exec next start -p 3001 > server.log 2>&1 &
+          echo $! > server.pid
+
+      - name: Wait for server to be ready
+        shell: bash
+        run: |
+          for i in {1..60}; do
+            if curl -fsS http://localhost:3001/ >/dev/null; then
+              echo "Server is up"
+              exit 0
+            fi
+            sleep 1
+          done
+          echo "Server did not become ready in time" >&2
+          exit 1
+
       - name: Run smoke and save timing artifact
         if: always()
         shell: bash
+        env:
+          BASE_URL: http://localhost:3001
         run: |
           START_TS=$(date +%s)
           set +e
@@ -86,4 +109,13 @@ jobs:
           name: web-smoke-timing-${{ github.run_id }}
           path: artifacts/${{ github.run_id }}/web_smoke_total_seconds.txt
           if-no-files-found: error
+
+      - name: Stop server
+        if: always()
+        run: |
+          if [ -f server.pid ]; then
+            kill $(cat server.pid) || true
+          fi
+          sleep 1
+          pkill -f "next start" || true
 

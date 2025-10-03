@@ -1,87 +1,148 @@
 name: ci
+
 on:
   push:
     branches: [ main ]
   pull_request:
     branches: [ main ]
+
 permissions:
   contents: read
+
 concurrency:
   group: ci-${{ github.ref }}
   cancel-in-progress: true
+
 jobs:
   test:
     name: test
     runs-on: ubuntu-latest
     timeout-minutes: 20
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
         with:
-          node-version: '20'
-      - run: |
-          npm i -g pnpm@9.12.0
-          pnpm -v
-          which pnpm
-      - run: pnpm install --frozen-lockfile
-      - working-directory: apps/web
-        run: pnpm exec prisma generate
-      - working-directory: apps/web
-        run: pnpm test -- --ci --runInBand --forceExit --detectOpenHandles --testPathIgnorePatterns="dashboard\.guard\.test\.(ts|tsx)|_?api\..*whoami.*\.test\.ts|auth\.redirect\.test\.ts"
-        run: pnpm test -- --ci --runInBand --forceExit --detectOpenHandles
+          node-version: '20.x'
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9
+
+      - name: Get pnpm store path
+        id: pnpm-cache
+        run: echo "STORE_PATH=$(pnpm store path)" >> "$GITHUB_OUTPUT"
+
+      - name: Restore pnpm store cache
+        uses: actions/cache@v4
+        with:
+          path: ${{ steps.pnpm-cache.outputs.STORE_PATH }}
+          key: ${{ runner.os }}-pnpmstore-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-pnpmstore-
+
+      - name: Install
+        run: pnpm install --frozen-lockfile
+
+      - name: Test
+        run: pnpm -w test
 
   web-smoke:
     name: web-smoke
     runs-on: ubuntu-latest
-    timeout-minutes: 30
+    needs: test
+    timeout-minutes: 20
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
         with:
-          node-version: '20'
-      - run: |
-          npm i -g pnpm@9.12.0
-          pnpm -v
-          which pnpm
-      - run: pnpm install --frozen-lockfile
-      - working-directory: apps/web
-        run: pnpm exec prisma generate
-      - working-directory: apps/web
-        run: pnpm build
-      - name: Start web
-        working-directory: apps/web
-        env:
-          NEXTAUTH_URL: http://localhost:3001
-          NEXTAUTH_SECRET: devsecret-1234567890
-          AUTH_GOOGLE_ID: stub
-          AUTH_GOOGLE_SECRET: stub
-          GOOGLE_CLIENT_ID: stub
-          GOOGLE_CLIENT_SECRET: stub
+          node-version: '20.x'
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9
+
+      - name: Get pnpm store path
+        id: pnpm-cache
+        run: echo "STORE_PATH=$(pnpm store path)" >> "$GITHUB_OUTPUT"
+
+      - name: Restore pnpm store cache
+        uses: actions/cache@v4
+        with:
+          path: ${{ steps.pnpm-cache.outputs.STORE_PATH }}
+          key: ${{ runner.os }}-pnpmstore-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-pnpmstore-
+
+      - name: Install
+        run: pnpm install --frozen-lockfile
+
+      - name: Build web app
+        run: pnpm -w --filter @iberitax/web build
+
+      - name: Start web app
         run: |
-          pnpm exec next start -p 3001 > ../../server.log 2>&1 & echo $! > ../../.app-pid
-      - name: Wait for health
-        run: npx --yes wait-on http://localhost:3001 -t 120000
-      - name: Show server.log on failure
-        if: failure()
-        run: |
-          echo "--- server.log (last 200 lines) ---"
-          tail -n 200 server.log || true
-      - name: Run smoke and capture log
+          PORT=3001 pnpm -w --filter @iberitax/web start > server.log 2>&1 & echo $! > .app-pid
+          for i in $(seq 1 60); do
+            curl -fsS "http://localhost:3001/login" >/dev/null && break
+            sleep 1
+          done
+
+      - name: Run smoke
         env:
           BASE_URL: http://localhost:3001
-        run: bash apps/web/tools/smoke.portable.sh |& tee smoke.log
-      - if: always()
+          LOG: smoke.log
+        run: bash apps/web/tools/smoke.portable.sh | tee -a smoke.log
+
+      - name: Append server.log tail to summary on failure
+        if: failure()
+        run: |
+          echo '```' >> "$GITHUB_STEP_SUMMARY"
+          tail -n 200 server.log >> "$GITHUB_STEP_SUMMARY"
+          echo '```' >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Upload smoke.log
+        if: always()
         uses: actions/upload-artifact@v4
         with:
           name: smoke.log
           path: smoke.log
           retention-days: 7
-      - if: always()
+
+      - name: Upload server.log
+        if: always()
         uses: actions/upload-artifact@v4
         with:
           name: server.log
           path: server.log
           retention-days: 7
-      - if: always()
+
+      - name: Stop web app
+        if: always()
         run: |
-          if [ -f .app-pid ]; then kill $(cat .app-pid) || true; fi
+          if [ -f .app-pid ]; then kill "$(cat .app-pid)" || true; fi
+
+# Optional Next.js persistent cache (disabled by default)
+# To enable, add these two steps after "Install" in both jobs:
+#
+#   - name: Restore Next cache
+#     uses: actions/cache@v4
+#     with:
+#       path: apps/web/.next/cache
+#       key: ${{ runner.os }}-next-${{ hashFiles('apps/web/package.json') }}-${{ hashFiles('**/pnpm-lock.yaml') }}
+#       restore-keys: |
+#         ${{ runner.os }}-next-
+#
+#   - name: Save Next cache
+#     if: success()
+#     uses: actions/cache/save@v4
+#     with:
+#       path: apps/web/.next/cache
+#       key: ${{ runner.os }}-next-${{ hashFiles('apps/web/package.json') }}-${{ hashFiles('**/pnpm-lock.yaml') }}

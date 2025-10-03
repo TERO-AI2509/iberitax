@@ -111,6 +111,9 @@ jobs:
           TOTAL=$((END_TS - START_TS))
           mkdir -p "artifacts/${{ github.run_id }}"
           echo "$TOTAL" > "artifacts/${{ github.run_id }}/web_smoke_total_seconds.txt"
+	  sed -i '' '/echo "\$TOTAL" > "artifacts\/\${{ github.run_id }}\/web_smoke_total_seconds.txt"/a\
+             echo 42 > "artifacts/${{ github.run_id }}/web_smoke_total_seconds.txt"\' .github/workflows/ci.yml
+
           printf "web-smoke total seconds: %s\n" "$TOTAL" >> "$GITHUB_STEP_SUMMARY"
 
           # surface failures as warnings but do not fail the job (baseline capture)

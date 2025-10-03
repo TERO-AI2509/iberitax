@@ -86,3 +86,4 @@ jobs:
           name: web-smoke-timing-${{ github.run_id }}
           path: artifacts/${{ github.run_id }}/web_smoke_total_seconds.txt
           if-no-files-found: error
+

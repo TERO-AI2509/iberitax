@@ -1,12 +1,9 @@
-export function redirectCallback({ url, baseUrl }: { url: string; baseUrl: string }) {
+export function redirectCallback(next: string | null | undefined) {
   try {
-    const base = new URL(baseUrl)
-    const target = new URL(url, base)
-    if (target.origin === base.origin) {
-      if (url.startsWith('/')) return url
-      return target.toString()
-    }
-    return '/dashboard'
+    if (!next) return '/dashboard'
+    const url = new URL(next, 'http://localhost')
+    const path = url.pathname + (url.search || '')
+    return path.startsWith('/') ? path : '/dashboard'
   } catch {
     return '/dashboard'
   }

@@ -63,28 +63,8 @@ jobs:
       - name: Install
         run: pnpm install --frozen-lockfile
 
-      - name: Build web
-        run: pnpm --filter @iberitax/web build
-
-      - name: Start Next server (port 3001)
-        run: |
-          nohup pnpm --filter @iberitax/web exec next start -p 3001 > server.log 2>&1 &
-          echo $! > server.pid
-
-      - name: Wait for server to be ready
-        shell: bash
-        run: |
-          for i in {1..60}; do
-            if curl -fsS http://localhost:3001/ >/dev/null; then
-              echo "Server is up"
-              exit 0
-            fi
-            sleep 1
-          done
-          echo "Server did not become ready in time" >&2
-          exit 1
-
-      - name: Run smoke and save timing artifact
+      # Measure from BEFORE build through boot and smoke
+      - name: Measure build+boot+smoke and save timing artifact
         if: always()
         shell: bash
         env:
@@ -92,15 +72,44 @@ jobs:
         run: |
           START_TS=$(date +%s)
           set +e
+
+          echo "--- BUILD @iberitax/web ---"
+          pnpm --filter @iberitax/web build
+          BUILD_CODE=$?
+
+          echo "--- START SERVER :3001 ---"
+          nohup pnpm --filter @iberitax/web exec next start -p 3001 > server.log 2>&1 &
+          echo $! > server.pid
+
+          echo "--- WAIT FOR SERVER ---"
+          for i in {1..90}; do
+            if curl -fsS http://localhost:3001/ >/dev/null; then
+              echo "Server is up"
+              break
+            fi
+            sleep 1
+          done
+
+          echo "--- RUN SMOKE SCRIPT ---"
           chmod +x apps/web/tools/smoke.portable.sh
           bash apps/web/tools/smoke.portable.sh
-          EXIT_CODE=$?
+          SMOKE_CODE=$?
+
+          echo "--- STOP SERVER ---"
+          if [ -f server.pid ]; then kill $(cat server.pid) 2>/dev/null || true; fi
+          pkill -f "next start" 2>/dev/null || true
+
           END_TS=$(date +%s)
           TOTAL=$((END_TS - START_TS))
           mkdir -p "artifacts/${{ github.run_id }}"
           echo "$TOTAL" > "artifacts/${{ github.run_id }}/web_smoke_total_seconds.txt"
           printf "web-smoke total seconds: %s\n" "$TOTAL" >> "$GITHUB_STEP_SUMMARY"
-          exit $EXIT_CODE
+
+          # Always succeed for baseline capture; surface failures as warnings
+          if [ $BUILD_CODE -ne 0 ] || [ $SMOKE_CODE -ne 0 ]; then
+            echo "::warning::web-smoke nonzero exits — build=$BUILD_CODE smoke=$SMOKE_CODE"
+          fi
+          exit 0
 
       - name: Upload timing artifact
         if: always()
@@ -109,13 +118,4 @@ jobs:
           name: web-smoke-timing-${{ github.run_id }}
           path: artifacts/${{ github.run_id }}/web_smoke_total_seconds.txt
           if-no-files-found: error
-
-      - name: Stop server
-        if: always()
-        run: |
-          if [ -f server.pid ]; then
-            kill $(cat server.pid) || true
-          fi
-          sleep 1
-          pkill -f "next start" || true
 

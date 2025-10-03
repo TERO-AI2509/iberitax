@@ -1,5 +1,5 @@
 import NextAuth from "next-auth";
-import { redirectCallback } from '../../../lib/authRedirect';
+import { redirectCallback } from '../../../../lib/authRedirect';
 import { authOptions } from "@/lib/auth";
 
 /**

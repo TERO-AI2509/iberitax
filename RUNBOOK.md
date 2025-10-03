@@ -53,3 +53,45 @@ Decision rubric:
 - Revert if corruption symptoms or variance >2× baseline.
 
 Invalidation: naturally handled by key inputs. Emergency bust via suffix on the key.
+## STEP41 · Next.js build cache experiment (CI)
+
+Goal: Improve CI time for web-smoke by restoring .next/cache.
+
+What we measure: single stopwatch around the full smoke flow (build + boot) with result in:
+artifacts/<run_id>/web_smoke_total_seconds.txt
+
+Cache scope: apps/web/.next/cache
+
+Cache key:
+- OS
+- pnpm-lock.yaml
+- apps/web/next.config.*
+- apps/web/tsconfig.json
+- apps/web/package.json
+
+Decision rubric:
+- Keep if median web-smoke total improves by ≥10% over 5 runs and no flakiness observed.
+- Revert if corruption symptoms or variance >2× baseline.
+
+Invalidation: naturally handled by key inputs. Emergency bust via suffix on the key.
+## STEP41 · Next.js build cache experiment (CI)
+
+Goal: Improve CI time for web-smoke by restoring .next/cache.
+
+What we measure: single stopwatch around the full smoke flow (build + boot) with result in:
+artifacts/<run_id>/web_smoke_total_seconds.txt
+
+Cache scope: apps/web/.next/cache
+
+Cache key:
+- OS
+- pnpm-lock.yaml
+- apps/web/next.config.*
+- apps/web/tsconfig.json
+- apps/web/package.json
+
+Decision rubric:
+- Keep if median web-smoke total improves by ≥10% over 5 runs and no flakiness observed.
+- Revert if corruption symptoms or variance >2× baseline.
+
+Invalidation: naturally handled by key inputs. Emergency bust via suffix on the key.

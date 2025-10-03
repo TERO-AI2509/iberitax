@@ -37,6 +37,7 @@ jobs:
         run: echo "STORE_PATH=$(pnpm store path)" >> "$GITHUB_OUTPUT"
 
       - name: Restore pnpm store cache
+        id: restore-cache
         uses: actions/cache@v4
         with:
           path: ${{ steps.pnpm-cache.outputs.STORE_PATH }}
@@ -74,6 +75,7 @@ jobs:
         run: echo "STORE_PATH=$(pnpm store path)" >> "$GITHUB_OUTPUT"
 
       - name: Restore pnpm store cache
+        id: restore-cache
         uses: actions/cache@v4
         with:
           path: ${{ steps.pnpm-cache.outputs.STORE_PATH }}
@@ -100,6 +102,12 @@ jobs:
           BASE_URL: http://localhost:3001
           LOG: smoke.log
         run: bash apps/web/tools/smoke.portable.sh | tee -a smoke.log
+
+      - name: Ensure artifact files exist
+        if: always()
+        run: |
+          : > smoke.log
+          : > server.log
 
       - name: Append server.log tail to summary on failure
         if: failure()

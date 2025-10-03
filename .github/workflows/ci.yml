@@ -27,7 +27,7 @@ jobs:
       - working-directory: apps/web
         run: pnpm exec prisma generate
       - working-directory: apps/web
-        run: pnpm test -- --ci --runInBand --testPathIgnorePatterns="dashboard\.guard\.test\.(ts|tsx)|_?api\..*whoami.*\.test\.ts|auth\.redirect\.test\.ts"
+        run: pnpm test -- --ci --runInBand --forceExit --detectOpenHandles --testPathIgnorePatterns="dashboard\.guard\.test\.(ts|tsx)|_?api\..*whoami.*\.test\.ts|auth\.redirect\.test\.ts"
   web-smoke:
     name: web-smoke
     runs-on: ubuntu-latest
@@ -47,19 +47,23 @@ jobs:
       - working-directory: apps/web
         run: pnpm build
       - name: Start web
+        working-directory: apps/web
         env:
-          PORT: '3001'
           NEXTAUTH_URL: http://localhost:3001
           NEXTAUTH_SECRET: devsecret-1234567890
-          GOOGLE_CLIENT_ID: stub
-          GOOGLE_CLIENT_SECRET: stub
           AUTH_GOOGLE_ID: stub
           AUTH_GOOGLE_SECRET: stub
-        working-directory: apps/web
+          GOOGLE_CLIENT_ID: stub
+          GOOGLE_CLIENT_SECRET: stub
         run: |
-          pnpm start > ../../server.log 2>&1 & echo $! > ../../.app-pid
+          pnpm start -- -p 3001 > ../../server.log 2>&1 & echo $! > ../../.app-pid
       - name: Wait for health
         run: npx --yes wait-on http://localhost:3001 -t 120000
+      - name: Show server.log on failure
+        if: failure()
+        run: |
+          echo "--- server.log (last 200 lines) ---"
+          tail -n 200 server.log || true
       - name: Run smoke and capture log
         env:
           BASE_URL: http://localhost:3001

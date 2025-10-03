@@ -2,25 +2,17 @@ name: CI
 
 on:
   push:
-    branches:
-      - main
-      - '**'
+    branches: [ main, "**" ]
   pull_request:
-    branches:
-      - main
-      - '**'
 
 jobs:
   test:
     name: test
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-      # Install pnpm based on "packageManager" in package.json
-      - name: Setup PNPM
-        uses: pnpm/action-setup@v4
+      - uses: pnpm/action-setup@v4
         with:
           run_install: false
 
@@ -29,9 +21,6 @@ jobs:
         with:
           node-version: '20'
           cache: 'pnpm'
-
-      - name: Verify pnpm
-        run: pnpm --version
 
       - name: Install
         run: pnpm install --frozen-lockfile
@@ -44,12 +33,9 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 20
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-      # Install pnpm based on "packageManager" in package.json
-      - name: Setup PNPM
-        uses: pnpm/action-setup@v4
+      - uses: pnpm/action-setup@v4
         with:
           run_install: false
 
@@ -59,21 +45,21 @@ jobs:
           node-version: '20'
           cache: 'pnpm'
 
-      - name: Verify pnpm
-        run: pnpm --version
-
       - name: Install
         run: pnpm install --frozen-lockfile
 
       - name: Build web
         run: pnpm --filter @iberitax/web build
 
-      - name: Start Next server (port 3001)
+      - name: Start Next server
+        shell: bash
+        env:
+          PORT: 3001
         run: |
-          nohup pnpm --filter @iberitax/web exec next start -p 3001 > server.log 2>&1 &
+          pnpm --filter @iberitax/web exec next start -p "$PORT" > server.log 2>&1 &
           echo $! > server.pid
 
-      - name: Wait for server to be ready
+      - name: Wait for server (up to 90s)
         shell: bash
         run: |
           for i in {1..90}; do
@@ -87,7 +73,6 @@ jobs:
           exit 1
 
       # Measure build+boot+smoke and always write artifacts, even if smoke fails
-
       - name: Measure build+boot+smoke and save timing artifact
         if: always()
         shell: bash
@@ -111,12 +96,8 @@ jobs:
           TOTAL=$((END_TS - START_TS))
           mkdir -p "artifacts/${{ github.run_id }}"
           echo "$TOTAL" > "artifacts/${{ github.run_id }}/web_smoke_total_seconds.txt"
-	  sed -i '' '/echo "\$TOTAL" > "artifacts\/\${{ github.run_id }}\/web_smoke_total_seconds.txt"/a\
-             echo 42 > "artifacts/${{ github.run_id }}/web_smoke_total_seconds.txt"\' .github/workflows/ci.yml
-
           printf "web-smoke total seconds: %s\n" "$TOTAL" >> "$GITHUB_STEP_SUMMARY"
 
-          # surface failures as warnings but do not fail the job (baseline capture)
           if [ $SMOKE_CODE -ne 0 ]; then
             echo "::warning::web-smoke exited nonzero (code=$SMOKE_CODE)"
           fi
@@ -130,21 +111,20 @@ jobs:
           path: artifacts/${{ github.run_id }}/web_smoke_total_seconds.txt
           if-no-files-found: error
 
-- name: Guardrail: warn on slow smoke
-  if: always()
-  shell: bash
-  run: |
-    TFILE="artifacts/${{ github.run_id }}/web_smoke_total_seconds.txt"
-    if [ ! -f "$TFILE" ]; then
-      echo "::warning title=Smoke timing missing::$TFILE not found"
-      exit 0
-    fi
-    SECS="$(tr -d '\r\n' < "$TFILE")"
-    THRESHOLD="35"
-    if awk -v s="$SECS" -v t="$THRESHOLD" 'BEGIN{exit !(s+0>t+0)}'; then
-      echo "::warning title=Smoke timing regression::web-smoke took ${SECS}s (> ${THRESHOLD}s baseline×1.25)"
-    fi
-
+      - name: Guardrail: warn on slow smoke
+        if: always()
+        shell: bash
+        run: |
+          TFILE="artifacts/${{ github.run_id }}/web_smoke_total_seconds.txt"
+          if [ ! -f "$TFILE" ]; then
+            echo "::warning title=Smoke timing missing::$TFILE not found"
+            exit 0
+          fi
+          SECS="$(tr -d '\r\n' < "$TFILE")"
+          THRESHOLD="35"
+          if awk -v s="$SECS" -v t="$THRESHOLD" 'BEGIN{exit !(s+0>t+0)}'; then
+            echo "::warning title=Smoke timing regression::web-smoke took ${SECS}s (> ${THRESHOLD}s baseline×1.25)"
+          fi
 
       - name: Upload logs (server & smoke)
         if: always()

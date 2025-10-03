@@ -1,0 +1,1 @@
+import fs from "node:fs"; import { ocrBuffer } from "../packages/ocr/dist/index.js"; const buf = fs.readFileSync("tests/fixtures/ocr/hola.png"); ocrBuffer(buf,{lang:"spa"}).then(t=>{ console.log(t.trim()); if(!t.toLowerCase().includes("hola")){ process.exitCode=1; } }).catch(e=>{ console.error(e); process.exitCode=1; });

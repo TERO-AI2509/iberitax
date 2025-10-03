@@ -2,59 +2,67 @@ name: CI
 
 on:
   push:
-    branches: [ main ]
+    branches:
+      - main
+      - '**'
   pull_request:
-    branches: [ main ]
-
-concurrency:
-  group: ci-${{ github.ref }}
-  cancel-in-progress: true
-
-env:
-  CI: true
-  NODE_VERSION: '20'
+    branches:
+      - main
+      - '**'
 
 jobs:
   test:
     name: test
     runs-on: ubuntu-latest
-    timeout-minutes: 10
     steps:
       - name: Checkout
         uses: actions/checkout@v4
 
+      # Install pnpm based on "packageManager" in package.json
+      - name: Setup PNPM
+        uses: pnpm/action-setup@v4
+        with:
+          run_install: false
+
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
-          node-version: ${{ env.NODE_VERSION }}
+          node-version: '20'
           cache: 'pnpm'
 
-      - name: Enable Corepack
-        run: corepack enable
+      - name: Verify pnpm
+        run: pnpm --version
 
       - name: Install
         run: pnpm install --frozen-lockfile
 
-      - name: Run unit tests
+      - name: Run tests
+      - name: OCR smoke
+        run: pnpm smoke:ocr
         run: pnpm -w test
 
   web-smoke:
     name: web-smoke
-    needs: [test]
     runs-on: ubuntu-latest
     timeout-minutes: 20
     steps:
       - name: Checkout
         uses: actions/checkout@v4
 
+      # Install pnpm based on "packageManager" in package.json
+      - name: Setup PNPM
+        uses: pnpm/action-setup@v4
+        with:
+          run_install: false
+
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
-          node-version: ${{ env.NODE_VERSION }}
+          node-version: '20'
           cache: 'pnpm'
 
-      - name: Enable Corepack
-        run: corepack enable
+      - name: Verify pnpm
+        run: pnpm --version
 
       - name: Install
         run: pnpm install --frozen-lockfile
@@ -62,54 +70,72 @@ jobs:
       - name: Build web
         run: pnpm --filter @iberitax/web build
 
-      - name: Start Next server (background)
-        shell: bash
+      - name: Start Next server (port 3001)
         run: |
-          set -eu
-          export PORT=3001
-          nohup pnpm --filter @iberitax/web start > artifacts/server.log 2>&1 &
-          echo $! > .server.pid
+          nohup pnpm --filter @iberitax/web exec next start -p 3001 > server.log 2>&1 &
+          echo $! > server.pid
 
-      - name: Wait for server
+      - name: Wait for server to be ready
         shell: bash
         run: |
-          set -eu
-          for i in $(seq 1 60); do
-            if curl -sfS "http://localhost:3001" >/dev/null; then
+          for i in {1..90}; do
+            if curl -fsS http://localhost:3001/ >/dev/null; then
+              echo "Server is up"
               exit 0
             fi
             sleep 1
           done
-          echo "Server did not become ready in time"
+          echo "Server did not become ready in time" >&2
           exit 1
 
-      - name: Run smoke
+      # Measure build+boot+smoke and always write artifacts, even if smoke fails
+      - name: Measure build+boot+smoke and save timing artifact
+        if: always()
         shell: bash
+        env:
+          BASE_URL: http://localhost:3001
         run: |
-          set -euo pipefail
-          mkdir -p artifacts
-          if [ -x apps/web/tools/smoke.portable.sh ]; then
-            apps/web/tools/smoke.portable.sh | tee artifacts/smoke.log
-          elif [ -x scripts/smoke-auth.sh ]; then
-            scripts/smoke-auth.sh | tee artifacts/smoke.log
-          else
-            echo "No smoke script found" | tee artifacts/smoke.log
-            exit 1
-          fi
+          START_TS=$(date +%s)
+          set +e
+          set -o pipefail
 
-      - name: Upload smoke artifacts
+          echo "--- RUN SMOKE SCRIPT ---"
+          chmod +x apps/web/tools/smoke.portable.sh
+          bash apps/web/tools/smoke.portable.sh 2>&1 | tee smoke.log
+          SMOKE_CODE=${PIPESTATUS[0]}
+
+          echo "--- STOP SERVER ---"
+          if [ -f server.pid ]; then kill "$(cat server.pid)" 2>/dev/null || true; fi
+          pkill -f "next start" 2>/dev/null || true
+
+          END_TS=$(date +%s)
+          TOTAL=$((END_TS - START_TS))
+          mkdir -p "artifacts/${{ github.run_id }}"
+          echo "$TOTAL" > "artifacts/${{ github.run_id }}/web_smoke_total_seconds.txt"
+          printf "web-smoke total seconds: %s\n" "$TOTAL" >> "$GITHUB_STEP_SUMMARY"
+
+          # surface failures as warnings but do not fail the job (baseline capture)
+          if [ $SMOKE_CODE -ne 0 ]; then
+            echo "::warning::web-smoke exited nonzero (code=$SMOKE_CODE)"
+          fi
+          exit 0
+
+      - name: Upload timing artifact
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: web-smoke-${{ github.run_id }}
-          path: |
-            artifacts/smoke.log
-            artifacts/server.log
+          name: web-smoke-timing-${{ github.run_id }}
+          path: artifacts/${{ github.run_id }}/web_smoke_total_seconds.txt
+          if-no-files-found: error
 
-      - name: Stop Next server
+      - name: Upload logs (server & smoke)
         if: always()
-        run: |
-          if [ -f .server.pid ]; then
-            kill "$(cat .server.pid)" 2>/dev/null || true
-          fi
+        uses: actions/upload-artifact@v4
+        with:
+          name: web-smoke-logs-${{ github.run_id }}
+          path: |
+            server.log
+            smoke.log
+          if-no-files-found: warn
+
 

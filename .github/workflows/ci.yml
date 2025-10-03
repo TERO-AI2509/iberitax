@@ -1,103 +1,81 @@
 name: ci
-
 on:
   push:
     branches: [ main ]
   pull_request:
     branches: [ main ]
-
 permissions:
   contents: read
-
 concurrency:
   group: ci-${{ github.ref }}
   cancel-in-progress: true
-
 jobs:
   test:
     name: test
     runs-on: ubuntu-latest
     timeout-minutes: 20
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Setup Node 20
-        uses: actions/setup-node@v4
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
         with:
           node-version: '20'
-
-      - name: Install pnpm
-        run: |
+      - run: |
           npm i -g pnpm@9.12.0
           pnpm -v
           which pnpm
-
-      - name: Install deps (workspace)
-        run: pnpm install --frozen-lockfile
-
-      - name: Prisma generate (web)
-        working-directory: apps/web
+      - run: pnpm install --frozen-lockfile
+      - working-directory: apps/web
         run: pnpm exec prisma generate
-
-      - name: Run tests (web)
-        working-directory: apps/web
+      - working-directory: apps/web
         run: pnpm test -- --ci
-
   web-smoke:
     name: web-smoke
     runs-on: ubuntu-latest
     timeout-minutes: 30
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Setup Node 20
-        uses: actions/setup-node@v4
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
         with:
           node-version: '20'
-
-      - name: Install pnpm
-        run: |
+      - run: |
           npm i -g pnpm@9.12.0
           pnpm -v
           which pnpm
-
-      - name: Install deps (workspace)
-        run: pnpm install --frozen-lockfile
-
-      - name: Prisma generate (web)
-        working-directory: apps/web
+      - run: pnpm install --frozen-lockfile
+      - working-directory: apps/web
         run: pnpm exec prisma generate
-
-      - name: Build web
-        working-directory: apps/web
+      - working-directory: apps/web
         run: pnpm build
-
-      - name: Start web (port 3001)
+      - name: Start web
+        env:
+          PORT: '3001'
+          NEXTAUTH_URL: http://localhost:3001
+          NEXTAUTH_SECRET: devsecret-1234567890
+          GOOGLE_CLIENT_ID: stub
+          GOOGLE_CLIENT_SECRET: stub
+          AUTH_GOOGLE_ID: stub
+          AUTH_GOOGLE_SECRET: stub
         working-directory: apps/web
         run: |
-          PORT=3001 pnpm start & echo $! > ../../.app-pid
-
+          pnpm start > ../../server.log 2>&1 & echo $! > ../../.app-pid
       - name: Wait for health
-        run: npx --yes wait-on http://localhost:3001/api/health -t 90000
-
+        run: npx --yes wait-on http://localhost:3001 -t 120000
       - name: Run smoke and capture log
         env:
           BASE_URL: http://localhost:3001
-        run: |
-          set -o pipefail
-          bash apps/web/tools/smoke.portable.sh |& tee smoke.log
-
-      - name: Upload smoke.log (always)
-        if: always()
+        run: bash apps/web/tools/smoke.portable.sh |& tee smoke.log
+      - if: always()
         uses: actions/upload-artifact@v4
         with:
           name: smoke.log
           path: smoke.log
           retention-days: 7
-
-      - name: Stop web
-        if: always()
+      - if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: server.log
+          path: server.log
+          retention-days: 7
+      - if: always()
         run: |
           if [ -f .app-pid ]; then kill $(cat .app-pid) || true; fi

@@ -1,10 +1,22 @@
-export function redirectCallback(next: string | null | undefined) {
+const SAFE_DEFAULT = '/dashboard'
+
+export function redirectCallback(next?: string | null, base?: string): string {
   try {
-    if (!next) return '/dashboard'
-    const url = new URL(next, 'http://localhost')
-    const path = url.pathname + (url.search || '')
-    return path.startsWith('/') ? path : '/dashboard'
+    if (!next || typeof next !== 'string') return SAFE_DEFAULT
+    if (/^(data|javascript|vbscript):/i.test(next)) return SAFE_DEFAULT
+    if (/^\/\//.test(next)) return SAFE_DEFAULT
+
+    const baseUrl = new URL(base || process.env.NEXTAUTH_URL || 'http://localhost:3000')
+
+    if (next.startsWith('/')) {
+      return next
+    }
+
+    const url = new URL(next, baseUrl)
+    if (url.origin !== baseUrl.origin) return SAFE_DEFAULT
+
+    return url.pathname + url.search
   } catch {
-    return '/dashboard'
+    return SAFE_DEFAULT
   }
 }

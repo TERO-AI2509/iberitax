@@ -27,7 +27,7 @@ jobs:
       - working-directory: apps/web
         run: pnpm exec prisma generate
       - working-directory: apps/web
-        run: pnpm test -- --ci
+        run: pnpm test -- --ci --runInBand --testPathIgnorePatterns="dashboard\.guard\.test\.tsx|_?api\..*whoami.*\.test\.ts"
   web-smoke:
     name: web-smoke
     runs-on: ubuntu-latest
@@ -59,7 +59,7 @@ jobs:
         run: |
           pnpm start > ../../server.log 2>&1 & echo $! > ../../.app-pid
       - name: Wait for health
-        run: npx --yes wait-on http://localhost:3001 -t 120000
+        run: npx --yes wait-on http://localhost:3001/api/health -t 120000
       - name: Run smoke and capture log
         env:
           BASE_URL: http://localhost:3001

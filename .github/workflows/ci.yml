@@ -2,23 +2,29 @@ name: CI
 
 on:
   push:
-    branches: [ main, "**" ]
+    branches:
+      - main
+      - '**'
   pull_request:
+    branches:
+      - main
+      - '**'
 
 jobs:
   test:
     name: test
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: pnpm/action-setup@v4
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setup PNPM
+        uses: pnpm/action-setup@v4
         with:
           version: 9
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
           node-version: '20'
-          cache: 'pnpm'
       - name: Install
         run: pnpm install --frozen-lockfile
       - name: Run tests
@@ -29,40 +35,32 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 20
     steps:
-      - uses: actions/checkout@v4
-      - uses: pnpm/action-setup@v4
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setup PNPM
+        uses: pnpm/action-setup@v4
         with:
           version: 9
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
           node-version: '20'
-          cache: 'pnpm'
       - name: Install
         run: pnpm install --frozen-lockfile
 
       - name: Run smoke and save timing artifact
-	  if: always()
-	  run: |
-	    START_TS=$(date +%s)
-	    set +e
-	    pnpm --filter @iberitax/web smoke:portable
-	    EXIT_CODE=$?
-	    END_TS=$(date +%s)
-	    TOTAL=$((END_TS - START_TS))
-	    mkdir -p artifacts/${{ github.run_id }}
-	    echo "$TOTAL" > artifacts/${{ github.run_id }}/web_smoke_total_seconds.txt
-	    printf "web-smoke total seconds: %s\n" "$TOTAL" >> $GITHUB_STEP_SUMMARY
-	    exit $EXIT_CODE
-
-	- name: Upload timing artifact
-	  if: always()
-	  uses: actions/upload-artifact@v4
-	  with:
-	    name: web-smoke-timing-${{ github.run_id }}
-	    path: artifacts/${{ github.run_id }}/web_smoke_total_seconds.txt
-	    if-no-files-found: error
-
+        if: always()
+        run: |
+          START_TS=$(date +%s)
+          set +e
+          pnpm --filter @iberitax/web smoke:portable
+          EXIT_CODE=$?
+          END_TS=$(date +%s)
+          TOTAL=$((END_TS - START_TS))
+          mkdir -p "artifacts/${{ github.run_id }}"
+          echo "$TOTAL" > "artifacts/${{ github.run_id }}/web_smoke_total_seconds.txt"
+          printf "web-smoke total seconds: %s\n" "$TOTAL" >> "$GITHUB_STEP_SUMMARY"
+          exit $EXIT_CODE
 
       - name: Upload timing artifact
         if: always()

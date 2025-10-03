@@ -87,6 +87,7 @@ jobs:
           exit 1
 
       # Measure build+boot+smoke and always write artifacts, even if smoke fails
+
       - name: Measure build+boot+smoke and save timing artifact
         if: always()
         shell: bash
@@ -125,6 +126,22 @@ jobs:
           name: web-smoke-timing-${{ github.run_id }}
           path: artifacts/${{ github.run_id }}/web_smoke_total_seconds.txt
           if-no-files-found: error
+
+- name: Guardrail: warn on slow smoke
+  if: always()
+  shell: bash
+  run: |
+    TFILE="artifacts/${{ github.run_id }}/web_smoke_total_seconds.txt"
+    if [ ! -f "$TFILE" ]; then
+      echo "::warning title=Smoke timing missing::$TFILE not found"
+      exit 0
+    fi
+    SECS="$(tr -d '\r\n' < "$TFILE")"
+    THRESHOLD="35"
+    if awk -v s="$SECS" -v t="$THRESHOLD" 'BEGIN{exit !(s+0>t+0)}'; then
+      echo "::warning title=Smoke timing regression::web-smoke took ${SECS}s (> ${THRESHOLD}s baseline×1.25)"
+    fi
+
 
       - name: Upload logs (server & smoke)
         if: always()

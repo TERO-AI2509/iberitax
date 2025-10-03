@@ -37,6 +37,8 @@ jobs:
         run: pnpm install --frozen-lockfile
 
       - name: Run tests
+      - name: OCR PDF smoke
+        run: pnpm smoke:ocr:pdf
       - name: OCR smoke
         run: pnpm smoke:ocr
         run: pnpm -w test

@@ -19,81 +19,54 @@ jobs:
   setup:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-      - name: Setup PNPM
-        uses: pnpm/action-setup@v4
-        with:
-          version: 9
-      - name: Setup Node
-        uses: actions/setup-node@v4
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
         with:
           node-version: '20'
           cache: 'pnpm'
-      - name: Install
-        run: pnpm install --frozen-lockfile
+      - run: corepack enable
+      - run: pnpm --version
+      - run: pnpm install --frozen-lockfile
 
   build:
     runs-on: ubuntu-latest
     needs: [setup]
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-      - name: Setup PNPM
-        uses: pnpm/action-setup@v4
-        with:
-          version: 9
-      - name: Setup Node
-        uses: actions/setup-node@v4
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
         with:
           node-version: '20'
           cache: 'pnpm'
-      - name: Install
-        run: pnpm install --frozen-lockfile
-      - name: Build
-        run: pnpm -r --workspace-concurrency=1 build
+      - run: corepack enable
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm -r --workspace-concurrency=1 build
 
   test:
     runs-on: ubuntu-latest
     needs: [build]
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-      - name: Setup PNPM
-        uses: pnpm/action-setup@v4
-        with:
-          version: 9
-      - name: Setup Node
-        uses: actions/setup-node@v4
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
         with:
           node-version: '20'
           cache: 'pnpm'
-      - name: Install
-        run: pnpm install --frozen-lockfile
-      - name: Test
-        run: pnpm -r test
+      - run: corepack enable
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm -r test
 
   ocr-validate:
     runs-on: ubuntu-latest
     needs: [test]
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-      - name: Setup PNPM
-        uses: pnpm/action-setup@v4
-        with:
-          version: 9
-      - name: Setup Node
-        uses: actions/setup-node@v4
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
         with:
           node-version: '20'
           cache: 'pnpm'
-      - name: Install
-        run: pnpm install --frozen-lockfile
-      - name: OCR Validate
-        run: pnpm --filter @iberitax/ocr run smoke:ocr:full
-      - name: Upload OCR Artifacts
-        if: always()
+      - run: corepack enable
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm --filter @iberitax/ocr run smoke:ocr:full
+      - if: always()
         uses: actions/upload-artifact@v4
         with:
           name: ocr-artifacts

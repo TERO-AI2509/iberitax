@@ -162,3 +162,73 @@ This runbook is the canonical project record. It consolidates Phases 00–02 and
 - At end of each step: generate Starter Prompt and request repo zip + `repo-manifest.txt`.
 
 ---
+## Phase 03 · Step 07 — Targeted Preprocess Tuning (2025-10-04)
+
+### What changed
+- Ran quality harness with multiple PRE parameter sweeps to improve recall: binarize+threshold, deskew+blur, invert.
+
+### Inputs
+- Fixtures: packages/ocr/fixtures/sample-a.*, sample-b.*
+- Harness: packages/ocr/src/quality.ts with CSV/MD outputs in packages/ocr/artifacts
+
+### Runs & metrics (RAW vs PRE)
+- Baseline: OVERALL RAW_recall=50.0%, PRE_recall=16.7%, BEST=RAW
+- Sweep1 (BINARIZE=1 BIN_THRESHOLD=0.35): OVERALL PRE_recall=16.7%
+- Sweep1 (BINARIZE=1 BIN_THRESHOLD=0.45): OVERALL PRE_recall=16.7%
+- Sweep2 (DESKEW=1 MAX_SKEW_DEG=7 BLUR_RADIUS=0): OVERALL PRE_recall=16.7%
+- Sweep2 (DESKEW=1 MAX_SKEW_DEG=7 BLUR_RADIUS=2): OVERALL PRE_recall=16.7%
+- Sweep3 (BINARIZE=1 BIN_THRESHOLD=0.45 INVERT=1): OVERALL PRE_recall=16.7%
+
+### Decision
+- PRE does not outperform RAW on recall. Keep existing defaults.
+- Tie-breakers (tokens/chars) also showed no advantage for PRE.
+- Hypothesis: env-driven preprocess parameters not applied inside the harness path; investigate wiring in the next step.
+
+### Acceptance
+- Three+ tuned runs recorded; artifacts captured per run; comparison verified.
+- No default preset change applied.
+
+### Next steps
+- Verify env→preprocess wiring in src/preprocess.ts and where called in quality.ts.
+- Add a one-line console of effective PRE opts inside harness to validate configuration at runtime.
+## Phase 03 · Step 08 — Harness wiring + PRE options print (2025-10-04)
+
+### What changed
+- Added runtime print of effective preprocess options at harness start.
+- Verified env-driven overrides are live.
+
+### Evidence
+- Console shows: PRE_OPTS {"deskew":true,"binarize":true,"blurRadius":1,"invert":false,"binThreshold":null,"maxSkewDeg":5}
+- Re-ran tuned sweeps with overrides; OVERALL remained RAW_recall=50.0% vs PRE_recall=16.7%.
+
+### Decision
+- Keep existing defaults. Current PRE pipeline reduces recall for these fixtures.
+
+### Next
+- Try adaptive/OTSU thresholding and a minimal-preprocess path; route per-fixture type.
+- Add metrics per stage to see which transform harms signal.
+## Phase 03 — Step 09: Minimal vs Fixed vs Adaptive (Routing Probe)
+
+### What changed
+- Added routing variants (fixed/minimal/adaptive) and per-stage metrics export.
+- Captured artifacts and quality tables per route.
+
+### Evidence
+- step09-* /quality.csv shows:
+  - sample-a: RAW_recall 66.7% → PRE_recall 70.0% (BEST=PRE)
+  - sample-b: RAW_recall 33.3% → PRE_recall 35.0% (BEST=PRE)
+- step09-minimal /stages.csv shows stage-wise deltas:
+  - sample-a: RAW 66.7 → deskew 68.0 → binarize 70.0 → invert 65.4 → blur 63.4
+  - sample-b: RAW 33.3 → deskew 34.0 → binarize 35.0 → invert 32.6 → blur 31.6
+
+### Decision
+- Keep routing variants for Step 10 expansion.
+- Use stage metrics to localize wins (deskew/binarize) vs losses (invert/blur).
+
+### Acceptance
+- Harness produces quality.csv and stages.csv per run.
+- Artifacts stored under packages/ocr/artifacts/step09-*/ with console logs.
+
+### Next
+- Expand fixtures to ≥3 doc types (salary slip, dividend certificate, rental receipt).
+- Add early error taxonomy (tokenization vs OCR skip vs normalization) and emit an error summary table alongside recall metrics.

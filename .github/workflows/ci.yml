@@ -4,146 +4,101 @@ on:
   push:
     branches:
       - main
-      - '**'
+      - develop
+      - feature/**
+      - chore/**
   pull_request:
-    branches:
-      - main
-      - '**'
+
+permissions:
+  contents: read
+
+env:
+  CI: true
 
 jobs:
+  setup:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'pnpm'
+      - name: Setup PNPM
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9
+      - name: Install
+        run: pnpm install --frozen-lockfile
+
+  build:
+    runs-on: ubuntu-latest
+    needs: [setup]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'pnpm'
+      - name: Setup PNPM
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9
+      - name: Install
+        run: pnpm install --frozen-lockfile
+      - name: Build
+        run: pnpm -r --workspace-concurrency=1 build
+
   test:
-    name: test
     runs-on: ubuntu-latest
+    needs: [build]
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-
-      # Install pnpm based on "packageManager" in package.json
-      - name: Setup PNPM
-        uses: pnpm/action-setup@v4
-        with:
-          run_install: false
-
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
           node-version: '20'
           cache: 'pnpm'
-
-      - name: Verify pnpm
-        run: pnpm --version
-
-      - name: Install
-        run: pnpm install --frozen-lockfile
-
-      - name: Run tests
-      - name: OCR preprocess smoke
-      - name: OCR normalize smoke
-        run: pnpm smoke:ocr:norm
-      - name: OCR normalize smoke
-        run: pnpm smoke:ocr:norm
-        run: pnpm smoke:ocr:pre
-      - name: OCR PDF smoke
-        run: pnpm smoke:ocr:pdf
-      - name: OCR smoke
-        run: pnpm smoke:ocr
-        run: pnpm -w test
-
-  web-smoke:
-    name: web-smoke
-    runs-on: ubuntu-latest
-    timeout-minutes: 20
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      # Install pnpm based on "packageManager" in package.json
       - name: Setup PNPM
         uses: pnpm/action-setup@v4
         with:
-          run_install: false
+          version: 9
+      - name: Install
+        run: pnpm install --frozen-lockfile
+      - name: Test
+        run: pnpm -r test
 
+  ocr-validate:
+    runs-on: ubuntu-latest
+    needs: [test]
+    defaults:
+      run:
+        working-directory: .
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
           node-version: '20'
           cache: 'pnpm'
-
-      - name: Verify pnpm
-        run: pnpm --version
-
+      - name: Setup PNPM
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9
       - name: Install
         run: pnpm install --frozen-lockfile
-
-      - name: Build web
-        run: pnpm --filter @iberitax/web build
-
-      - name: Start Next server (port 3001)
-        run: |
-          nohup pnpm --filter @iberitax/web exec next start -p 3001 > server.log 2>&1 &
-          echo $! > server.pid
-
-      - name: Wait for server to be ready
-        shell: bash
-        run: |
-          for i in {1..90}; do
-            if curl -fsS http://localhost:3001/ >/dev/null; then
-              echo "Server is up"
-              exit 0
-            fi
-            sleep 1
-          done
-          echo "Server did not become ready in time" >&2
-          exit 1
-
-      # Measure build+boot+smoke and always write artifacts, even if smoke fails
-      - name: Measure build+boot+smoke and save timing artifact
-        if: always()
-        shell: bash
-        env:
-          BASE_URL: http://localhost:3001
-        run: |
-          START_TS=$(date +%s)
-          set +e
-          set -o pipefail
-
-          echo "--- RUN SMOKE SCRIPT ---"
-          chmod +x apps/web/tools/smoke.portable.sh
-          bash apps/web/tools/smoke.portable.sh 2>&1 | tee smoke.log
-          SMOKE_CODE=${PIPESTATUS[0]}
-
-          echo "--- STOP SERVER ---"
-          if [ -f server.pid ]; then kill "$(cat server.pid)" 2>/dev/null || true; fi
-          pkill -f "next start" 2>/dev/null || true
-
-          END_TS=$(date +%s)
-          TOTAL=$((END_TS - START_TS))
-          mkdir -p "artifacts/${{ github.run_id }}"
-          echo "$TOTAL" > "artifacts/${{ github.run_id }}/web_smoke_total_seconds.txt"
-          printf "web-smoke total seconds: %s\n" "$TOTAL" >> "$GITHUB_STEP_SUMMARY"
-
-          # surface failures as warnings but do not fail the job (baseline capture)
-          if [ $SMOKE_CODE -ne 0 ]; then
-            echo "::warning::web-smoke exited nonzero (code=$SMOKE_CODE)"
-          fi
-          exit 0
-
-      - name: Upload timing artifact
+      - name: OCR Validate
+        run: pnpm --filter @iberitax/ocr run smoke:ocr:full
+      - name: Upload OCR Artifacts
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: web-smoke-timing-${{ github.run_id }}
-          path: artifacts/${{ github.run_id }}/web_smoke_total_seconds.txt
-          if-no-files-found: error
-
-      - name: Upload logs (server & smoke)
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: web-smoke-logs-${{ github.run_id }}
-          path: |
-            server.log
-            smoke.log
+          name: ocr-artifacts
+          path: packages/ocr/artifacts/**
           if-no-files-found: warn
-
-

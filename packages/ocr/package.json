@@ -1,0 +1,1 @@
+{ "name": "@iberitax/ocr", "version": "0.1.0", "type": "module", "main": "dist/index.js", "types": "dist/index.d.ts", "files": ["dist","bin"], "scripts": { "build": "tsc -p tsconfig.json" }, "dependencies": { "jimp": "^0.22.12", "tesseract.js": "^5.1.0" } }

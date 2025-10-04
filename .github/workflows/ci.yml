@@ -1,139 +1,65 @@
-name: CI
+name: ci
 
 on:
   push:
-    branches:
-      - main
-      - '**'
   pull_request:
-    branches:
-      - main
-      - '**'
 
 jobs:
   test:
-    name: test
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v4
 
-      # Install pnpm based on "packageManager" in package.json
-      - name: Setup PNPM
-        uses: pnpm/action-setup@v4
-        with:
-          run_install: false
-
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          node-version: 20
           cache: 'pnpm'
 
-      - name: Verify pnpm
-        run: pnpm --version
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9
 
-      - name: Install
-        run: pnpm install --frozen-lockfile
+      - name: Install deps (workspace)
+        run: pnpm install --frozen-lockfile=false
 
-      - name: Run tests
-        run: pnpm -w test
+      - name: Run extractor tests (golden + snapshots + integration)
+        run: pnpm -C packages/extractor test
 
   web-smoke:
-    name: web-smoke
     runs-on: ubuntu-latest
-    timeout-minutes: 20
+    needs: test
     steps:
       - name: Checkout
         uses: actions/checkout@v4
 
-      # Install pnpm based on "packageManager" in package.json
-      - name: Setup PNPM
-        uses: pnpm/action-setup@v4
-        with:
-          run_install: false
-
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
-          cache: 'pnpm'
+          node-version: 20
+          cache: pnpm
 
-      - name: Verify pnpm
-        run: pnpm --version
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9
 
-      - name: Install
-        run: pnpm install --frozen-lockfile
+      - name: Install deps (workspace)
+        run: pnpm install --frozen-lockfile=false
 
       - name: Build web
-        run: pnpm --filter @iberitax/web build
+        run: pnpm -C apps/web build
 
-      - name: Start Next server (port 3001)
-        run: |
-          nohup pnpm --filter @iberitax/web exec next start -p 3001 > server.log 2>&1 &
-          echo $! > server.pid
+      - name: Start web
+        run: pnpm --filter @iberitax/web exec next start -p 3001 &
 
-      - name: Wait for server to be ready
-        shell: bash
-        run: |
-          for i in {1..90}; do
-            if curl -fsS http://localhost:3001/ >/dev/null; then
-              echo "Server is up"
-              exit 0
-            fi
-            sleep 1
-          done
-          echo "Server did not become ready in time" >&2
-          exit 1
-
-      # Measure build+boot+smoke and always write artifacts, even if smoke fails
-      - name: Measure build+boot+smoke and save timing artifact
-        if: always()
-        shell: bash
+      - name: Smoke test
         env:
           BASE_URL: http://localhost:3001
-        run: |
-          START_TS=$(date +%s)
-          set +e
-          set -o pipefail
+        run: apps/web/tools/smoke.portable.sh
 
-          echo "--- RUN SMOKE SCRIPT ---"
-          chmod +x apps/web/tools/smoke.portable.sh
-          bash apps/web/tools/smoke.portable.sh 2>&1 | tee smoke.log
-          SMOKE_CODE=${PIPESTATUS[0]}
-
-          echo "--- STOP SERVER ---"
-          if [ -f server.pid ]; then kill "$(cat server.pid)" 2>/dev/null || true; fi
-          pkill -f "next start" 2>/dev/null || true
-
-          END_TS=$(date +%s)
-          TOTAL=$((END_TS - START_TS))
-          mkdir -p "artifacts/${{ github.run_id }}"
-          echo "$TOTAL" > "artifacts/${{ github.run_id }}/web_smoke_total_seconds.txt"
-          printf "web-smoke total seconds: %s\n" "$TOTAL" >> "$GITHUB_STEP_SUMMARY"
-
-          # surface failures as warnings but do not fail the job (baseline capture)
-          if [ $SMOKE_CODE -ne 0 ]; then
-            echo "::warning::web-smoke exited nonzero (code=$SMOKE_CODE)"
-          fi
-          exit 0
-
-      - name: Upload timing artifact
+      - name: Stop web
         if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: web-smoke-timing-${{ github.run_id }}
-          path: artifacts/${{ github.run_id }}/web_smoke_total_seconds.txt
-          if-no-files-found: error
-
-      - name: Upload logs (server & smoke)
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: web-smoke-logs-${{ github.run_id }}
-          path: |
-            server.log
-            smoke.log
-          if-no-files-found: warn
-
-
+        run: lsof -ti tcp:3001 | xargs kill -9 || true

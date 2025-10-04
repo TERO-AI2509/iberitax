@@ -4,7 +4,8 @@
   "packageManager": "pnpm@9.0.0",
   "version": "0.1.0",
   "workspaces": [
-    "packages/*"
+    "packages/*",
+    "packages/ocr"
   ],
   "scripts": {
     "codegen": "tsx scripts/codegen.ts",
@@ -17,12 +18,20 @@
     "demo:upload": "node demos/call-upload.mjs",
     "build:clients": "tsc -p packages/clients/tsconfig.json",
     "demo:extract": "tsc -p tsconfig.scripts.json && node dist-scripts/demos/call-extract.js",
-    "test": "pnpm -C packages/extractor test"
+    "test": "pnpm -C packages/extractor test",
+    "build:ocr": "pnpm --filter @iberitax/ocr build",
+    "smoke:ocr": "node scripts/ocr.smoke.mjs",
+    "smoke:ocr:pdf": "node scripts/ocr.pdf.smoke.mjs",
+    "smoke:ocr:pre": "node scripts/ocr.pre.smoke.mjs",
+    "smoke:ocr:norm": "node scripts/ocr.normalize.smoke.mjs",
+    "smoke:ocr:norm:pdf": "node scripts/ocr.norm.pdf.smoke.mjs",
+    "smoke:ocr:all": "pnpm smoke:ocr:pre && pnpm smoke:ocr:norm"
   },
   "devDependencies": {
     "@babel/preset-env": "^7.28.3",
     "@babel/preset-react": "^7.27.1",
     "@babel/preset-typescript": "^7.27.1",
+    "@iberitax/ocr": "workspace:*",
     "@types/express": "^5.0.3",
     "@types/jest": "^29.5.12",
     "@types/node": "^20.19.17",
@@ -34,9 +43,11 @@
     "fs-extra": "^11.2.0",
     "glob": "^11.0.0",
     "jest": "^29.7.0",
+    "jimp": "^0.22.12",
     "json-schema-to-ts": "^3.1.1",
     "json-schema-to-typescript": "^15.0.0",
     "json-schema-to-zod": "^2.3.1",
+    "pdfkit": "^0.17.2",
     "prettier": "^3.3.3",
     "prisma": "^5.22.0",
     "supertest": "^7.1.4",

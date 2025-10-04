@@ -1,0 +1,42 @@
+name: OCR Validate (follows CI)
+
+on:
+  workflow_run:
+    workflows: ["CI"]
+    types: [completed]
+
+permissions:
+  contents: read
+
+jobs:
+  ocr-validate:
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Enable Corepack
+        run: corepack enable
+
+      - name: Show PNPM version
+        run: pnpm --version
+
+      - name: Install
+        run: pnpm install --frozen-lockfile
+
+      - name: OCR Validate
+        run: pnpm --filter @iberitax/ocr run smoke:ocr:full
+
+      - name: Upload OCR Artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ocr-artifacts
+          path: packages/ocr/artifacts/**
+          if-no-files-found: warn

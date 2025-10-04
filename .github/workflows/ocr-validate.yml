@@ -2,7 +2,7 @@ name: OCR Validation (PR comment)
 
 on:
   workflow_run:
-    workflows: ["CI"]
+    workflows: ["ci"]
     types: [completed]
 
 jobs:

@@ -1,0 +1,5 @@
+sample,year,tax_id,base,tax,due,valid
+modelo100.sample.a.json,2024,X0000000A,1000.00,190.00,190.00,true
+modelo100.sample.b.json,2023,X1111111B,2500.50,475.10,475.10,true
+modelo100.sample.c.json,2024,X2222222C,0.00,0.00,0.00,true
+modelo100.sample.d.json,2022,X3333333D,1500.00,285.00,285.00,true

@@ -10,27 +10,17 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+      - name: Ensure pnpm
+        run: npm i -g pnpm@9.11.0 && pnpm -v
 
       - name: Setup Node
         uses: actions/setup-node@v4
       - name: Setup pnpm
-        uses: pnpm/action-setup@v4
-        with:
-          version: 9.11.0
-          run_install: false
-        with:
-          node-version: 20
           cache: 'pnpm'
 
       - name: Activate pnpm
         run: corepack enable && corepack prepare pnpm@9.11.0 --activate && pnpm -v
       - name: Setup pnpm
-        uses: pnpm/action-setup@v4
-        with:
-          version: 9
-
-      - name: Install deps (workspace)
-        run: pnpm install --frozen-lockfile=false
 
       - name: Run extractor tests (golden + snapshots + integration)
         run: pnpm -C packages/extractor test
@@ -41,24 +31,14 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+      - name: Ensure pnpm
+        run: npm i -g pnpm@9.11.0 && pnpm -v
 
       - name: Setup Node
         uses: actions/setup-node@v4
       - name: Setup pnpm
-        uses: pnpm/action-setup@v4
-        with:
-          version: 9.11.0
-          run_install: false
-        with:
-          node-version: 20
 
       - name: Setup pnpm
-        uses: pnpm/action-setup@v4
-        with:
-          version: 9
-
-      - name: Install deps (workspace)
-        run: pnpm install --frozen-lockfile=false
 
       - name: Build web
         run: pnpm -C apps/web build

@@ -21,15 +21,15 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+      - name: Setup PNPM
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
           node-version: '20'
           cache: 'pnpm'
-      - name: Setup PNPM
-        uses: pnpm/action-setup@v4
-        with:
-          version: 9
       - name: Install
         run: pnpm install --frozen-lockfile
 
@@ -39,15 +39,15 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+      - name: Setup PNPM
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
           node-version: '20'
           cache: 'pnpm'
-      - name: Setup PNPM
-        uses: pnpm/action-setup@v4
-        with:
-          version: 9
       - name: Install
         run: pnpm install --frozen-lockfile
       - name: Build
@@ -59,15 +59,15 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+      - name: Setup PNPM
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
           node-version: '20'
           cache: 'pnpm'
-      - name: Setup PNPM
-        uses: pnpm/action-setup@v4
-        with:
-          version: 9
       - name: Install
         run: pnpm install --frozen-lockfile
       - name: Test
@@ -76,21 +76,18 @@ jobs:
   ocr-validate:
     runs-on: ubuntu-latest
     needs: [test]
-    defaults:
-      run:
-        working-directory: .
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+      - name: Setup PNPM
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
           node-version: '20'
           cache: 'pnpm'
-      - name: Setup PNPM
-        uses: pnpm/action-setup@v4
-        with:
-          version: 9
       - name: Install
         run: pnpm install --frozen-lockfile
       - name: OCR Validate

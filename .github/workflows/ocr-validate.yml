@@ -1,42 +1,76 @@
-name: OCR Validate (follows CI)
+name: OCR Validation (PR comment)
 
 on:
   workflow_run:
     workflows: ["CI"]
     types: [completed]
 
-permissions:
-  contents: read
-
 jobs:
-  ocr-validate:
-    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+  post-ocr-summary:
+    if: >
+      github.event.workflow_run.conclusion == 'success' &&
+      github.event.workflow_run.event == 'pull_request'
     runs-on: ubuntu-latest
+    permissions:
+      actions: read
+      contents: read
+      pull-requests: write
+      issues: write
     steps:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Setup Node
+      - name: Download OCR artifacts from CI run
+        uses: dawidd6/action-download-artifact@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          run_id: ${{ github.event.workflow_run.id }}
+          name: ocr-artifacts
+          path: ocr-artifacts
+
+      - name: Set up Node
         uses: actions/setup-node@v4
         with:
           node-version: '20'
 
-      - name: Enable Corepack
-        run: corepack enable
+      - name: Build PR comment body
+        id: build
+        run: |
+          node .github/scripts/ocr-summary.mjs \
+            --artifacts-dir ocr-artifacts \
+            --run-id "${{ github.event.workflow_run.id }}" \
+            --repo "${{ github.repository }}" \
+            --pr-number "$(jq -r '.[0].number' <<< '${{ toJson(github.event.workflow_run.pull_requests) }}')"
 
-      - name: Show PNPM version
-        run: pnpm --version
-
-      - name: Install
-        run: pnpm install --frozen-lockfile
-
-      - name: OCR Validate
-        run: pnpm --filter @iberitax/ocr run smoke:ocr:full
-
-      - name: Upload OCR Artifacts
-        if: always()
-        uses: actions/upload-artifact@v4
+      - name: Upsert PR comment "OCR Validation Summary"
+        uses: actions/github-script@v7
         with:
-          name: ocr-artifacts
-          path: packages/ocr/artifacts/**
-          if-no-files-found: warn
+          script: |
+            const fs = require('fs');
+            const path = require('path');
+            const payloadPath = path.join(process.cwd(), '.github', 'scripts', 'ocr-summary.payload.json');
+            const data = JSON.parse(fs.readFileSync(payloadPath, 'utf8'));
+            const { pr, body } = data;
+            const { owner, repo } = context.repo;
+
+            const title = 'OCR Validation Summary';
+            const header = `### ${title}`;
+            const { data: comments } = await github.rest.issues.listComments({ owner, repo, issue_number: pr, per_page: 100 });
+
+            const existing = comments.find(c =>
+              c.user.type === 'Bot' &&
+              c.body &&
+              c.body.startsWith(header)
+            );
+
+            if (existing) {
+              await github.rest.issues.updateComment({ owner, repo, comment_id: existing.id, body: body });
+            } else {
+              await github.rest.issues.createComment({ owner, repo, issue_number: pr, body: body });
+            }
+
+  skip-on-main:
+    if: github.event.workflow_run.event == 'push'
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "Main branch push detected; skipping PR comment."

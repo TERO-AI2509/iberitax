@@ -1,0 +1,58 @@
+name: OCR Drift
+
+on:
+  push:
+    branches: [ main ]
+    paths:
+      - "packages/ocr/**"
+      - ".github/workflows/ocr-drift.yml"
+  pull_request:
+    branches: [ main ]
+    paths:
+      - "packages/ocr/**"
+      - ".github/workflows/ocr-drift.yml"
+  workflow_dispatch:
+
+jobs:
+  drift:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9
+          run_install: true
+
+      - name: Generate drift CSV (never fail the run here)
+        working-directory: packages/ocr
+        run: pnpm run drift:gen
+
+      - name: Run drift gate (fails on offenders)
+        working-directory: packages/ocr
+        run: pnpm run check:drift:gate
+
+      - name: Build dashboard HTML
+        if: always()
+        working-directory: packages/ocr
+        run: pnpm run drift:dash
+
+      - name: Upload drift artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ocr-drift-artifacts
+          path: |
+            packages/ocr/artifacts/drift/**
+            packages/ocr/artifacts/validation_history.md
+            packages/ocr/artifacts/validation_trend.md
+          if-no-files-found: warn

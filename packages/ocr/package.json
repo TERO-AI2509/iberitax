@@ -32,7 +32,9 @@
     "seed:drift": "node scripts/drift.seed.mjs",
     "drift:all": "node scripts/drift.run.mjs",
     "drift:summary": "node scripts/drift.notify.mjs > artifacts/drift/summary.md",
-    "drift:gen": "node scripts/drift.run.mjs || true"
+    "drift:gen": "node scripts/drift.run.mjs || true",
+    "drift:dash": "node scripts/drift.dashboard.mjs",
+    "post:drift:gate": "pnpm -s run drift:dash"
   },
   "dependencies": {
     "chart.js": "^4.5.0",

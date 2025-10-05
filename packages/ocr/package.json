@@ -1,1 +1,49 @@
-{ "name": "@iberitax/ocr", "version": "0.1.0", "type": "module", "main": "dist/index.js", "types": "dist/index.d.ts", "files": ["dist","bin"], "scripts": { "build": "tsc -p tsconfig.json" }, "dependencies": { "jimp": "^0.22.12", "tesseract.js": "^5.1.0" } }
+{
+  "name": "@iberitax/ocr",
+  "version": "0.1.0",
+  "type": "module",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist",
+    "bin"
+  ],
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "smoke:ocr:bench": "node ../../scripts/ocr.bench.smoke.mjs",
+    "smoke:ocr:quality": "tsc -p tsconfig.json && node dist/quality.js",
+    "post:ocr:error:summary": "node scripts/postErrorSummary.cjs",
+    "smoke:ocr:validate": "tsx src/validate/validate.extract.ts",
+    "smoke:ocr:export": "tsx src/validate/export.summary.ts && node scripts/export.write-csv.mjs",
+    "smoke:ocr:full": "pnpm -C . run smoke:ocr:quality && pnpm -C . run smoke:ocr:validate && pnpm -C . run smoke:ocr:export",
+    "test:contracts": "node tests/contracts/regression.test.mjs",
+    "smoke:contract": "tsx src/contracts/contract.smoke.ts",
+    "post:ocr:contract:summary": "tsx src/validate/contract.summary.ts",
+    "post:contracts:report": "node -e \"console.log(\\\"Artifacts: packages/ocr/artifacts\\\")\"",
+    "posttest:contracts": "node scripts/post-history.mjs && node scripts/history.analyze.mjs",
+    "check:contracts:drift": "node ./scripts/gate-history.mjs",
+    "post:ocr:history": "node ./scripts/history.analyze.mjs",
+    "post:ocr:drift:plot": "node scripts/plotDrift.mjs",
+    "post:ocr:snapshot": "pnpm -C . run smoke:ocr:export && node scripts/post-history.mjs",
+    "check:drift:gate": "node scripts/drift.gate.mjs",
+    "post:drift:notify": "node scripts/drift.notify.mjs",
+    "drift:snapshot": "node scripts/drift.snapshot.mjs",
+    "prep:drift:compute": "node scripts/drift.compute.mjs",
+    "seed:drift": "node scripts/drift.seed.mjs",
+    "drift:all": "node scripts/drift.run.mjs",
+    "drift:summary": "node scripts/drift.notify.mjs > artifacts/drift/summary.md",
+    "drift:gen": "node scripts/drift.run.mjs || true"
+  },
+  "dependencies": {
+    "chart.js": "^4.5.0",
+    "chartjs-node-canvas": "^5.0.0",
+    "gray-matter": "^4.0.3",
+    "jimp": "^0.22.12",
+    "marked": "^16.3.0",
+    "tesseract.js": "^5.1.0"
+  },
+  "devDependencies": {
+    "ajv": "^8.17.1",
+    "ajv-formats": "^3.0.1"
+  }
+}

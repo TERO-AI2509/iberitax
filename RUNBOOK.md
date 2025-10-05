@@ -232,3 +232,85 @@ This runbook is the canonical project record. It consolidates Phases 00–02 and
 ### Next
 - Expand fixtures to ≥3 doc types (salary slip, dividend certificate, rental receipt).
 - Add early error taxonomy (tokenization vs OCR skip vs normalization) and emit an error summary table alongside recall metrics.
+## Phase 03 · Step 13 — CI Wiring + Artifact Upload (final)
+
+What changed
+- Restored known-good baseline CI at .github/workflows/ci.yml
+- Added follower workflow .github/workflows/ocr-validate.yml using workflow_run to execute OCR validation only after CI succeeds
+- OCR job installs via Corepack to honor package.json "packageManager"
+- Uploads packages/ocr/artifacts/** as "ocr-artifacts"
+
+Why
+- Avoided destabilizing the baseline CI
+- Eliminated pnpm version conflicts between action inputs and packageManager
+
+How to run locally
+- pnpm --filter @iberitax/ocr run smoke:ocr:full
+
+Acceptance
+- Actions: CI green, then "OCR Validate (follows CI)" runs and uploads "ocr-artifacts"
+- Artifacts include validation_summary.* and validation_report.*
+
+Lessons learned
+- Prefer Corepack to respect packageManager and reduce moving parts
+- When a job causes baseline churn, split into a follower workflow with workflow_run
+
+Definition of Done
+- CI executes normally
+- OCR validation runs after CI success
+- Artifacts uploaded from packages/ocr/artifacts/**
+- RUNBOOK updated and step ZIP produced
+## Phase 03 · Step 14 — PR Comment with OCR Validation Summary
+
+- Added follower workflow `.github/workflows/ocr-validate.yml` triggered on successful CI `workflow_run` for PRs.
+- Downloads `ocr-artifacts` from the originating run, reads `packages/ocr/artifacts/validation_summary.md` (fallback: CSV), and posts/updates a single PR comment titled "OCR Validation Summary".
+- Deep links to the CI run artifacts page.
+- No-op on pushes to `main`.
+
+Acceptance:
+- PR shows a single up-to-date "OCR Validation Summary" comment after each successful CI.
+- Follower logs show artifact detection and successful comment post.
+
+Notes:
+- Requires the primary workflow to be named "CI".
+- Artifacts must include either `validation_summary.md` or `validation_summary.csv`.
+
+## Lessons Learned — CI edits during Step 14
+- Revert-first policy: if CI breaks, restore the last green `ci.yml` from `main` before any further edits.
+- No live-splicing `ci.yml`: avoid regex/awk inserts inside existing steps; YAML drift is too risky.
+- Step isolation: keep Step 14 scoped to the follower workflow and script; do not modify CI unless strictly required.
+- Artifact contract first: verify the CI artifact name and workflow name, then adapt the follower to those, not the other way around.
+- Single-change rule: apply one small change, run once, read the first failing step, then proceed.
+
+## Phase 03 · Step 14 — PR Comment with OCR Validation Summary (finalized)
+Status: Completed. CI left untouched by reverting to last known good from `main`. Follower workflow listens to the actual CI workflow name, downloads `ocr-artifacts`, parses `validation_summary.md` (CSV fallback), and upserts a single PR comment titled "OCR Validation Summary" with a deep link to the run’s artifacts page. No-op on pushes to `main`.
+Acceptance Evidence: CI green on PR; follower run succeeded; PR shows the "OCR Validation Summary" comment updated by latest run.
+### Step 15 Fix — Test sample paths
+Issue: tests used repo-root paths and failed when run from package root.
+Change: resolve samples relative to test file location.
+Result: `test:contracts` and `smoke:contract` both pass.
+
+## Phase 03 · Step 23 — Per-Field Drift Rules & Overrides
+
+Files
+- packages/ocr/config/drift.rules.json
+- packages/ocr/scripts/drift.gate.mjs
+
+Defaults
+- Fail if Δ ≤ -2.0 or last < 80.0
+
+Overrides (initial)
+- iban: rel_drop=-1.0, abs_floor=90.0
+- vat_number: abs_floor=85.0
+- exempt: vendor_internal_note
+- min_support: 20
+
+Acceptance
+- pnpm -F @iberitax/ocr run check:drift:gate applies overrides and exemptions
+- Offenders table shows rule source (global vs field-override)
+- Digest lists active overrides and exemptions; skipped rows listed
+
+Lessons learned
+- Keep gates dependency-free
+- Stable, greppable output
+- Treat exemptions as skipped, not passed

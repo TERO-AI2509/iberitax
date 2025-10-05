@@ -1,0 +1,13 @@
+{
+  "defaults": {
+    "rel_drop": -2.0,
+    "abs_floor": 80.0
+  },
+  "fields": {
+    "iban": { "rel_drop": -1.0, "abs_floor": 90.0 },
+    "vat_number": { "abs_floor": 85.0 }
+  },
+  "exempt": ["vendor_internal_note"],
+  "quarantine": ["field_1", "field_4", "field_5", "field_6", "field_7", "field_8"],
+  "min_support": 20
+}

@@ -37,9 +37,23 @@ jobs:
         working-directory: packages/ocr
         run: pnpm run drift:gen
 
-      - name: Run drift gate (fails on offenders)
+      - name: Run drift gate (capture status, do not fail step)
+        id: gate
         working-directory: packages/ocr
-        run: pnpm run check:drift:gate
+        shell: bash
+        run: |
+          set +e
+          pnpm run check:drift:gate
+          status=$?
+          echo "status=$status" >> "$GITHUB_OUTPUT"
+          # Write a short summary file for the PR comment and job summary
+          mkdir -p artifacts/drift
+          {
+            echo "Gate status: $([ $status -eq 0 ] && echo PASSED || echo FAILED)"
+            echo "Workflow run artifacts: https://github.com/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}"
+          } > artifacts/drift/_gate_summary.txt
+          # Don't fail this step; we'll fail at the end based on status
+          exit 0
 
       - name: Build dashboard HTML
         if: always()
@@ -56,3 +70,42 @@ jobs:
             packages/ocr/artifacts/validation_history.md
             packages/ocr/artifacts/validation_trend.md
           if-no-files-found: warn
+
+      - name: Post sticky PR comment with artifact link
+        if: ${{ github.event_name == 'pull_request' }}
+        uses: marocchino/sticky-pull-request-comment@v2
+        with:
+          recreate: true
+          message: |
+            ### 📈 OCR Drift Report
+            **Gate:** ${{ steps.gate.outputs.status == '0' && '✅ PASSED' || '❌ FAILED' }}
+
+            **Artifacts:** [Download “ocr-drift-artifacts”](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }})
+            
+            - Dashboard file inside artifact: `packages/ocr/artifacts/drift/index.html`
+            - Raw CSV: `packages/ocr/artifacts/drift/drift_amounts.csv`
+            - Summary: `_gate_summary.txt`
+
+            _This comment auto-updates on new pushes to this PR._
+
+      - name: Add job summary
+        if: always()
+        shell: bash
+        run: |
+          echo "### OCR Drift Report" >> "$GITHUB_STEP_SUMMARY"
+          if [ "${{ steps.gate.outputs.status }}" = "0" ]; then
+            echo "**Gate:** ✅ PASSED" >> "$GITHUB_STEP_SUMMARY"
+          else
+            echo "**Gate:** ❌ FAILED" >> "$GITHUB_STEP_SUMMARY"
+          fi
+          echo "" >> "$GITHUB_STEP_SUMMARY"
+          echo "**Artifacts:** [ocr-drift-artifacts](https://github.com/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID})" >> "$GITHUB_STEP_SUMMARY"
+          echo "" >> "$GITHUB_STEP_SUMMARY"
+          echo "- Dashboard: \`packages/ocr/artifacts/drift/index.html\`" >> "$GITHUB_STEP_SUMMARY"
+          echo "- CSV: \`packages/ocr/artifacts/drift/drift_amounts.csv\`" >> "$GITHUB_STEP_SUMMARY"
+          echo "- Summary: \`packages/ocr/artifacts/drift/_gate_summary.txt\`" >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Fail job if gate failed
+        if: always()
+        run: |
+          test "${{ steps.gate.outputs.status }}" = "0" && exit 0 || exit 1

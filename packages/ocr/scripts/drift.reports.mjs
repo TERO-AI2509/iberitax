@@ -1,8 +1,8 @@
 import { spawnSync } from "node:child_process"
 import path from "path"
-const root = path.resolve("packages/ocr")
-function run(cmd, args, cwd = root) {
-  const r = spawnSync(cmd, args, { cwd, stdio: "inherit" })
+const root = process.cwd()
+function run(cmd, args) {
+  const r = spawnSync(cmd, args, { cwd: root, stdio: "inherit" })
   if (r.status !== 0) process.exit(r.status || 1)
 }
 run("node", ["scripts/drift.dashboard.mjs"])

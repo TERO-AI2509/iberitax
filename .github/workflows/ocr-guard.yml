@@ -1,0 +1,26 @@
+name: OCR Guard
+on:
+  push:
+    paths: ["packages/ocr/**",".github/workflows/ocr-guard.yml"]
+  pull_request:
+    paths: ["packages/ocr/**",".github/workflows/ocr-guard.yml"]
+jobs:
+  guard:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with: { version: 9 }
+      - uses: actions/setup-node@v4
+        with: { node-version: 20, cache: pnpm }
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm -F @iberitax/ocr run test:golden | tee golden.out
+      - run: pnpm -F @iberitax/ocr run drift:gen
+      - run: pnpm -F @iberitax/ocr run check:drift:gate
+      - name: Summaries
+        run: |
+          echo "### Golden Tests" >> $GITHUB_STEP_SUMMARY
+          sed -n '1,200p' golden.out >> $GITHUB_STEP_SUMMARY || true
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### Drift Summary" >> $GITHUB_STEP_SUMMARY
+          sed -n '1,200p' packages/ocr/artifacts/drift/summary.md >> $GITHUB_STEP_SUMMARY || true

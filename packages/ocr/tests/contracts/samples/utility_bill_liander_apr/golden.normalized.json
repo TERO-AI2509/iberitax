@@ -1,0 +1,19 @@
+{
+  "documentType": "utility_bill",
+  "issuer": "Liander",
+  "issuedOn": "2024-04-28",
+  "currency": "EUR",
+  "amount": {
+    "gross": 212.4,
+    "vatRate": 21,
+    "net": 175.62
+  },
+  "support": {
+    "issuer": true,
+    "issuedOn": true,
+    "amount.gross": true,
+    "amount.vatRate": true,
+    "amount.net": true
+  },
+  "meter": "EL-3982012"
+}

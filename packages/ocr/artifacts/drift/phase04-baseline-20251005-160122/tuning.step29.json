@@ -1,0 +1,55 @@
+{
+  "byField": {
+    "field_1": {
+      "category": "Critical",
+      "suggested_action": "Increase OCR zone height by 10% and expand token grouping tolerance to merge split numeric fragments",
+      "confidence": 0.92
+    },
+    "field_2": {
+      "category": "Volatile",
+      "suggested_action": "Inspect raw samples for skewed images or partial overlays; consider mild deskew before OCR",
+      "confidence": 0.73
+    },
+    "field_3": {
+      "category": "Volatile",
+      "suggested_action": "Normalize decimal separators (comma→dot) in preprocessing; verify language locale",
+      "confidence": 0.8
+    },
+    "field_4": {
+      "category": "Critical",
+      "suggested_action": "Re-center extraction ROI ±5px vertically; apply adaptive thresholding instead of fixed binarization",
+      "confidence": 0.9
+    },
+    "field_5": {
+      "category": "Critical",
+      "suggested_action": "Enable text-line merging and disable whitespace cut-off for multi-row totals",
+      "confidence": 0.95
+    },
+    "field_6": {
+      "category": "Critical",
+      "suggested_action": "Adjust numeric confidence cutoff from 0.85→0.75; re-enable fallback normalization pass",
+      "confidence": 0.88
+    },
+    "field_7": {
+      "category": "Volatile",
+      "suggested_action": "Data-quality issue likely—check for inconsistent page scans or duplicate rows in input PDFs",
+      "confidence": 0.7
+    },
+    "field_8": {
+      "category": "Critical",
+      "suggested_action": "Re-tune threshold curve (REL_DROP -2→-1.5) and add zone-bias weighting for right-aligned totals",
+      "confidence": 0.93
+    }
+  },
+  "perField": {
+    "field_8": {
+      "biasRightTotals": true,
+      "lineMerge": true,
+      "roiLeftTrim": true,
+      "rightEdgeSnap": true,
+      "fuseNumericRuns": true,
+      "verticalNudgeJoin": true,
+      "hardFuseNumeric": true
+    }
+  }
+}

@@ -1,0 +1,11 @@
+fixture,stage,tokens,chars,recall
+sample-a,RAW,9,39,66.7
+sample-a,deskew,9,39,68
+sample-a,binarize,9,39,70
+sample-a,invert,9,39,65.4
+sample-a,blur,9,39,63.4
+sample-b,RAW,8,33,33.3
+sample-b,deskew,8,33,34
+sample-b,binarize,8,33,35
+sample-b,invert,8,33,32.6
+sample-b,blur,8,33,31.6

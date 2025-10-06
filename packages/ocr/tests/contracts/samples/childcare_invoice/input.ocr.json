@@ -1,0 +1,32 @@
+{
+  "source": "ocr-engine-v3",
+  "doc_type_hint": "childcare_invoice",
+  "pages": 1,
+  "language": "nl",
+  "blocks": [
+    {
+      "type": "text",
+      "value": "Partou Kinderopvang"
+    },
+    {
+      "type": "text",
+      "value": "childcare_invoice"
+    },
+    {
+      "type": "text",
+      "value": "Date: 2024-03-05"
+    },
+    {
+      "type": "text",
+      "value": "Gross: EUR 768.90"
+    },
+    {
+      "type": "text",
+      "value": "VAT 9%"
+    },
+    {
+      "type": "text",
+      "value": "Net: EUR 705.41"
+    }
+  ]
+}

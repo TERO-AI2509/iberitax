@@ -1,0 +1,93 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8"/>
+<title>OCR Drift Dashboard</title>
+<style>
+body{font:16px/1.4 -apple-system,system-ui,Segoe UI,Roboto,Helvetica,Arial}
+table{width:100%;border-collapse:separate;border-spacing:0 8px}
+th,td{padding:10px 14px}
+thead th{font-weight:700;color:#111}
+tbody tr{background:#fff;box-shadow:0 1px 0 0 #eee inset, 0 -1px 0 0 #eee inset}
+.pill{padding:.2rem .5rem;border-radius:999px;font-size:.85rem;display:inline-block}
+.pill.ok{background:#e6f7ef;color:#0a7f4b}
+.pill.warn{background:#fff7e6;color:#aa7a00}
+.pill.fail{background:#fdecee;color:#b42318}
+.meta{color:#666;margin:6px 0 16px}
+hr{border:0;border-top:1px solid #eee;margin:16px 0}
+h1{margin:0 0 4px}
+.small{font-size:.88rem;color:#777}
+</style>
+</head>
+<body>
+<h1>OCR Drift Dashboard</h1>
+<div class="meta small">Generated 2025-10-05T13:09:14.622Z</div>
+<a class="small" href="../history/validation_history.md">Open validation history</a>
+<hr/>
+<table>
+<thead>
+<tr><th>Field</th><th>Prev</th><th>Last</th><th>Δ</th><th>Support</th><th>Trend</th></tr>
+</thead>
+<tbody>
+<tr>
+    <td>field_1</td>
+    <td>88.25</td>
+    <td>84.76</td>
+    <td><span class="pill fail">-3.49</span></td>
+    <td></td>
+    <td><div class="small" style="height:4px;background:#eee;border-radius:4px"></div></td>
+  </tr><tr>
+    <td>field_2</td>
+    <td>89.41</td>
+    <td>89.58</td>
+    <td><span class="pill ok">+0.17</span></td>
+    <td></td>
+    <td><div class="small" style="height:4px;background:#eee;border-radius:4px"></div></td>
+  </tr><tr>
+    <td>field_3</td>
+    <td>89.52</td>
+    <td>88.78</td>
+    <td><span class="pill warn">-0.74</span></td>
+    <td></td>
+    <td><div class="small" style="height:4px;background:#eee;border-radius:4px"></div></td>
+  </tr><tr>
+    <td>field_4</td>
+    <td>88.07</td>
+    <td>85.38</td>
+    <td><span class="pill fail">-2.69</span></td>
+    <td></td>
+    <td><div class="small" style="height:4px;background:#eee;border-radius:4px"></div></td>
+  </tr><tr>
+    <td>field_5</td>
+    <td>95.19</td>
+    <td>91.63</td>
+    <td><span class="pill fail">-3.56</span></td>
+    <td></td>
+    <td><div class="small" style="height:4px;background:#eee;border-radius:4px"></div></td>
+  </tr><tr>
+    <td>field_6</td>
+    <td>95.65</td>
+    <td>91.56</td>
+    <td><span class="pill fail">-4.09</span></td>
+    <td></td>
+    <td><div class="small" style="height:4px;background:#eee;border-radius:4px"></div></td>
+  </tr><tr>
+    <td>field_7</td>
+    <td>94.16</td>
+    <td>88.57</td>
+    <td><span class="pill fail">-5.59</span></td>
+    <td>2</td>
+    <td><div class="small" style="height:4px;background:#eee;border-radius:4px"></div></td>
+  </tr><tr>
+    <td>field_8</td>
+    <td>91.59</td>
+    <td>84.94</td>
+    <td><span class="pill fail">-6.65</span></td>
+    <td>2</td>
+    <td><div class="small" style="height:4px;background:#eee;border-radius:4px"></div></td>
+  </tr>
+</tbody>
+</table>
+<p class="small">Δ classes: ok ≥ 0 · warn &lt; 0 · fail ≤ -2 (global threshold)</p>
+</body>
+</html>

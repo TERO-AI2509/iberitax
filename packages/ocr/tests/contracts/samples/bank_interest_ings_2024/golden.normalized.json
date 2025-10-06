@@ -1,0 +1,19 @@
+{
+  "documentType": "bank_interest_certificate",
+  "issuer": "ING Bank N.V.",
+  "issuedOn": "2024-12-31",
+  "currency": "EUR",
+  "amount": {
+    "gross": 86.72,
+    "vatRate": 0,
+    "net": 86.72
+  },
+  "support": {
+    "issuer": true,
+    "issuedOn": true,
+    "amount.gross": true,
+    "amount.vatRate": true,
+    "amount.net": true
+  },
+  "iban": "NL91INGB0001234567"
+}

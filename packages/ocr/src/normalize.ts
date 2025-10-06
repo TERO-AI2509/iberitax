@@ -1,24 +1,52 @@
-export function normalizeSpanishText(input: string): string {
-  let t = input;
+const NUM_CONF_FLOOR=0.75;
+const GROUPING_TOL=0.16;
+/**
+ * Replace common OCR glyph confusions in numeric contexts.
+ * Only keeps digits, separators, sign, and a few safe chars.
+ */
+export function cleanNumericGlyphs(input: unknown): string {
+  const s = String(input ?? "");
+  // map common OCR confusions (uppercase first, then lowercase)
+  const mapped = s
+    .replace(/[OÒÓÔÕÖØ]/g, "0")
+    .replace(/[o]/g, "0")
+    .replace(/[lIíÍ]/g, "1")
+    .replace(/[S]/g, "5")
+    .replace(/[B]/g, "8")
+    .replace(/[Z]/g, "2")
+    .replace(/[—–\--‒]/g, "-"); // normalize dashes to hyphen
+  // keep only allowed chars for numeric parsing
+  return mapped.replace(/[^0-9.,+\-\s€\u00A0\u202F]/g, "");
+}
 
-  t = t.replace(/€/g, "EUR");
+/**
+ * Parse a European/Spanish-formatted number string into "1234.56".
+ * Accepts "."/spaces as thousands, "," as decimal, strips currency and noise.
+ */
+export function normalizeEuroAmount(input: unknown): string | null {
+  if (input == null) return null;
 
-  t = t.replace(/\b\d{1,3}(?:\.\d{3})+(?:,\d+)?\b/g, (m) => {
-    const noThousands = m.replace(/\./g, "");
-    return noThousands.replace(",", ".");
-  });
+  let s = cleanNumericGlyphs(input)
+    // strip currency sign explicitly
+    .replace(/[€\u20AC]/g, "")
+    // collapse thin/nbsp/regular spaces
+    .replace(/[\u00A0\u202F ]+/g, " ")
+    .trim();
 
-  t = t.replace(/\b(\d+)\s*EUR\b/g, (_m, n) => `${n} EUR`);
-  t = t.replace(/\bEUR\s*(\d+(?:\.\d+)?)\b/g, (_m, n) => `EUR ${n}`);
+  if (!s) return null;
 
-  t = t.replace(/\b([0-3]?\d)[\/\-]([01]?\d)[\/\-]((?:19|20)?\d{2})\b/g, (_m, d, m, y) => {
-    const day = String(d).padStart(2, "0");
-    const mon = String(m).padStart(2, "0");
-    let year = String(y);
-    if (year.length === 2) year = (parseInt(year, 10) >= 70 ? "19" : "20") + year;
-    return `${year}-${mon}-${day}`;
-  });
+  // sign tidy: "- 1 234,56" → "-1 234,56"
+  s = s.replace(/^\s*([+-])\s*/, "$1").replace(/\s+$/g, "");
 
-  t = t.replace(/\s{2,}/g, " ");
-  return t.trim();
+  // If there's a comma, treat it as decimal, so remove "." and spaces
+  if (s.includes(",")) {
+    s = s.replace(/[.\s]/g, "").replace(",", ".");
+  } else {
+    // US style, drop spaces only
+    s = s.replace(/\s+/g, "");
+  }
+
+  const n = Number(s);
+  if (!Number.isFinite(n)) return null;
+  return n.toFixed(2);
 }

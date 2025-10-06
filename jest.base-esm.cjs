@@ -13,3 +13,4 @@ module.exports = {
   transformIgnorePatterns: ["/node_modules/"],
   testPathIgnorePatterns: ["/dist/", "/build/"]
 };
+module.exports.testMatch=["**/*.test.(js|mjs|ts)"];

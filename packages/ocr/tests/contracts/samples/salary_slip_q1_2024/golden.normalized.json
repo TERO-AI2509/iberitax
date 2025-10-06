@@ -1,0 +1,19 @@
+{
+  "documentType": "salary_slip",
+  "issuer": "Acme B.V.",
+  "issuedOn": "2024-03-31",
+  "currency": "EUR",
+  "amount": {
+    "gross": 4525.8,
+    "vatRate": 0,
+    "net": 4525.8
+  },
+  "support": {
+    "issuer": true,
+    "issuedOn": true,
+    "amount.gross": true,
+    "amount.vatRate": true,
+    "amount.net": true
+  },
+  "employeeId": "EMP-10293"
+}

@@ -1,0 +1,19 @@
+{
+  "documentType": "invoice",
+  "issuer": "PixelPolder Studio",
+  "issuedOn": "2024-06-15",
+  "currency": "EUR",
+  "amount": {
+    "gross": 3025.0,
+    "vatRate": 21,
+    "net": 2500.0
+  },
+  "support": {
+    "issuer": true,
+    "issuedOn": true,
+    "amount.gross": true,
+    "amount.vatRate": true,
+    "amount.net": true
+  },
+  "invoiceNo": "INV-240615"
+}

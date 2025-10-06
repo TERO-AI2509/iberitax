@@ -1,0 +1,19 @@
+{
+  "documentType": "dividend_certificate",
+  "issuer": "ABN AMRO",
+  "issuedOn": "2024-12-15",
+  "currency": "EUR",
+  "amount": {
+    "gross": 1280.0,
+    "vatRate": 15,
+    "net": 1088.0
+  },
+  "support": {
+    "issuer": true,
+    "issuedOn": true,
+    "amount.gross": true,
+    "amount.vatRate": true,
+    "amount.net": true
+  },
+  "isin": "NL0000009132"
+}

@@ -1,0 +1,13 @@
+id,documentType,issuer,issuedOn,currency,gross,vatRate,net
+"bank_interest_ings_2024","bank_interest_certificate","ING Bank N.V.","2024-12-31","EUR","86.72","0","86.72"
+"charity_donation","donation_receipt","Stichting Goede Doelen","2024-12-20","EUR","250","0","250"
+"childcare_invoice","childcare_invoice","Partou Kinderopvang","2024-03-05","EUR","768.9","9","705.41"
+"dividend_cert_abn_2024","dividend_certificate","ABN AMRO","2024-12-15","EUR","1280","15","1088"
+"freelance_invoice","invoice","PixelPolder Studio","2024-06-15","EUR","3025","21","2500"
+"health_insurance_premium","insurance_statement","Zilveren Kruis","2024-01-31","EUR","143.5","0","143.5"
+"mortgage_interest","mortgage_interest_statement","Rabobank","2024-12-31","EUR","4821.35","0","4821.35"
+"rental_receipt_may","rental_receipt","Woningfonds NL","2024-05-01","EUR","1450","0","1450"
+"salary_slip_q1_2024","salary_slip","Acme B.V.","2024-03-31","EUR","4525.8","0","4525.8"
+"transport_subscription","subscription_receipt","NS","2024-02-01","EUR","99","9","90.83"
+"tuition_receipt_uva","tuition_receipt","Universiteit van Amsterdam","2024-09-01","EUR","2314","0","2314"
+"utility_bill_liander_apr","utility_bill","Liander","2024-04-28","EUR","212.4","21","175.62"

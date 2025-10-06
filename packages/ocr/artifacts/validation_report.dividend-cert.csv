@@ -1,0 +1,8 @@
+"fixture","field","required","status","value","rule","reason"
+"dividend-cert","holder_name","true","OK","Ana Gómez","{""type"":""string""}",""
+"dividend-cert","isin","true","OK","ES0144580Y14","{""type"":""pattern"",""regex"":""^[A-Z]{2}[A-Z0-9]{9}\\d$""}",""
+"dividend-cert","dividend_amount","true","OK","250.5","{""type"":""number""}",""
+"dividend-cert","pay_date","true","OK","2025-09-20","{""type"":""date"",""format"":""YYYY-MM-DD""}",""
+"dividend-cert","withholding_tax","true","OK","47.6","{""type"":""number""}",""
+"dividend-cert","broker_name","false","OK","BestBroker EU","{""type"":""string""}",""
+"dividend-cert","currency","false","OK","EUR","{""type"":""string""}",""

@@ -1,76 +1,50 @@
-name: OCR Validation (PR comment)
+name: OCR Validate
 
 on:
-  workflow_run:
-    workflows: ["ci"]
-    types: [completed]
+  pull_request:
+  workflow_dispatch:
 
 jobs:
-  post-ocr-summary:
-    if: >
-      github.event.workflow_run.conclusion == 'success' &&
-      github.event.workflow_run.event == 'pull_request'
+  ocr-validate:
     runs-on: ubuntu-latest
-    permissions:
-      actions: read
-      contents: read
-      pull-requests: write
-      issues: write
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-      - name: Download OCR artifacts from CI run
-        uses: dawidd6/action-download-artifact@v3
+      - uses: pnpm/action-setup@v4
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          run_id: ${{ github.event.workflow_run.id }}
-          name: ocr-artifacts
-          path: ocr-artifacts
+          version: 9
 
-      - name: Set up Node
+      - name: Use Node
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          node-version: 20
+          cache: pnpm
 
-      - name: Build PR comment body
-        id: build
+      - name: Install
+        run: pnpm install --frozen-lockfile
+
+      - name: Build + Contracts
         run: |
-          node .github/scripts/ocr-summary.mjs \
-            --artifacts-dir ocr-artifacts \
-            --run-id "${{ github.event.workflow_run.id }}" \
-            --repo "${{ github.repository }}" \
-            --pr-number "$(jq -r '.[0].number' <<< '${{ toJson(github.event.workflow_run.pull_requests) }}')"
+          pnpm -F @iberitax/ocr build
+          pnpm -F @iberitax/ocr run test:contracts || true
 
-      - name: Upsert PR comment "OCR Validation Summary"
-        uses: actions/github-script@v7
+      - name: Rebuild history
+        run: pnpm -F @iberitax/ocr run post:ocr:history
+
+      - name: Optional drift gate
+        env:
+          GATE_DRIFT: ${{ vars.GATE_DRIFT }}
+        run: pnpm -F @iberitax/ocr run check:contracts:drift
+
+      - name: PR Summary (sparkline)
+        run: node .github/scripts/ocr-summary.mjs
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
         with:
-          script: |
-            const fs = require('fs');
-            const path = require('path');
-            const payloadPath = path.join(process.cwd(), '.github', 'scripts', 'ocr-summary.payload.json');
-            const data = JSON.parse(fs.readFileSync(payloadPath, 'utf8'));
-            const { pr, body } = data;
-            const { owner, repo } = context.repo;
-
-            const title = 'OCR Validation Summary';
-            const header = `### ${title}`;
-            const { data: comments } = await github.rest.issues.listComments({ owner, repo, issue_number: pr, per_page: 100 });
-
-            const existing = comments.find(c =>
-              c.user.type === 'Bot' &&
-              c.body &&
-              c.body.startsWith(header)
-            );
-
-            if (existing) {
-              await github.rest.issues.updateComment({ owner, repo, comment_id: existing.id, body: body });
-            } else {
-              await github.rest.issues.createComment({ owner, repo, issue_number: pr, body: body });
-            }
-
-  skip-on-main:
-    if: github.event.workflow_run.event == 'push'
-    runs-on: ubuntu-latest
-    steps:
-      - run: echo "Main branch push detected; skipping PR comment."
+          name: ocr-history-and-trend
+          path: |
+            packages/ocr/artifacts/validation_history.md
+            packages/ocr/artifacts/validation_trend.md
+            packages/ocr/artifacts/history
+          if-no-files-found: warn

@@ -25,16 +25,17 @@
     "post:ocr:history": "node ./scripts/history.analyze.mjs",
     "post:ocr:drift:plot": "node scripts/plotDrift.mjs",
     "post:ocr:snapshot": "pnpm -C . run smoke:ocr:export && node scripts/post-history.mjs",
-    "check:drift:gate": "node scripts/drift.gate.mjs",
+    "check:drift:gate": "pnpm run test:golden && node scripts/drift.gate.mjs",
     "post:drift:notify": "node scripts/drift.notify.mjs",
     "drift:snapshot": "node scripts/drift.snapshot.mjs",
     "prep:drift:compute": "node scripts/drift.compute.mjs",
     "seed:drift": "node scripts/drift.seed.mjs",
     "drift:all": "node scripts/drift.run.mjs",
     "drift:summary": "node scripts/drift.notify.mjs > artifacts/drift/summary.md",
-    "drift:gen": "node scripts/drift.run.mjs || true",
+    "drift:gen": "node scripts/drift.gen.mjs",
     "drift:dash": "node scripts/drift.dashboard.mjs",
-    "post:drift:gate": "pnpm -s run drift:dash"
+    "post:drift:gate": "pnpm -s run drift:dash",
+    "test:golden": "jest -c jest.config.cjs --runTestsByPath tests/contracts/golden.test.js"
   },
   "dependencies": {
     "chart.js": "^4.5.0",

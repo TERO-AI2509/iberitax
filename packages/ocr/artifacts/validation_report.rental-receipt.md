@@ -1,0 +1,1 @@
+# Validation Summary · rental-receipt- Passed: 7- Failed: 0

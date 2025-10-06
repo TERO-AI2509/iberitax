@@ -1,0 +1,5 @@
+{
+  "year": 2023,
+  "declarant": { "tax_id": "X1111111B" },
+  "totals": { "base": 2500.50, "tax": 475.10, "due": 475.10 }
+}

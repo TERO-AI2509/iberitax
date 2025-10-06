@@ -1,0 +1,1 @@
+packages/ocr/src/norm-index.ts:20:  out.field_8 = normAmount((src as any).field_8);

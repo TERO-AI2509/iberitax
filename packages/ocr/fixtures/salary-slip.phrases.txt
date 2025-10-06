@@ -1,0 +1,5 @@
+NÓMINA
+EUR
+Sueldo base
+IRPF
+Seguridad Social

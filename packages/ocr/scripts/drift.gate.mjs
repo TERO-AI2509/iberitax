@@ -1,3 +1,4 @@
+const QUAR_ENV=(process.env.QUARANTINE_FIELDS||"").split(/[, \t]+/).filter(Boolean);
 import fs from "node:fs";
 import path from "node:path";
 

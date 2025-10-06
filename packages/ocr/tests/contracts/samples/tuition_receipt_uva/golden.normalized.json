@@ -1,0 +1,19 @@
+{
+  "documentType": "tuition_receipt",
+  "issuer": "Universiteit van Amsterdam",
+  "issuedOn": "2024-09-01",
+  "currency": "EUR",
+  "amount": {
+    "gross": 2314.0,
+    "vatRate": 0,
+    "net": 2314.0
+  },
+  "support": {
+    "issuer": true,
+    "issuedOn": true,
+    "amount.gross": true,
+    "amount.vatRate": true,
+    "amount.net": true
+  },
+  "studentNo": "S1234567"
+}

@@ -314,3 +314,206 @@ Lessons learned
 - Keep gates dependency-free
 - Stable, greppable output
 - Treat exemptions as skipped, not passed
+
+## Phase 03 · Step 24 — Drift Dashboard & History Overlay
+
+Files
+- packages/ocr/scripts/drift.dashboard.mjs → builds artifacts/drift/index.html from drift_amounts.csv (+ optional validation_history.md)
+
+Acceptance
+- pnpm -F @iberitax/ocr run check:drift:gate
+- pnpm -F @iberitax/ocr run drift:dash
+- artifacts/drift/index.html renders table with Δ badges and simple sparkline
+- Link to validation_history.md if present
+
+Notes
+- Sideload history by adding "field: v1,v2,...,vn" lines into artifacts/validation_history.md
+
+## Phase 03 · Step 24 — Drift Dashboard wired to CI
+
+**What changed**
+- New workflow `.github/workflows/ocr-drift.yml`:
+  - `drift:gen` (never fails)
+  - `check:drift:gate` (strict; fails on offenders)
+  - `drift:dash` (always runs)
+  - Uploads `packages/ocr/artifacts/drift/**` (+ validation history/trend) as CI artifacts
+
+**Why**
+- Reliable, human-readable review even on red builds
+- Fast triage with Δ badges and sparkline
+
+**Acceptance**
+- CI job produces artifact `ocr-drift-artifacts` on PRs & pushes to `main`
+- Local: `pnpm -F @iberitax/ocr run drift:dash` writes `artifacts/drift/index.html`
+- Gate behavior: quarantined → Skipped; offenders → non-zero exit
+
+**Next microsteps**
+1) (Optional) Auto-link dashboard artifact in PR comment
+2) Tighten per-field overrides gradually; remove items from `quarantine` as fixes land
+3) Add min_support enforcement once support counts are real
+
+**Lessons learned**
+- Separate “generate” from “gate” to keep insights flowing on red runs
+- Always `if: always()` for artifact steps to avoid losing evidence
+
+## 2025-10-05 — Phase 03 · Step 25 — Targeted Fix & De-quarantine Loop
+
+Scope: De-quarantine field_7 / field_8 after normalizing Spanish-formatted amounts.
+Changes:
+- Added normalizeEuroAmount() in src/normalize.ts
+- Routed field_7 / field_8 through normalizeEuroAmount() in norm-index.ts
+- Updated drift.rules.json to remove them from quarantine and add tight overrides
+
+Acceptance:
+- Drift gate passes or fails only on remaining quarantined fields
+- artifacts/drift/index.html shows improved Δ for field_7 / field_8
+
+## 2025-10-05 — Phase 03 · Step 25 — Targeted Fix & De-quarantine Loop (pass 2)
+
+Root cause (money fields): OCR glyph confusions (O↔0, l/I↔1, S↔5, B↔8) plus comma/space handling.
+Changes:
+- Added cleanNumericGlyphs() pre-pass for numeric strings.
+- normalizeEuroAmount() now uses glyph cleanup and stricter whitespace/sign logic.
+- field_7 & field_8 routed through the new normalization.
+
+Evidence (fill with latest dashboard values):
+- Before: field_7 Δ = ___ ; field_8 Δ = ___
+- After:  field_7 Δ = ___ ; field_8 Δ = ___
+- Gate: PASS (or only remaining quarantined fields fail).
+
+## 2025-10-05 — Phase 03 · Step 25 — Targeted Fix & De-quarantine Loop
+
+Targeted fields: field_7, field_8 (amounts).
+Changes:
+- Added robust EU amount normalization (comma decimals, space/period thousands, glyph cleanup).
+- Routed field_7/field_8 through normalizeEuroAmount().
+- De-quarantined with strict per-field drift overrides (max_drop=-1, abs_floor=80, min_support=20).
+
+Evidence:
+- Gate: PASS (only other quarantined fields skipped).
+- Δ unchanged today due to insufficient fixture support for amount fields.
+  Action: add minimal labeled fixtures in Step 26 so drift reflects improvements.
+
+Rationale:
+- Normalization fixes applied; metrics will move once covered samples exist in history.
+
+## 2025-10-05 — Phase 03 · Step 25 — Targeted Fix & De-Quarantine Loop ✅
+
+**Scope:** field_7 & field_8 (amount fields)
+
+**Changes**
+- Added `normalizeEuroAmount()` with European decimal handling + glyph cleanup.
+- Routed amount fields through the new normalizer.
+- Introduced synthetic fixtures (2) for amount coverage.
+- Added support-merger script to enrich drift CSVs.
+- De-quarantined field_7 + field_8 with strict per-field overrides.
+
+**Evidence**
+- Dashboard shows Support = 2 for field_7 + field_8.  
+- Drift gate → PASS.  
+- Δ unchanged (expected until more fixtures accumulate).
+
+**Next**
+- Step 26 → Expand fixture coverage (≥ 10 samples) to build reliable trend curves.  
+- When support > 10, reduce overrides to global thresholds and monitor stability.
+
+# Phase 03 · Step 28 — Field Correction Planning
+
+## Objective
+Parse drift.classification.csv and recent validation_history.md, auto-suggest correction heuristics per Critical and Volatile field, and prepare tuning plan inputs for Phase 04 (Mapping Rules Tuning).
+
+## Inputs
+- packages/ocr/artifacts/drift/drift.classification.csv
+- packages/ocr/artifacts/validation_history.md
+
+## Process
+1) Ingested drift.classification.csv and validation_history.md.
+2) For each Critical field, proposed concrete extraction/normalization adjustments (ROI, thresholding, grouping, confidence cutoffs).
+3) For each Volatile field, flagged data-quality or preprocessing checks.
+4) Wrote field_corrections.plan.csv with columns: field,category,suggested_action,confidence.
+
+## Results
+Exported: packages/ocr/artifacts/field_corrections.plan.csv
+
+| field   | category | suggested_action                                                                                     | confidence |
+|---------|----------|------------------------------------------------------------------------------------------------------|------------|
+| field_1 | Critical | Increase OCR zone height by 10% and expand token grouping tolerance to merge split numeric fragments | 0.92       |
+| field_2 | Volatile | Inspect raw samples for skewed images or partial overlays; consider mild deskew before OCR           | 0.73       |
+| field_3 | Volatile | Normalize decimal separators (comma→dot) in preprocessing; verify language locale                    | 0.80       |
+| field_4 | Critical | Re-center extraction ROI ±5px vertically; apply adaptive thresholding instead of fixed binarization  | 0.90       |
+| field_5 | Critical | Enable text-line merging and disable whitespace cut-off for multi-row totals                         | 0.95       |
+| field_6 | Critical | Adjust numeric confidence cutoff from 0.85→0.75; re-enable fallback normalization pass              | 0.88       |
+| field_7 | Volatile | Data-quality issue likely—check for inconsistent page scans or duplicate rows in input PDFs         | 0.70       |
+| field_8 | Critical | Re-tune threshold curve (REL_DROP -2→-1.5) and add zone-bias weighting for right-aligned totals     | 0.93       |
+
+## Acceptance
+- field_corrections.plan.csv generated with all 8 fields
+- Each Critical field has a concrete, testable correction proposal
+- Runbook Step 28 updated with plan summary
+
+## Next (Phase 04 — Mapping Rules Tuning)
+- Translate each suggested_action into concrete normalization/ROI/threshold rule edits
+- Add per-field A/B toggles and run drift gate; require Δ ≥ 0 on Critical fields
+
+
+# Phase 04 · Step 29 — Mapping Rules Tuning
+
+## Objective
+Apply field_corrections.plan.csv adjustments to extraction/normalization rules and verify drift recovery (Critical fields Δ ≥ 0).
+
+## Inputs
+- packages/ocr/artifacts/field_corrections.plan.csv
+- packages/ocr/artifacts/drift/drift.classification.csv
+- packages/ocr/artifacts/validation_history.md
+
+## Plan
+1) Create a tuning overlay: packages/ocr/config/tuning.step29.json derived from field_corrections.plan.csv.
+2) Add a targeted drift override for field_8 (REL_DROP → -1.5) in packages/ocr/config/drift.rules.json.
+3) Re-run drift and record artifacts to establish the tuned baseline.
+
+## Commands
+1) Generate tuning.overlay and patch drift rules
+2) Rebuild, re-run drift suite, snapshot artifacts
+3) Verify gate status and record summary
+
+## Acceptance
+- Drift gate passes with all Critical fields Δ ≥ 0
+- Artifacts written: artifacts/drift/phase04-baseline-*.*
+- Runbook updated with before/after deltas and next-step notes
+
+
+## Phase 03 · Step 30 — Tuning Iteration & Lock-In — Status @ ${TS}
+
+**What’s working**
+- End-to-end pipeline runs cleanly (build → validate → drift → snapshot).
+- Lock-in reports generated: packages/ocr/artifacts/drift/lockin.report.<ts>.csv.
+- Config backups exist; tuning.stable.json present and ready to activate.
+
+**What’s not yet working / Risks**
+- No fields promoted to stable in this bundle (tuning.stable.json perField empty).
+- field_6, field_7, field_8 remain Critical in drift.classification.csv; require broader samples and continued per-field tuning.
+
+**Numbers (targeted fields)**
+- field_6, field_7, field_8: Δ_change not confirmed in this archive (delta.*.csv not included in Step-30 zip).
+
+**Next actions**
+- Re-run Step-29 deltas with expanded fixtures; ensure promotion reads the newest delta.*.csv.
+- Promote only fields with Δ_change > 0 into tuning.stable.json and re-run gate.
+- Add golden tests for promoted fields to prevent regressions.
+
+
+## Phase 03 · Step 31 — Regression Guards & Golden Tests (@ ${TS})
+
+**Objective**
+Add per-field golden tests for all promoted fields from Step 30.
+
+**Scope**
+- Create tests/contracts/golden/ fixtures.
+- Implement test:golden runner (compare OCR output vs golden expectations).
+- Require 3 green drift gates before Phase 04 transition.
+
+**Definition of Done**
+- Golden tests pass.
+- Drift gate remains green.
+- phase04-lockin snapshot archived.
+

@@ -1,0 +1,7 @@
+
+> @iberitax/ocr@0.1.0 smoke:ocr:quality /Users/eltjotimmerman/TERO-AI/dev/iberitax/packages/ocr
+> tsc -p tsconfig.json && node dist/quality.js
+
+src/preprocess.runtime.ts(1,57): error TS2835: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Did you mean './preprocess.js'?
+src/preprocess.runtime.ts(2,42): error TS2835: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Did you mean './index.js'?
+ ELIFECYCLE  Command failed with exit code 2.

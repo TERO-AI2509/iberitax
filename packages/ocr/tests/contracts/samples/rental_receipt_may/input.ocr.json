@@ -1,0 +1,32 @@
+{
+  "source": "ocr-engine-v3",
+  "doc_type_hint": "rental_receipt",
+  "pages": 1,
+  "language": "nl",
+  "blocks": [
+    {
+      "type": "text",
+      "value": "Woningfonds NL"
+    },
+    {
+      "type": "text",
+      "value": "rental_receipt"
+    },
+    {
+      "type": "text",
+      "value": "Date: 2024-05-01"
+    },
+    {
+      "type": "text",
+      "value": "Gross: EUR 1,450.00"
+    },
+    {
+      "type": "text",
+      "value": "VAT 0%"
+    },
+    {
+      "type": "text",
+      "value": "Net: EUR 1,450.00"
+    }
+  ]
+}

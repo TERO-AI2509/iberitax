@@ -1,0 +1,19 @@
+{
+  "documentType": "childcare_invoice",
+  "issuer": "Partou Kinderopvang",
+  "issuedOn": "2024-03-05",
+  "currency": "EUR",
+  "amount": {
+    "gross": 768.9,
+    "vatRate": 9,
+    "net": 705.41
+  },
+  "support": {
+    "issuer": true,
+    "issuedOn": true,
+    "amount.gross": true,
+    "amount.vatRate": true,
+    "amount.net": true
+  },
+  "kidId": "K-39012"
+}

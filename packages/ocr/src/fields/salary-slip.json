@@ -1,0 +1,16 @@
+{
+  "fixture": "salary-slip",
+  "required": {
+    "employee_name": { "type": "string" },
+    "employer_name": { "type": "string" },
+    "gross_amount": { "type": "number" },
+    "net_amount": { "type": "number" },
+    "pay_date": { "type": "date", "format": "YYYY-MM-DD" },
+    "iban": { "type": "pattern", "regex": "^[A-Z]{2}\\d{2}[A-Z0-9]{4}\\d{7}([A-Z0-9]?){0,16}$" },
+    "nif": { "type": "pattern", "regex": "^[0-9A-Z]{8,10}$" }
+  },
+  "optional": {
+    "hours_worked": { "type": "number" },
+    "deductions_total": { "type": "number" }
+  }
+}

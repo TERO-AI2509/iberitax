@@ -1,0 +1,5 @@
+Recibo de Alquiler
+EUR
+IVA
+Mes
+Importe

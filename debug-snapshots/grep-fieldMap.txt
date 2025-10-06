@@ -1,0 +1,4 @@
+packages/ocr/src/validate/validate.extract.ts:18:type FieldMap = { fixture: string; required: Record<string, FieldRule>; optional?: Record<string, FieldRule> };
+packages/ocr/src/validate/validate.extract.ts:75:    const fmap = readJSON(path.join(fieldsDir, ff)) as FieldMap;
+packages/ocr/src/validate/validate.extract.ts.bak:7:type FieldMap = { fixture: string; required: Record<string, FieldRule>; optional?: Record<string, FieldRule> };
+packages/ocr/src/validate/validate.extract.ts.bak:64:    const fmap = readJSON(path.join(fieldsDir, ff)) as FieldMap;

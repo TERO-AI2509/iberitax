@@ -1,0 +1,14 @@
+{
+  "fixture": "dividend-cert",
+  "required": {
+    "holder_name": { "type": "string" },
+    "isin": { "type": "pattern", "regex": "^[A-Z]{2}[A-Z0-9]{9}\\d$" },
+    "dividend_amount": { "type": "number" },
+    "pay_date": { "type": "date", "format": "YYYY-MM-DD" },
+    "withholding_tax": { "type": "number" }
+  },
+  "optional": {
+    "broker_name": { "type": "string" },
+    "currency": { "type": "string" }
+  }
+}

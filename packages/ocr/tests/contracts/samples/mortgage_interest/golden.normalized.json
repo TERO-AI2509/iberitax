@@ -1,0 +1,19 @@
+{
+  "documentType": "mortgage_interest_statement",
+  "issuer": "Rabobank",
+  "issuedOn": "2024-12-31",
+  "currency": "EUR",
+  "amount": {
+    "gross": 4821.35,
+    "vatRate": 0,
+    "net": 4821.35
+  },
+  "support": {
+    "issuer": true,
+    "issuedOn": true,
+    "amount.gross": true,
+    "amount.vatRate": true,
+    "amount.net": true
+  },
+  "loanId": "RABO-448812"
+}

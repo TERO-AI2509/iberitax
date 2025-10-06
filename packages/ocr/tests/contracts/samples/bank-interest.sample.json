@@ -1,0 +1,10 @@
+{
+  "taxYear": 2024,
+  "taxpayerId": "ES-ABC123",
+  "docType": "bank_interest",
+  "source": { "fileName": "bank-interest.pdf", "pageCount": 1 },
+  "currency": "EUR",
+  "items": [
+    { "type": "interest", "amountEUR": 9.87, "description": "Interest Q1", "dateISO": "2024-03-31", "payer": "Bank SA" }
+  ]
+}

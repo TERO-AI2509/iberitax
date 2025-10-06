@@ -1,0 +1,19 @@
+{
+  "documentType": "rental_receipt",
+  "issuer": "Woningfonds NL",
+  "issuedOn": "2024-05-01",
+  "currency": "EUR",
+  "amount": {
+    "gross": 1450.0,
+    "vatRate": 0,
+    "net": 1450.0
+  },
+  "support": {
+    "issuer": true,
+    "issuedOn": true,
+    "amount.gross": true,
+    "amount.vatRate": true,
+    "amount.net": true
+  },
+  "address": "Keizersgracht 123, Amsterdam"
+}

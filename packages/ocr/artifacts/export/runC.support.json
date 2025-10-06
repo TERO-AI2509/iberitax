@@ -1,0 +1,122 @@
+[
+  {
+    "id": "bank_interest_ings_2024",
+    "support": {
+      "issuer": true,
+      "issuedOn": true,
+      "gross": true,
+      "vatRate": true,
+      "net": true
+    }
+  },
+  {
+    "id": "charity_donation",
+    "support": {
+      "issuer": true,
+      "issuedOn": true,
+      "gross": true,
+      "vatRate": true,
+      "net": true
+    }
+  },
+  {
+    "id": "childcare_invoice",
+    "support": {
+      "issuer": true,
+      "issuedOn": true,
+      "gross": true,
+      "vatRate": true,
+      "net": true
+    }
+  },
+  {
+    "id": "dividend_cert_abn_2024",
+    "support": {
+      "issuer": true,
+      "issuedOn": true,
+      "gross": true,
+      "vatRate": true,
+      "net": true
+    }
+  },
+  {
+    "id": "freelance_invoice",
+    "support": {
+      "issuer": true,
+      "issuedOn": true,
+      "gross": true,
+      "vatRate": true,
+      "net": true
+    }
+  },
+  {
+    "id": "health_insurance_premium",
+    "support": {
+      "issuer": true,
+      "issuedOn": true,
+      "gross": true,
+      "vatRate": true,
+      "net": true
+    }
+  },
+  {
+    "id": "mortgage_interest",
+    "support": {
+      "issuer": true,
+      "issuedOn": true,
+      "gross": true,
+      "vatRate": true,
+      "net": true
+    }
+  },
+  {
+    "id": "rental_receipt_may",
+    "support": {
+      "issuer": true,
+      "issuedOn": true,
+      "gross": true,
+      "vatRate": true,
+      "net": true
+    }
+  },
+  {
+    "id": "salary_slip_q1_2024",
+    "support": {
+      "issuer": true,
+      "issuedOn": true,
+      "gross": true,
+      "vatRate": true,
+      "net": true
+    }
+  },
+  {
+    "id": "transport_subscription",
+    "support": {
+      "issuer": true,
+      "issuedOn": true,
+      "gross": true,
+      "vatRate": true,
+      "net": true
+    }
+  },
+  {
+    "id": "tuition_receipt_uva",
+    "support": {
+      "issuer": true,
+      "issuedOn": true,
+      "gross": true,
+      "vatRate": true,
+      "net": true
+    }
+  },
+  {
+    "id": "utility_bill_liander_apr",
+    "support": {
+      "issuer": true,
+      "issuedOn": true,
+      "gross": true,
+      "vatRate": true,
+      "net": true
+    }
+  }
+]

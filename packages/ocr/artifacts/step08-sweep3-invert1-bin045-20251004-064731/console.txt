@@ -1,0 +1,8 @@
+
+> @iberitax/ocr@0.1.0 smoke:ocr:quality /Users/eltjotimmerman/TERO-AI/dev/iberitax/packages/ocr
+> tsc -p tsconfig.json && node dist/quality.js
+
+PRE_OPTS {"deskew":true,"binarize":true,"blurRadius":1,"invert":false,"binThreshold":null,"maxSkewDeg":5}
+FIXTURE=sample-a RAW_tok=9 PRE_tok=9 RAW_chr=39 PRE_chr=35 RAW_recall=66.7% PRE_recall=33.3% BEST=RAW
+FIXTURE=sample-b RAW_tok=8 PRE_tok=8 RAW_chr=33 PRE_chr=32 RAW_recall=33.3% PRE_recall=0.0% BEST=RAW
+OVERALL RAW_tok=17 PRE_tok=17 RAW_chr=72 PRE_chr=67 RAW_recall=50.0% PRE_recall=16.7% BEST=RAW

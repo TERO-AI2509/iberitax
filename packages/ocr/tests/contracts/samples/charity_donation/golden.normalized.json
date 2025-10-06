@@ -1,0 +1,19 @@
+{
+  "documentType": "donation_receipt",
+  "issuer": "Stichting Goede Doelen",
+  "issuedOn": "2024-12-20",
+  "currency": "EUR",
+  "amount": {
+    "gross": 250.0,
+    "vatRate": 0,
+    "net": 250.0
+  },
+  "support": {
+    "issuer": true,
+    "issuedOn": true,
+    "amount.gross": true,
+    "amount.vatRate": true,
+    "amount.net": true
+  },
+  "kvk": "41234567"
+}

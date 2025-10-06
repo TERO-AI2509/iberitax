@@ -1,0 +1,10 @@
+{
+  "taxYear": 2024,
+  "taxpayerId": "ES-ABC123",
+  "docType": "dividend",
+  "source": { "fileName": "broker-dividend.pdf", "pageCount": 2 },
+  "currency": "EUR",
+  "items": [
+    { "type": "dividend", "amountEUR": 123.45, "description": "ACME Corp 2024-06", "dateISO": "2024-06-15", "payer": "ACME Corp" }
+  ]
+}

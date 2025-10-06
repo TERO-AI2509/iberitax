@@ -1,0 +1,19 @@
+{
+  "documentType": "insurance_statement",
+  "issuer": "Zilveren Kruis",
+  "issuedOn": "2024-01-31",
+  "currency": "EUR",
+  "amount": {
+    "gross": 143.5,
+    "vatRate": 0,
+    "net": 143.5
+  },
+  "support": {
+    "issuer": true,
+    "issuedOn": true,
+    "amount.gross": true,
+    "amount.vatRate": true,
+    "amount.net": true
+  },
+  "policy": "ZK-778201-2024"
+}

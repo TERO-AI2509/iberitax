@@ -1,0 +1,1 @@
+# Validation Summary · dividend-cert- Passed: 7- Failed: 0

@@ -1,0 +1,75 @@
+packages/ocr/artifacts
+==> packages/ocr/artifacts
+total 160
+drwxr-xr-x  62 eltjotimmerman  staff  1984 Oct  5 16:54 .
+drwxr-xr-x  17 eltjotimmerman  staff   544 Oct  5 16:42 ..
+-rw-r--r--@  1 eltjotimmerman  staff  6148 Oct  5 16:42 .DS_Store
+drwxr-xr-x  13 eltjotimmerman  staff   416 Oct  5 16:01 drift
+drwxr-xr-x   7 eltjotimmerman  staff   224 Oct  5 14:30 export
+-rw-r--r--   1 eltjotimmerman  staff    36 Oct  5 13:45 export.summary.csv
+-rw-r--r--   1 eltjotimmerman  staff   970 Oct  5 15:51 field_corrections.plan.csv
+-rw-r--r--   1 eltjotimmerman  staff    13 Oct  5 16:55 field_map.ping.txt
+drwxr-xr-x  22 eltjotimmerman  staff   704 Oct  5 14:34 history
+drwxr-xr-x   5 eltjotimmerman  staff   160 Oct  4 09:52 input
+-rw-r--r--   1 eltjotimmerman  staff   147 Oct  4 06:48 quality.csv
+-rw-r--r--   1 eltjotimmerman  staff   199 Oct  4 06:48 quality.md
+drwxr-xr-x   2 eltjotimmerman  staff    64 Oct  4 06:24 step07-baseline-20251004-062427
+drwxr-xr-x   4 eltjotimmerman  staff   128 Oct  4 06:28 step07-baseline-20251004-062809
+-rw-r--r--   1 eltjotimmerman  staff   443 Oct  4 06:28 step07-baseline-20251004-062809.console.txt
+drwxr-xr-x   5 eltjotimmerman  staff   160 Oct  4 06:30 step07-sweep1-bin035-20251004-062927
+drwxr-xr-x   5 eltjotimmerman  staff   160 Oct  4 06:30 step07-sweep1-bin045-20251004-063011
+drwxr-xr-x   5 eltjotimmerman  staff   160 Oct  4 06:25 step07-sweep1-bin050-20251004-062449
+drwxr-xr-x   5 eltjotimmerman  staff   160 Oct  4 06:32 step07-sweep2-skew7-blur0-20251004-063119
+drwxr-xr-x   5 eltjotimmerman  staff   160 Oct  4 06:32 step07-sweep2-skew7-blur2-20251004-063211
+drwxr-xr-x   5 eltjotimmerman  staff   160 Oct  4 06:33 step07-sweep3-invert1-bin045-20251004-063257
+drwxr-xr-x   5 eltjotimmerman  staff   160 Oct  4 06:46 step08-sweep1-bin040-20251004-064603
+drwxr-xr-x   5 eltjotimmerman  staff   160 Oct  4 06:47 step08-sweep2-skew7-blur0-20251004-064649
+drwxr-xr-x   5 eltjotimmerman  staff   160 Oct  4 06:48 step08-sweep3-invert1-bin045-20251004-064731
+drwxr-xr-x   5 eltjotimmerman  staff   160 Oct  4 06:45 step08-verify-banner-20251004-064513
+drwxr-xr-x   5 eltjotimmerman  staff   160 Oct  4 06:41 step08-verify-defaults-20251004-064107
+drwxr-xr-x   5 eltjotimmerman  staff   160 Oct  4 06:43 step08-verify-defaults-20251004-064240
+drwxr-xr-x   6 eltjotimmerman  staff   192 Oct  4 06:56 step09-adaptive-20251004045633.
+drwxr-xr-x   6 eltjotimmerman  staff   192 Oct  4 06:56 step09-fixed-20251004045630.
+drwxr-xr-x   8 eltjotimmerman  staff   256 Oct  4 09:40 step09-fixed-20251004072611.
+drwxr-xr-x   6 eltjotimmerman  staff   192 Oct  4 09:41 step09-fixed-20251004074112.
+drwxr-xr-x   6 eltjotimmerman  staff   192 Oct  4 09:41 step09-fixed-20251004074147.
+drwxr-xr-x   6 eltjotimmerman  staff   192 Oct  4 09:43 step09-fixed-20251004074304.
+drwxr-xr-x   6 eltjotimmerman  staff   192 Oct  4 09:43 step09-fixed-20251004074315.
+drwxr-xr-x   8 eltjotimmerman  staff   256 Oct  4 09:44 step09-fixed-20251004074403.
+drwxr-xr-x   6 eltjotimmerman  staff   192 Oct  4 09:48 step09-fixed-20251004074818.
+drwxr-xr-x   6 eltjotimmerman  staff   192 Oct  4 09:52 step09-fixed-20251004075249.
+drwxr-xr-x   6 eltjotimmerman  staff   192 Oct  4 09:56 step09-fixed-20251004075633.
+drwxr-xr-x   6 eltjotimmerman  staff   192 Oct  4 09:58 step09-fixed-20251004075801.
+drwxr-xr-x   6 eltjotimmerman  staff   192 Oct  4 09:59 step09-fixed-20251004075927.
+drwxr-xr-x   6 eltjotimmerman  staff   192 Oct  4 10:02 step09-fixed-20251004080244.
+drwxr-xr-x   6 eltjotimmerman  staff   192 Oct  4 10:05 step09-fixed-20251004080505.
+drwxr-xr-x   6 eltjotimmerman  staff   192 Oct  4 10:05 step09-fixed-20251004080509.
+drwxr-xr-x   6 eltjotimmerman  staff   192 Oct  4 11:14 step09-fixed-20251004091435.
+drwxr-xr-x   6 eltjotimmerman  staff   192 Oct  4 11:15 step09-fixed-20251004091513.
+drwxr-xr-x   8 eltjotimmerman  staff   256 Oct  4 22:05 step09-fixed-20251004200534.
+drwxr-xr-x   6 eltjotimmerman  staff   192 Oct  5 16:29 step09-fixed-20251005142932.
+drwxr-xr-x   6 eltjotimmerman  staff   192 Oct  5 16:31 step09-fixed-20251005143158.
+drwxr-xr-x   6 eltjotimmerman  staff   192 Oct  5 16:34 step09-fixed-20251005143405.
+drwxr-xr-x   6 eltjotimmerman  staff   192 Oct  4 06:56 step09-minimal-20251004045632.
+-rw-r--r--   1 eltjotimmerman  staff   335 Oct  5 16:29 validation_history.md
+-rw-r--r--   1 eltjotimmerman  staff  2190 Oct  5 16:52 validation_report.all.csv
+-rw-r--r--   1 eltjotimmerman  staff   676 Oct  5 16:52 validation_report.dividend-cert.csv
+-rw-r--r--   1 eltjotimmerman  staff    59 Oct  5 16:52 validation_report.dividend-cert.md
+-rw-r--r--   1 eltjotimmerman  staff   747 Oct  5 16:52 validation_report.rental-receipt.csv
+-rw-r--r--   1 eltjotimmerman  staff    60 Oct  5 16:52 validation_report.rental-receipt.md
+-rw-r--r--   1 eltjotimmerman  staff   889 Oct  5 16:52 validation_report.salary-slip.csv
+-rw-r--r--   1 eltjotimmerman  staff    57 Oct  5 16:52 validation_report.salary-slip.md
+-rw-r--r--   1 eltjotimmerman  staff    36 Oct  5 16:39 validation_summary.csv
+-rw-r--r--   1 eltjotimmerman  staff   254 Oct  5 16:39 validation_summary.json
+-rw-r--r--   1 eltjotimmerman  staff    85 Oct  5 13:36 validation_summary.md
+-rw-r--r--   1 eltjotimmerman  staff    36 Oct  5 16:29 validation_trend.md
+packages/ocr/packages/ocr/artifacts
+==> packages/ocr/packages/ocr/artifacts
+total 40
+drwxr-xr-x  7 eltjotimmerman  staff  224 Oct  5 16:38 .
+drwxr-xr-x  3 eltjotimmerman  staff   96 Oct  4 09:56 ..
+-rw-r--r--  1 eltjotimmerman  staff   13 Oct  5 16:52 field_map.ping.txt
+-rw-r--r--  1 eltjotimmerman  staff  112 Oct  4 22:09 validation_history.md
+-rw-r--r--  1 eltjotimmerman  staff   31 Oct  4 09:56 validation_summary.csv
+-rw-r--r--  1 eltjotimmerman  staff   85 Oct  4 09:56 validation_summary.md
+-rw-r--r--  1 eltjotimmerman  staff   54 Oct  4 22:09 validation_trend.md

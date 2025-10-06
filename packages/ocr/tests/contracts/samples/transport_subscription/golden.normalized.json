@@ -1,0 +1,19 @@
+{
+  "documentType": "subscription_receipt",
+  "issuer": "NS",
+  "issuedOn": "2024-02-01",
+  "currency": "EUR",
+  "amount": {
+    "gross": 99.0,
+    "vatRate": 9,
+    "net": 90.83
+  },
+  "support": {
+    "issuer": true,
+    "issuedOn": true,
+    "amount.gross": true,
+    "amount.vatRate": true,
+    "amount.net": true
+  },
+  "plan": "Dal Voordeel"
+}

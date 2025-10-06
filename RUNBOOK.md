@@ -608,3 +608,15 @@ Acceptance:
 - CSV downloads correctly for full and last-5 views.
 - Dashboard links open the correct history page.
 - CI still publishes packages/ocr/artifacts/reports/**.
+
+## Phase 03 · Step 37 — CSV Export + Drill-Through (2025-10-06)
+Status: Done
+
+Changes:
+- Added "Download CSV" on history pages (label,value).
+- Dashboard fields link directly to each field's history page.
+
+Acceptance:
+- CSV downloads correctly for full and last-5 views.
+- Dashboard links open the correct history page.
+- CI still publishes packages/ocr/artifacts/reports/**.

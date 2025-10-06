@@ -570,3 +570,12 @@ Next actions:
 - Optionally add per-field tolerance band shading in sparkline.
 - Consider merging trends from multiple baselines into a toggle.
 
+
+## Phase 03 · Step 35 — Drift History Links & Per-Field Navigation (Done)
+- Added drift.history.render.mjs with markdown+snapshot fallbacks.
+- Generated per-field history pages under artifacts/reports/history/ with sparklines and Δ table.
+- Linked dashboard field cells to history pages via drift.dashboard.linkify.mjs.
+- Added shared stylesheet artifacts/reports/styles.css.
+- CI now uploads artifacts/reports/**.
+Next: Step 36 — tolerance bands, OOB point coloring, last-5 filter.
+

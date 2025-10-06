@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="en">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Drift Dashboard</title>
+<style>
+:root{--bg:#0b0c0f;--fg:#e9ecf1;--muted:#a8b0bd;--card:#131622;--ok:#208a2f;--warn:#b78a1f;--crit:#c43c3c;--chip:#1c2133}
+body{margin:0;background:var(--bg);color:var(--fg);font:14px/1.5 ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Ubuntu}
+.wrap{max-width:1200px;margin:0 auto;padding:24px}
+h1{font-size:22px;margin:0 0 16px 0}
+.toolbar{display:flex;gap:12px;align-items:center;margin:12px 0 18px}
+input[type="search"]{flex:1;padding:10px 12px;border-radius:10px;border:1px solid #2a2f43;background:#0f1322;color:var(--fg)}
+select{padding:10px 12px;border-radius:10px;border:1px solid #2a2f43;background:#0f1322;color:var(--fg)}
+.table{width:100%;border-collapse:separate;border-spacing:0 10px}
+th,td{text-align:left;padding:12px}
+th{font-size:12px;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);cursor:pointer}
+.row{background:var(--card);border-radius:12px;overflow:hidden}
+.status{display:inline-block;padding:4px 10px;border-radius:999px;background:var(--chip);color:var(--fg);font-weight:600}
+.delta{font-variant-numeric:tabular-nums}
+.imgbox{width:140px;height:88px;display:flex;align-items:center;justify-content:center;background:#0e1220;border:1px solid #22273a;border-radius:8px;overflow:hidden}
+.imgbox img{max-width:100%;max-height:100%;display:block}
+.small{color:var(--muted);font-size:12px}
+.badge{display:inline-block;margin-left:8px;padding:2px 8px;border-radius:999px;background:#0e1220;border:1px solid #2a2f43;color:var(--muted);font-size:12px}
+footer{margin-top:18px;color:var(--muted);font-size:12px}
+</style>
+<div class="wrap">
+  <h1>Drift Dashboard</h1>
+  <div class="toolbar">
+    <input id="q" type="search" placeholder="Filter by field or status">
+    <select id="vol">
+      <option value="">All classes</option>
+      <option>Stable</option>
+      <option>Volatile</option>
+      <option>Critical</option>
+    </select>
+    <select id="pass">
+      <option value="">All results</option>
+      <option value="pass">Pass</option>
+      <option value="fail">Fail</option>
+    </select>
+  </div>
+  <table class="table" id="tbl">
+    <thead>
+      <tr>
+        <th data-k="field">Field</th>
+        <th data-k="delta">Δ</th>
+        <th data-k="tolerance">Tolerance</th>
+        <th data-k="vol">Class</th>
+        <th data-k="pass">Result</th>
+        <th>Overlay</th>
+      </tr>
+    </thead>
+    <tbody></tbody>
+  </table>
+  <footer>Generated 2025-10-06T11:52:08.527Z</footer>
+</div>
+<script>
+const data = [{"field":"address","delta":0,"tolerance":0,"vol":"Stable","pass":true,"overlayRel":null},{"field":"amount","delta":0,"tolerance":0,"vol":"Stable","pass":true,"overlayRel":null},{"field":"broker_name","delta":0,"tolerance":0,"vol":"Stable","pass":true,"overlayRel":null},{"field":"currency","delta":0,"tolerance":0,"vol":"Stable","pass":true,"overlayRel":null},{"field":"deductions_total","delta":0,"tolerance":0,"vol":"Stable","pass":true,"overlayRel":null},{"field":"dividend_amount","delta":0,"tolerance":0,"vol":"Stable","pass":true,"overlayRel":null},{"field":"employee_name","delta":0,"tolerance":0,"vol":"Stable","pass":true,"overlayRel":null},{"field":"employer_name","delta":0,"tolerance":0,"vol":"Stable","pass":true,"overlayRel":null},{"field":"gross_amount","delta":0,"tolerance":0,"vol":"Stable","pass":true,"overlayRel":null},{"field":"holder_name","delta":0,"tolerance":0,"vol":"Stable","pass":true,"overlayRel":null},{"field":"hours_worked","delta":0,"tolerance":0,"vol":"Stable","pass":true,"overlayRel":null},{"field":"iban","delta":0,"tolerance":0,"vol":"Stable","pass":true,"overlayRel":null},{"field":"isin","delta":0,"tolerance":0,"vol":"Stable","pass":true,"overlayRel":null},{"field":"landlord_name","delta":0,"tolerance":0,"vol":"Stable","pass":true,"overlayRel":null},{"field":"net_amount","delta":0,"tolerance":0,"vol":"Stable","pass":true,"overlayRel":null},{"field":"nif","delta":0,"tolerance":0,"vol":"Stable","pass":true,"overlayRel":null},{"field":"pay_date","delta":0,"tolerance":0,"vol":"Stable","pass":true,"overlayRel":null},{"field":"rent_month","delta":0,"tolerance":0,"vol":"Stable","pass":true,"overlayRel":null},{"field":"tenant_name","delta":0,"tolerance":0,"vol":"Stable","pass":true,"overlayRel":null},{"field":"withholding_tax","delta":0,"tolerance":0,"vol":"Stable","pass":true,"overlayRel":null}]
+</script>
+</html>

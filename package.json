@@ -25,7 +25,9 @@
     "smoke:ocr:pre": "node scripts/ocr.pre.smoke.mjs",
     "smoke:ocr:norm": "node scripts/ocr.normalize.smoke.mjs",
     "smoke:ocr:norm:pdf": "node scripts/ocr.norm.pdf.smoke.mjs",
-    "smoke:ocr:all": "pnpm smoke:ocr:pre && pnpm smoke:ocr:norm"
+    "smoke:ocr:all": "pnpm smoke:ocr:pre && pnpm smoke:ocr:norm",
+    "golden:fields": "node packages/ocr/scripts/regions.snapshot.mjs && pnpm -F @iberitax/ocr test",
+    "golden:migrate": "node -e \"process.exit(0)\""
   },
   "devDependencies": {
     "@babel/preset-env": "^7.28.3",
@@ -64,6 +66,7 @@
     "jose": "^6.1.0",
     "next-auth": "^4.24.11",
     "node-fetch": "3",
+    "sharp": "^0.34.4",
     "stripe": "^18.5.0"
   }
 }

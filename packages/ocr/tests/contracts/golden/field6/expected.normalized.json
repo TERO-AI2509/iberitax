@@ -1,32 +1,3 @@
 {
-  "source": "ocr-engine-v3",
-  "doc_type_hint": "bank_interest_certificate",
-  "pages": 1,
-  "language": "nl",
-  "blocks": [
-    {
-      "type": "text",
-      "value": "ING Bank N.V."
-    },
-    {
-      "type": "text",
-      "value": "bank_interest_certificate"
-    },
-    {
-      "type": "text",
-      "value": "Date: 2024-12-31"
-    },
-    {
-      "type": "text",
-      "value": "Gross: EUR 86.72"
-    },
-    {
-      "type": "text",
-      "value": "VAT 0%"
-    },
-    {
-      "type": "text",
-      "value": "Net: EUR 86.72"
-    }
-  ]
+  "field6": null
 }

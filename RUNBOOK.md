@@ -620,3 +620,14 @@ Acceptance:
 - CSV downloads correctly for full and last-5 views.
 - Dashboard links open the correct history page.
 - CI still publishes packages/ocr/artifacts/reports/**.
+## Phase 03 · Step 37 — CSV Export + Drill-Through (2025-10-06)
+Status: Done
+Changes:
+- Server-rendered Drift Dashboard from drift_amounts.csv (rows visible immediately).
+- History pages: tolerance band shading, red out-of-band points, Last-5 toggle, Download CSV; works even without JSON by parsing existing HTML.
+- Dashboard linkifies to history pages.
+Acceptance:
+- Dashboard shows rows for all fields; links open corresponding history pages.
+- History pages render band and toggle; CSV downloads match selected view.
+- CI still publishes packages/ocr/artifacts/reports/**.
+Next: Phase 03 · Step 38 — Delta Trend Export + Batch Compare.

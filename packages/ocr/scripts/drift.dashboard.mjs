@@ -1,127 +1,157 @@
-import fs from 'node:fs'
-import path from 'node:path'
-import { fileURLToPath } from 'node:url'
+import fs from "fs"
+import path from "path"
+import { fileURLToPath } from "url"
 
-const cwd = process.cwd()
-const tryPaths = [
-  path.resolve(cwd, 'packages/ocr/artifacts/drift/drift_amounts.csv'),
-  path.resolve(cwd, 'artifacts/drift/drift_amounts.csv'),
-  path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../artifacts/drift/drift_amounts.csv')
-]
-const outHtml = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "../artifacts/drift/index.html")
-fs.mkdirSync(path.dirname(outHtml), { recursive: true })
+const __filename = fileURLToPath(import.meta.url)
+const __dirname = path.dirname(__filename)
 
-function findFirstExisting(paths){ for(const p of paths){ if(fs.existsSync(p)) return p } return null }
-const csvPath = findFirstExisting(tryPaths)
-if(!csvPath){ console.error('drift_amounts.csv not found in expected locations'); process.exit(2) }
+const ROOT = path.resolve(__dirname, "..")
+const ARTIFACTS = path.join(ROOT, "artifacts")
+const DRIFT_DIR = path.join(ARTIFACTS, "drift")
+const REPORTS_DIR = path.join(ARTIFACTS, "reports")
+const REPORT_PATH = path.join(REPORTS_DIR, "drift-dashboard.html")
+const TOL_PATH = path.join(ROOT, "config", "tolerances.json")
 
-function splitCSVLine(line){
-  const out=[]; let cur=''; let inQ=false
-  for(let i=0;i<line.length;i++){
-    const ch=line[i]
-    if(ch==='\"'){ inQ=!inQ; continue }
-    if(ch===',' && !inQ){ out.push(cur); cur=''; continue }
-    cur+=ch
-  }
-  out.push(cur)
-  return out
+function ensureDir(p) {
+  if (!fs.existsSync(p)) fs.mkdirSync(p, { recursive: true })
 }
-function norm(s){
-  return (s||'').replace(/^\uFEFF/,'').trim().replace(/^"|"$/g,'')
-}
-function parseCSV(p){
-  const lines = fs.readFileSync(p,'utf8').trim().split(/\r?\n/)
-  const headers = splitCSVLine(lines[0]).map(norm)
-  // normalize header names
-  const headerMap = Object.fromEntries(headers.map((h,i)=>{
-    let k=h.toLowerCase()
-    if(k==='Δ' || k==='delta') k='delta'
-    if(k==='prev' || k==='previous') k='prev'
-    return [k,i]
-  }))
-  const req = ['field','prev','last','delta']
-  for(const r of req){ if(!(r in headerMap)){ throw new Error('Missing column: '+r+' in '+headers.join(',')) } }
-  return lines.slice(1).map(line=>{
-    const cols = splitCSVLine(line).map(norm)
-    return {
-      field: cols[headerMap.field],
-      prev: Number(cols[headerMap.prev]),
-      last: Number(cols[headerMap.last]),
-      delta: Number(cols[headerMap.delta])
-    }
+
+function readCSV(p) {
+  const raw = fs.readFileSync(p, "utf8").trim()
+  const [head, ...rows] = raw.split(/\r?\n/)
+  const cols = head.split(",").map(s => s.trim())
+  return rows.filter(Boolean).map(line => {
+    const parts = line.split(",").map(s => s.trim())
+    const obj = {}
+    cols.forEach((c, i) => (obj[c] = parts[i]))
+    return obj
   })
 }
 
-const rows = parseCSV(csvPath)
-
-// Optional support file
-const supportPath = path.resolve(path.dirname(csvPath).replace('/drift','/export'), 'runC.support.json')
-let supportMap = new Map()
-if (fs.existsSync(supportPath)) {
-  try {
-    const arr = JSON.parse(fs.readFileSync(supportPath,'utf8'))
-    // simple aggregate per field name if present; otherwise leave blank
-    // customize if your support JSON changes structure later
-    const defaultCount = Math.max(2, Math.floor(arr.length/6))
-    for(const f of ['field_7','field_8']) supportMap.set(f, defaultCount)
-  } catch {}
+function firstExisting(paths) {
+  for (const p of paths) if (p && fs.existsSync(p)) return p
+  return null
 }
 
-function badge(v){
-  if(Number.isNaN(v)) return `<span class="pill warn">NaN</span>`
-  const cls = v >= 0 ? 'ok' : (v <= -2 ? 'fail' : 'warn')
-  const sign = v>0?`+${v.toFixed(2)}`:v.toFixed(2)
-  return `<span class="pill ${cls}">${sign}</span>`
+function guessOverlay(field) {
+  const cand = []
+  cand.push(path.join(ARTIFACTS, "overlays", `${field}.png`))
+  cand.push(path.join(ARTIFACTS, "overlays", `${field}.jpg`))
+  cand.push(path.join(ARTIFACTS, "regions", `${field}.overlay.png`))
+  cand.push(path.join(ARTIFACTS, "regions", `${field}.png`))
+  cand.push(path.join(ARTIFACTS, "regions", `${field}.jpg`))
+  return firstExisting(cand)
 }
 
-const html = `<!doctype html>
-<html>
-<head>
-<meta charset="utf-8"/>
-<title>OCR Drift Dashboard</title>
+function classifyVolatility(deltaAbs) {
+  if (deltaAbs < 1) return "Stable"
+  if (deltaAbs < 4) return "Volatile"
+  return "Critical"
+}
+
+function statusColor(withinTol, volClass) {
+  if (withinTol) return "var(--ok)"
+  if (volClass === "Volatile") return "var(--warn)"
+  return "var(--crit)"
+}
+
+function escapeHtml(s) {
+  return String(s ?? "").replace(/[&<>"']/g, m => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[m]))
+}
+
+export async function generateDriftDashboard() {
+  ensureDir(REPORTS_DIR)
+
+  const csvPath = path.join(DRIFT_DIR, "drift_amounts.csv")
+  if (!fs.existsSync(csvPath)) {
+    console.error("missing drift_amounts.csv")
+    return
+  }
+
+  const rows = readCSV(csvPath)
+  const tol = fs.existsSync(TOL_PATH) ? JSON.parse(fs.readFileSync(TOL_PATH, "utf8")) : {}
+  const data = rows.map(r => {
+    const field = r.field || r.Field || r.name || r.Name
+    const deltaNum = Number(r.delta ?? r.Delta ?? r.Δ ?? 0)
+    const tolVal = Number((tol[field]?.abs) ?? (tol[field]?.value) ?? tol[field] ?? 0)
+    const passFail = Math.abs(deltaNum) <= tolVal
+    const vol = classifyVolatility(Math.abs(deltaNum))
+    const overlay = guessOverlay(field)
+    return {
+      field,
+      delta: isFinite(deltaNum) ? deltaNum : 0,
+      tolerance: isFinite(tolVal) ? tolVal : 0,
+      vol,
+      pass: !!passFail,
+      overlayRel: overlay ? path.relative(REPORTS_DIR, overlay).split(path.sep).join("/") : null
+    }
+  })
+
+  const html = `<!doctype html>
+<html lang="en">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Drift Dashboard</title>
 <style>
-body{font:16px/1.4 -apple-system,system-ui,Segoe UI,Roboto,Helvetica,Arial}
-table{width:100%;border-collapse:separate;border-spacing:0 8px}
-th,td{padding:10px 14px}
-thead th{font-weight:700;color:#111}
-tbody tr{background:#fff;box-shadow:0 1px 0 0 #eee inset, 0 -1px 0 0 #eee inset}
-.pill{padding:.2rem .5rem;border-radius:999px;font-size:.85rem;display:inline-block}
-.pill.ok{background:#e6f7ef;color:#0a7f4b}
-.pill.warn{background:#fff7e6;color:#aa7a00}
-.pill.fail{background:#fdecee;color:#b42318}
-.meta{color:#666;margin:6px 0 16px}
-hr{border:0;border-top:1px solid #eee;margin:16px 0}
-h1{margin:0 0 4px}
-.small{font-size:.88rem;color:#777}
+:root{--bg:#0b0c0f;--fg:#e9ecf1;--muted:#a8b0bd;--card:#131622;--ok:#208a2f;--warn:#b78a1f;--crit:#c43c3c;--chip:#1c2133}
+body{margin:0;background:var(--bg);color:var(--fg);font:14px/1.5 ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Ubuntu}
+.wrap{max-width:1200px;margin:0 auto;padding:24px}
+h1{font-size:22px;margin:0 0 16px 0}
+.toolbar{display:flex;gap:12px;align-items:center;margin:12px 0 18px}
+input[type="search"]{flex:1;padding:10px 12px;border-radius:10px;border:1px solid #2a2f43;background:#0f1322;color:var(--fg)}
+select{padding:10px 12px;border-radius:10px;border:1px solid #2a2f43;background:#0f1322;color:var(--fg)}
+.table{width:100%;border-collapse:separate;border-spacing:0 10px}
+th,td{text-align:left;padding:12px}
+th{font-size:12px;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);cursor:pointer}
+.row{background:var(--card);border-radius:12px;overflow:hidden}
+.status{display:inline-block;padding:4px 10px;border-radius:999px;background:var(--chip);color:var(--fg);font-weight:600}
+.delta{font-variant-numeric:tabular-nums}
+.imgbox{width:140px;height:88px;display:flex;align-items:center;justify-content:center;background:#0e1220;border:1px solid #22273a;border-radius:8px;overflow:hidden}
+.imgbox img{max-width:100%;max-height:100%;display:block}
+.small{color:var(--muted);font-size:12px}
+.badge{display:inline-block;margin-left:8px;padding:2px 8px;border-radius:999px;background:#0e1220;border:1px solid #2a2f43;color:var(--muted);font-size:12px}
+footer{margin-top:18px;color:var(--muted);font-size:12px}
 </style>
-</head>
-<body>
-<h1>OCR Drift Dashboard</h1>
-<div class="meta small">Generated ${new Date().toISOString()}</div>
-<a class="small" href="../history/validation_history.md">Open validation history</a>
-<hr/>
-<table>
-<thead>
-<tr><th>Field</th><th>Prev</th><th>Last</th><th>Δ</th><th>Support</th><th>Trend</th></tr>
-</thead>
-<tbody>
-${rows.map(r=>{
-  const support = supportMap.get(r.field) ?? ''
-  const prev = Number.isFinite(r.prev) ? r.prev.toFixed(2) : '—'
-  const last = Number.isFinite(r.last) ? r.last.toFixed(2) : '—'
-  return `<tr>
-    <td>${r.field ?? '—'}</td>
-    <td>${prev}</td>
-    <td>${last}</td>
-    <td>${badge(r.delta)}</td>
-    <td>${support || ''}</td>
-    <td><div class="small" style="height:4px;background:#eee;border-radius:4px"></div></td>
-  </tr>`
-}).join('')}
-</tbody>
-</table>
-<p class="small">Δ classes: ok ≥ 0 · warn &lt; 0 · fail ≤ -2 (global threshold)</p>
-</body>
+<div class="wrap">
+  <h1>Drift Dashboard</h1>
+  <div class="toolbar">
+    <input id="q" type="search" placeholder="Filter by field or status">
+    <select id="vol">
+      <option value="">All classes</option>
+      <option>Stable</option>
+      <option>Volatile</option>
+      <option>Critical</option>
+    </select>
+    <select id="pass">
+      <option value="">All results</option>
+      <option value="pass">Pass</option>
+      <option value="fail">Fail</option>
+    </select>
+  </div>
+  <table class="table" id="tbl">
+    <thead>
+      <tr>
+        <th data-k="field">Field</th>
+        <th data-k="delta">Δ</th>
+        <th data-k="tolerance">Tolerance</th>
+        <th data-k="vol">Class</th>
+        <th data-k="pass">Result</th>
+        <th>Overlay</th>
+      </tr>
+    </thead>
+    <tbody></tbody>
+  </table>
+  <footer>Generated ${new Date().toISOString()}</footer>
+</div>
+<script>
+const data = ${JSON.stringify([])}
+</script>
 </html>`
-fs.writeFileSync(outHtml, html)
-console.log('Wrote', outHtml)
+  const withData = html.replace("const data = []", "const data = " + JSON.stringify(data))
+  fs.writeFileSync(REPORT_PATH, withData, "utf8")
+  console.log("wrote", REPORT_PATH)
+}
+
+if (import.meta.url === `file://${process.argv[1]}`) {
+  generateDriftDashboard()
+}

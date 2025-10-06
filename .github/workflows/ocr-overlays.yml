@@ -1,0 +1,28 @@
+name: OCR Overlays
+on:
+  push:
+    branches: [ "**" ]
+  pull_request:
+jobs:
+  overlays:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 9
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm -F @iberitax/ocr add sharp
+      - run: node packages/ocr/scripts/regions.snapshot.and.overlays.mjs
+      - run: pnpm -F @iberitax/ocr test
+      - run: pnpm -F @iberitax/ocr run drift:gen
+      - run: pnpm -F @iberitax/ocr run check:drift:gate
+      - if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ocr-overlays
+          path: packages/ocr/artifacts/overlays

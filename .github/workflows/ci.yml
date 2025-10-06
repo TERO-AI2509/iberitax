@@ -124,6 +124,7 @@ jobs:
         with:
           name: web-smoke-timing-${{ github.run_id }}
           path: artifacts/${{ github.run_id }}/web_smoke_total_seconds.txt
+          - packages/ocr/artifacts/reports/**
           if-no-files-found: error
 
       - name: Upload logs (server & smoke)
@@ -132,6 +133,7 @@ jobs:
         with:
           name: web-smoke-logs-${{ github.run_id }}
           path: |
+          - packages/ocr/artifacts/reports/**
             server.log
             smoke.log
           if-no-files-found: warn

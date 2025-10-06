@@ -2,6 +2,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
+import { generateDriftDashboard } from './drift.dashboard.mjs'
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const PKG = path.resolve(__dirname, '..');             // packages/ocr
 const ART = path.join(PKG, 'artifacts');
@@ -132,3 +133,5 @@ for (const f of fields) {
 }
 fs.writeFileSync(DRIFT_FILE, out, 'utf8');
 console.log(`Wrote ${DRIFT_FILE} with ${fields.length} fields (parsed as ${kind.toUpperCase()}).`);
+
+await generateDriftDashboard()

@@ -517,3 +517,56 @@ Add per-field golden tests for all promoted fields from Step 30.
 - Drift gate remains green.
 - phase04-lockin snapshot archived.
 
+
+## Phase 03 · Step 33 — Overlay Visualization & Tolerance Tuning ✅ [$ts]
+
+**What changed**
+- Added overlay renderer drawing each promoted field’s bbox + OCR glyph boxes on top of region images.
+- Introduced per-field absolute / relative tolerances (`packages/ocr/config/tolerances.json`).
+- Updated golden comparator to honor tolerances, normalize whitespace, and equate null ↔ undefined.
+- Failures now print abs/rel tolerances, overlay path, and field-level diff.
+- CI and local runs both attach overlay PNGs as artifacts.
+
+**Why**
+- Visual drift debugging is now instant.
+- Tiny rounding and whitespace variations no longer break gates.
+- Ensures reproducible, noise-free drift testing.
+
+**Acceptance**
+- Overlays rendered under `packages/ocr/artifacts/overlays/<field>/region.overlay.png`.
+- Tests and drift gate green locally & in CI.
+- Golden diffs readable and traceable.
+
+**Next actions**
+1. Integrate overlays into drift dashboard HTML.
+2. Add per-field volatility auto-tuning for tolerance baselines.
+3. Start **Step 34 — Drift Dashboard and HTML Reports** (visual summary + artifact browser).
+
+
+CI: Drift dashboard now uploaded as artifact 'drift-dashboard' after drift:gen.
+
+## Work Instructions — MVP-first Q&A Principle
+### MVP-first Q&A Principle
+- When asking questions, assume the user knows nothing.
+- Always propose the shortest path to a working, reasonably robust MVP.
+- Prioritize MVP practicality over nice-to-haves.
+
+- When asking questions, assume the user knows nothing.
+- Always propose the shortest path to a working, reasonably robust MVP.
+- Prioritize MVP practicality over nice-to-haves.
+
+CI Summary on failure: Job now writes a debug section with artifact name, dashboard path, local repro commands, and last 20 lines of drift_amounts.csv.
+
+## Phase 03 · Step 35 — Drift History Links & Per-Field Navigation
+Status: Done
+Changes:
+- Added per-field history renderer at `packages/ocr/scripts/drift.history.render.mjs`.
+- Generated `packages/ocr/artifacts/reports/history/<field>.html` with inline SVG sparkline and Δ table.
+- Post-processed dashboard to hyperlink field cells to their history pages via `drift.dashboard.linkify.mjs`.
+- Added `pnpm -F @iberitax/ocr run drift:reports`.
+- CI artifacts now include `packages/ocr/artifacts/reports/**`.
+Next actions:
+- Style polish for history pages.
+- Optionally add per-field tolerance band shading in sparkline.
+- Consider merging trends from multiple baselines into a toggle.
+

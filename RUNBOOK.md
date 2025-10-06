@@ -579,3 +579,20 @@ Next actions:
 - CI now uploads artifacts/reports/**.
 Next: Step 36 — tolerance bands, OOB point coloring, last-5 filter.
 
+
+## Phase 03 · Step 36 — Tolerance Bands & Last-5 Filter (2025-10-06)
+**Status:** Done
+
+**Changes:** 
+- History pages now render a shaded ±tolerance band from `packages/ocr/config/tolerances.json`.
+- Points outside tolerance are highlighted.
+- In-page toggle shows full series or last 5 runs (zero-dependency, static).
+
+**Acceptance:** 
+- Each history page shows the band and colored out-of-band points.
+- Toggle switches between full series and last 5 runs.
+- CI artifact includes `reports/**`.
+
+**Next Step:** Phase 03 · Step 37 — CSV Export + Drill-Through (per drift gate failures).
+
+**Note:** As per project policy, after each Step we prepare a starter prompt for the next chat and remind to upload all MU-plugins and current files for analysis.

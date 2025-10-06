@@ -596,3 +596,15 @@ Next: Step 36 — tolerance bands, OOB point coloring, last-5 filter.
 **Next Step:** Phase 03 · Step 37 — CSV Export + Drill-Through (per drift gate failures).
 
 **Note:** As per project policy, after each Step we prepare a starter prompt for the next chat and remind to upload all MU-plugins and current files for analysis.
+
+## Phase 03 · Step 37 — CSV Export + Drill-Through (2025-10-06)
+Status: Done
+
+Changes:
+- Added "Download CSV" on history pages (label,value).
+- Dashboard fields link directly to each field's history page.
+
+Acceptance:
+- CSV downloads correctly for full and last-5 views.
+- Dashboard links open the correct history page.
+- CI still publishes packages/ocr/artifacts/reports/**.

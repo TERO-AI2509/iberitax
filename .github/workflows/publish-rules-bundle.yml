@@ -18,6 +18,7 @@ jobs:
           fetch-depth: 0
 
       - uses: actions/setup-node@v4
+       - name: Prebuild rules dashboard         run: |           node scripts/modelo100.rules.dashboard.html.mjs           node scripts/modelo100.rules.index.html.mjs           node scripts/modelo100.rules.insights.html.mjs           node scripts/modelo100.rules.index.mjs
         with:
           node-version: '20'
 

@@ -1,38 +1,40 @@
 name: Publish Rules Dashboard Bundle
 
 on:
-  push:
-    tags:
-      - 'v*'
   workflow_dispatch:
+  push:
+    branches: [ main ]
+    tags: [ "v*" ]
 
 permissions:
   contents: read
   pages: write
   id-token: write
 
+concurrency:
+  group: "pages"
+  cancel-in-progress: true
+
 jobs:
   publish:
     runs-on: ubuntu-latest
-    permissions:
-      contents: write
     outputs:
       stamp: ${{ steps.stamp.outputs.stamp }}
       refname: ${{ steps.stamp.outputs.refname }}
     steps:
       - uses: actions/checkout@v4
         with:
-          ref: ${{ github.ref_name }}
+          ref: ${{ github.ref }}
           fetch-depth: 0
-
       - uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          node-version: 20
 
       - name: Prebuild rules dashboard
         env:
-          ENABLE_RULES_DASHBOARD: '1'
-          ENABLE_RULE_INSIGHTS_HTML: '1'
+          ENABLE_RULES_DASHBOARD: 1
+          ENABLE_RULE_INSIGHTS_HTML: 1
+        shell: bash
         run: |
           mkdir -p artifacts/modelo100
           [ -f artifacts/modelo100/rules.index.md ] || cat > artifacts/modelo100/rules.index.md <<'MD'
@@ -46,7 +48,8 @@ jobs:
 
       - name: Build publish bundle
         env:
-          ENABLE_RULES_PUBLISH: '1'
+          ENABLE_RULES_PUBLISH: 1
+        shell: bash
         run: |
           node -v
           node scripts/modelo100.rules.publish.mjs
@@ -55,6 +58,7 @@ jobs:
 
       - name: Compute build stamp
         id: stamp
+        shell: bash
         run: |
           TS=$(date -u +%Y%m%dT%H%M%SZ)
           SHA=$(git rev-parse --short HEAD)
@@ -64,6 +68,7 @@ jobs:
           echo "::notice title=Build Stamp::${TS}-${SHA}"
 
       - name: Prepare release files
+        shell: bash
         run: |
           mkdir -p artifacts/release
           cp artifacts/modelo100/rules-dashboard-bundle.zip "artifacts/release/rules-dashboard-bundle-${{ steps.stamp.outputs.stamp }}.zip"
@@ -75,32 +80,21 @@ jobs:
           name: rules-dashboard-bundle-${{ steps.stamp.outputs.stamp }}
           path: artifacts/release/*
 
-      - uses: actions/configure-pages@v5
+      - name: Configure Pages
+        uses: actions/configure-pages@v5
 
-      - uses: actions/upload-pages-artifact@v3
+      - name: Upload site to Pages
+        uses: actions/upload-pages-artifact@v3
         with:
           path: artifacts/modelo100/dist
 
-      - name: Create GitHub Release (tag pushes)
-        if: startsWith(github.ref, 'refs/tags/')
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          gh --version
-          gh release create "${{ steps.stamp.outputs.refname }}" \
-            "artifacts/release/rules-dashboard-bundle-${{ steps.stamp.outputs.stamp }}.zip" \
-            --title "Rules Dashboard ${{ steps.stamp.outputs.refname }}" \
-            --notes-file artifacts/release/release-notes.md
-
-  pages:
+  deploy:
     needs: publish
     runs-on: ubuntu-latest
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
-    concurrency:
-      group: pages
-      cancel-in-progress: false
     steps:
-      - id: deployment
+      - name: Deploy to GitHub Pages
+        id: deployment
         uses: actions/deploy-pages@v4

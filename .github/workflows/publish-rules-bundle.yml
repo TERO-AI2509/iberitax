@@ -3,8 +3,7 @@ name: Publish Rules Dashboard Bundle
 on:
   workflow_dispatch:
   push:
-    branches: [ main ]
-    tags: [ "v*" ]
+    branches: [main]
 
 permissions:
   contents: read
@@ -12,20 +11,17 @@ permissions:
   id-token: write
 
 concurrency:
-  group: "pages"
+  group: pages
   cancel-in-progress: true
 
 jobs:
   publish:
     runs-on: ubuntu-latest
-    outputs:
-      stamp: ${{ steps.stamp.outputs.stamp }}
-      refname: ${{ steps.stamp.outputs.refname }}
     steps:
       - uses: actions/checkout@v4
         with:
-          ref: ${{ github.ref }}
           fetch-depth: 0
+
       - uses: actions/setup-node@v4
         with:
           node-version: 20
@@ -56,34 +52,15 @@ jobs:
           test -f artifacts/modelo100/rules-dashboard-bundle.zip
           echo "::notice title=Bundle Found::artifacts/modelo100/rules-dashboard-bundle.zip"
 
-      - name: Compute build stamp
-        id: stamp
+      - name: Unzip for Pages
         shell: bash
         run: |
-          TS=$(date -u +%Y%m%dT%H%M%SZ)
-          SHA=$(git rev-parse --short HEAD)
-          REF="${GITHUB_REF_NAME}"
-          echo "stamp=${TS}-${SHA}" >> "$GITHUB_OUTPUT"
-          echo "refname=${REF}" >> "$GITHUB_OUTPUT"
-          echo "::notice title=Build Stamp::${TS}-${SHA}"
+          rm -rf artifacts/modelo100/dist
+          mkdir -p artifacts/modelo100/dist
+          unzip -q artifacts/modelo100/rules-dashboard-bundle.zip -d artifacts/modelo100/dist
+          ls -l artifacts/modelo100/dist
 
-      - name: Prepare release files
-        shell: bash
-        run: |
-          mkdir -p artifacts/release
-          cp artifacts/modelo100/rules-dashboard-bundle.zip "artifacts/release/rules-dashboard-bundle-${{ steps.stamp.outputs.stamp }}.zip"
-          sed -e "s/{{TAG}}/${{ steps.stamp.outputs.refname }}/g" -e "s/{{STAMP}}/${{ steps.stamp.outputs.stamp }}/g" docs/publish-notes.md > artifacts/release/release-notes.md
-          ls -l artifacts/release
-
-      - uses: actions/upload-artifact@v4
-        with:
-          name: rules-dashboard-bundle-${{ steps.stamp.outputs.stamp }}
-          path: artifacts/release/*
-
-      - name: Configure Pages
-        uses: actions/configure-pages@v5
-
-      - name: Upload site to Pages
+      - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3
         with:
           path: artifacts/modelo100/dist
@@ -95,6 +72,6 @@ jobs:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
-      - name: Deploy to GitHub Pages
-        id: deployment
+      - uses: actions/configure-pages@v5
+      - id: deployment
         uses: actions/deploy-pages@v4

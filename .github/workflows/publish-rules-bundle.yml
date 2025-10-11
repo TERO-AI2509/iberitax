@@ -24,6 +24,7 @@ jobs:
       - name: Prebuild rules dashboard
         env:
           ENABLE_RULES_DASHBOARD: '1'
+          ENABLE_RULE_INSIGHTS_HTML: '1'
         run: |
           mkdir -p artifacts/modelo100
           [ -f artifacts/modelo100/rules.index.md ] || cat > artifacts/modelo100/rules.index.md <<'MD'

@@ -19,6 +19,8 @@ jobs:
 
       - uses: actions/setup-node@v4
         with:
+          node-version: '20'
+
       - name: Prebuild rules dashboard
         env:
           ENABLE_RULES_DASHBOARD: '1'
@@ -27,14 +29,6 @@ jobs:
           node scripts/modelo100.rules.index.html.mjs
           node scripts/modelo100.rules.insights.html.mjs
           node scripts/modelo100.rules.dashboard.html.mjs
-          node-version: '20'
-
-      - name: Prebuild rules dashboard
-        run: |
-          node scripts/modelo100.rules.dashboard.html.mjs
-          node scripts/modelo100.rules.index.html.mjs
-          node scripts/modelo100.rules.insights.html.mjs
-          node scripts/modelo100.rules.index.mjs
 
       - name: Build publish bundle
         env:
@@ -53,6 +47,7 @@ jobs:
           REF="${GITHUB_REF_NAME}"
           echo "stamp=${TS}-${SHA}" >> "$GITHUB_OUTPUT"
           echo "refname=${REF}" >> "$GITHUB_OUTPUT"
+          echo "::notice title=Build Stamp::${TS}-${SHA}"
 
       - name: Prepare release files
         run: |
@@ -72,6 +67,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
+          gh --version
           gh release create "${{ steps.stamp.outputs.refname }}" \
             "artifacts/release/rules-dashboard-bundle-${{ steps.stamp.outputs.stamp }}.zip" \
             --title "Rules Dashboard ${{ steps.stamp.outputs.refname }}" \

@@ -21,7 +21,7 @@ jobs:
         with:
           node-version: '20'
 
-      - name: Prebuild rules dashboard
+            - name: Prebuild rules dashboard
         env:
           ENABLE_RULES_DASHBOARD: '1'
         run: |
@@ -30,6 +30,7 @@ jobs:
           node scripts/modelo100.rules.index.html.mjs || true
           node scripts/modelo100.rules.insights.html.mjs || true
           node scripts/modelo100.rules.dashboard.html.mjs || true
+
       - name: Build publish bundle
         env:
           ENABLE_RULES_PUBLISH: '1'

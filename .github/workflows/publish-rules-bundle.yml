@@ -18,9 +18,6 @@ jobs:
         with:
           node-version: '20'
 
-      - name: Ensure GitHub CLI
-        uses: cli/cli@v2
-
       - name: Build publish bundle
         env:
           ENABLE_RULES_PUBLISH: '1'
@@ -47,7 +44,6 @@ jobs:
           sed -e "s/{{TAG}}/${{ steps.stamp.outputs.refname }}/g" -e "s/{{STAMP}}/${{ steps.stamp.outputs.stamp }}/g" docs/publish-notes.md > artifacts/release/release-notes.md
           ls -l artifacts/release
 
-      # Always upload artifacts (debug/for manual runs)
       - name: Upload workflow artifact
         uses: actions/upload-artifact@v4
         with:

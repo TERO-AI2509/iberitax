@@ -10,3 +10,9 @@ Mono-repo for Iberitax MVP (apps, packages, infra).
 - \`pnpm demo:health\` — check stub server
 - \`pnpm demo:extract\` — typed extract demo
 - \`pnpm test\` — project tests
+
+## Rules Dashboard
+
+Latest bundle: https://TERO-AI2509.github.io/iberitax/
+
+[![Publish Rules Dashboard](https://github.com/TERO-AI2509/iberitax/actions/workflows/publish-rules-bundle.yml/badge.svg)](https://github.com/TERO-AI2509/iberitax/actions/workflows/publish-rules-bundle.yml)

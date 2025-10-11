@@ -18,6 +18,9 @@ jobs:
         with:
           node-version: '20'
 
+      - name: Ensure GitHub CLI
+        uses: cli/cli@v2
+
       - name: Build publish bundle
         env:
           ENABLE_RULES_PUBLISH: '1'
@@ -25,6 +28,7 @@ jobs:
           node -v
           node scripts/modelo100.rules.publish.mjs
           test -f artifacts/modelo100/rules-dashboard-bundle.zip
+          echo "::notice title=Bundle Found::artifacts/modelo100/rules-dashboard-bundle.zip"
 
       - name: Compute build stamp
         id: stamp
@@ -34,15 +38,17 @@ jobs:
           REF="${GITHUB_REF_NAME}"
           echo "stamp=${TS}-${SHA}" >> "$GITHUB_OUTPUT"
           echo "refname=${REF}" >> "$GITHUB_OUTPUT"
+          echo "::notice title=Build Stamp::${TS}-${SHA}"
 
       - name: Prepare release files
         run: |
           mkdir -p artifacts/release
           cp artifacts/modelo100/rules-dashboard-bundle.zip "artifacts/release/rules-dashboard-bundle-${{ steps.stamp.outputs.stamp }}.zip"
           sed -e "s/{{TAG}}/${{ steps.stamp.outputs.refname }}/g" -e "s/{{STAMP}}/${{ steps.stamp.outputs.stamp }}/g" docs/publish-notes.md > artifacts/release/release-notes.md
+          ls -l artifacts/release
 
-      - name: Upload workflow artifact (manual runs)
-        if: github.event_name == 'workflow_dispatch'
+      # Always upload artifacts (debug/for manual runs)
+      - name: Upload workflow artifact
         uses: actions/upload-artifact@v4
         with:
           name: rules-dashboard-bundle-${{ steps.stamp.outputs.stamp }}
@@ -53,6 +59,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
+          gh --version
           gh release create "${{ steps.stamp.outputs.refname }}" \
             "artifacts/release/rules-dashboard-bundle-${{ steps.stamp.outputs.stamp }}.zip" \
             --title "Rules Dashboard ${{ steps.stamp.outputs.refname }}" \

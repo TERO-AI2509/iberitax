@@ -11,6 +11,8 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: write
+    outputs:
+      stamp: ${{ steps.stamp.outputs.stamp }}
     steps:
       - uses: actions/checkout@v4
         with:
@@ -78,3 +80,34 @@ jobs:
             "artifacts/release/rules-dashboard-bundle-${{ steps.stamp.outputs.stamp }}.zip" \
             --title "Rules Dashboard ${{ steps.stamp.outputs.refname }}" \
             --notes-file artifacts/release/release-notes.md
+
+  pages:
+    if: ${{ always() && needs.publish.result == 'success' }}
+    needs: publish
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download built artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: rules-dashboard-bundle-${{ needs.publish.outputs.stamp }}
+          path: site
+
+      - name: Unzip site
+        run: |
+          mkdir -p _site
+          unzip -q "site/rules-dashboard-bundle-*.zip" -d _site
+
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
+
+      - name: Deploy to Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

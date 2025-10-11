@@ -6,6 +6,9 @@ on:
       - 'v*'
   workflow_dispatch:
 
+permissions:
+  contents: read
+
 jobs:
   publish:
     runs-on: ubuntu-latest
@@ -13,6 +16,7 @@ jobs:
       contents: write
     outputs:
       stamp: ${{ steps.stamp.outputs.stamp }}
+      refname: ${{ steps.stamp.outputs.refname }}
     steps:
       - uses: actions/checkout@v4
         with:
@@ -70,6 +74,11 @@ jobs:
           name: rules-dashboard-bundle-${{ steps.stamp.outputs.stamp }}
           path: artifacts/release/*
 
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: artifacts/modelo100/dist
+
       - name: Create GitHub Release (tag pushes)
         if: startsWith(github.ref, 'refs/tags/')
         env:
@@ -81,33 +90,19 @@ jobs:
             --title "Rules Dashboard ${{ steps.stamp.outputs.refname }}" \
             --notes-file artifacts/release/release-notes.md
 
-  pages:
-    if: ${{ always() && needs.publish.result == 'success' }}
+  deploy:
     needs: publish
+    runs-on: ubuntu-latest
     permissions:
       pages: write
       id-token: write
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
-    runs-on: ubuntu-latest
+    concurrency:
+      group: pages
+      cancel-in-progress: false
     steps:
-      - name: Download built artifact
-        uses: actions/download-artifact@v4
-        with:
-          name: rules-dashboard-bundle-${{ needs.publish.outputs.stamp }}
-          path: site
-
-      - name: Unzip site
-        run: |
-          mkdir -p _site
-          unzip -q "site/rules-dashboard-bundle-*.zip" -d _site
-
-      - name: Upload Pages artifact
-        uses: actions/upload-pages-artifact@v3
-        with:
-          path: _site
-
-      - name: Deploy to Pages
+      - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4

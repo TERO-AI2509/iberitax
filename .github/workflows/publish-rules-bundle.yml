@@ -8,6 +8,8 @@ on:
 
 permissions:
   contents: read
+  pages: write
+  id-token: write
 
 jobs:
   publish:
@@ -68,14 +70,14 @@ jobs:
           sed -e "s/{{TAG}}/${{ steps.stamp.outputs.refname }}/g" -e "s/{{STAMP}}/${{ steps.stamp.outputs.stamp }}/g" docs/publish-notes.md > artifacts/release/release-notes.md
           ls -l artifacts/release
 
-      - name: Upload workflow artifact
-        uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v4
         with:
           name: rules-dashboard-bundle-${{ steps.stamp.outputs.stamp }}
           path: artifacts/release/*
 
-      - name: Upload Pages artifact
-        uses: actions/upload-pages-artifact@v3
+      - uses: actions/configure-pages@v5
+
+      - uses: actions/upload-pages-artifact@v3
         with:
           path: artifacts/modelo100/dist
 
@@ -90,12 +92,9 @@ jobs:
             --title "Rules Dashboard ${{ steps.stamp.outputs.refname }}" \
             --notes-file artifacts/release/release-notes.md
 
-  deploy:
+  pages:
     needs: publish
     runs-on: ubuntu-latest
-    permissions:
-      pages: write
-      id-token: write
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
@@ -103,6 +102,5 @@ jobs:
       group: pages
       cancel-in-progress: false
     steps:
-      - name: Deploy to GitHub Pages
-        id: deployment
+      - id: deployment
         uses: actions/deploy-pages@v4

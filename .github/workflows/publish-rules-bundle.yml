@@ -26,7 +26,10 @@ jobs:
           ENABLE_RULES_DASHBOARD: '1'
         run: |
           mkdir -p artifacts/modelo100
-          printf "# Modelo 100 – Rules Index\n\n_No rules available in this build._\n" > artifacts/modelo100/rules.index.md
+          [ -f artifacts/modelo100/rules.index.md ] || cat > artifacts/modelo100/rules.index.md <<'MD'
+          | id | tags | message | severity |
+          |----|------|---------|----------|
+          MD
           node scripts/modelo100.rules.index.mjs || true
           node scripts/modelo100.rules.index.html.mjs || true
           node scripts/modelo100.rules.insights.html.mjs || true
@@ -54,14 +57,14 @@ jobs:
       - name: Prepare release files
         run: |
           mkdir -p artifacts/release
-          cp artifacts/modelo100/rules-dashboard-bundle.zip "artifacts/release/rules-dashboard-bundle-\${{ steps.stamp.outputs.stamp }}.zip"
-          sed -e "s/{{TAG}}/\${{ steps.stamp.outputs.refname }}/g" -e "s/{{STAMP}}/\${{ steps.stamp.outputs.stamp }}/g" docs/publish-notes.md > artifacts/release/release-notes.md
+          cp artifacts/modelo100/rules-dashboard-bundle.zip "artifacts/release/rules-dashboard-bundle-${{ steps.stamp.outputs.stamp }}.zip"
+          sed -e "s/{{TAG}}/${{ steps.stamp.outputs.refname }}/g" -e "s/{{STAMP}}/${{ steps.stamp.outputs.stamp }}/g" docs/publish-notes.md > artifacts/release/release-notes.md
           ls -l artifacts/release
 
       - name: Upload workflow artifact
         uses: actions/upload-artifact@v4
         with:
-          name: rules-dashboard-bundle-\${{ steps.stamp.outputs.stamp }}
+          name: rules-dashboard-bundle-${{ steps.stamp.outputs.stamp }}
           path: artifacts/release/*
 
       - name: Create GitHub Release (tag pushes)
@@ -70,7 +73,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           gh --version
-          gh release create "\${{ steps.stamp.outputs.refname }}" \
-            "artifacts/release/rules-dashboard-bundle-\${{ steps.stamp.outputs.stamp }}.zip" \
-            --title "Rules Dashboard \${{ steps.stamp.outputs.refname }}" \
+          gh release create "${{ steps.stamp.outputs.refname }}" \
+            "artifacts/release/rules-dashboard-bundle-${{ steps.stamp.outputs.stamp }}.zip" \
+            --title "Rules Dashboard ${{ steps.stamp.outputs.refname }}" \
             --notes-file artifacts/release/release-notes.md

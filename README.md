@@ -16,3 +16,8 @@ Mono-repo for Iberitax MVP (apps, packages, infra).
 Latest bundle: https://TERO-AI2509.github.io/iberitax/
 
 [![Publish Rules Dashboard](https://github.com/TERO-AI2509/iberitax/actions/workflows/publish-rules-bundle.yml/badge.svg)](https://github.com/TERO-AI2509/iberitax/actions/workflows/publish-rules-bundle.yml)
+
+## Rules Maintenance · CI
+
+![Rules Maintenance](https://github.com/TERO-AI2509/iberitax/actions/workflows/rules-maintenance.yml/badge.svg)
+

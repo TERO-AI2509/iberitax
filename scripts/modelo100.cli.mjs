@@ -1,3 +1,9 @@
+import { spawnSync } from 'node:child_process';
+import process from 'node:process';
+if (process.argv[2] === 'admin') {
+  const r = spawnSync(process.execPath, ['scripts/modelo100.cli.admin.mjs', ...process.argv.slice(3)], { stdio: 'inherit' });
+  process.exit(r.status ?? 0);
+}
 #!/usr/bin/env node
 import { spawn } from 'node:child_process'
 import path from 'node:path'

@@ -1,110 +1,147 @@
-import { readdirSync, readFileSync, writeFileSync, statSync } from 'node:fs';
-import { join } from 'node:path';
-import { createHash } from 'node:crypto';
-import { execFileSync } from 'node:child_process';
+import { execFileSync } from 'node:child_process'
+import { createHash } from 'node:crypto'
+import { createReadStream, existsSync, mkdirSync, readFileSync, readdirSync, writeFileSync } from 'node:fs'
+import { basename, join } from 'node:path'
 
-const OUTDIR = 'artifacts/backups';
-const LIMIT = Number(process.env.LIMIT || 3);
-const REQUIRED = [
-  'RUNBOOK.md',
-  'docs/',
-  'artifacts/modelo100/',
-  'repo-manifest.txt',
-  'rules' 
-];
+const OUT_DIR = process.argv.includes('--out') ? process.argv[process.argv.indexOf('--out') + 1] : 'artifacts/backups'
+const REQUIRED_PATH = process.argv.includes('--required') ? process.argv[process.argv.indexOf('--required') + 1] : 'docs/backup.required.json'
+mkdirSync(OUT_DIR, { recursive: true })
 
-function sha256(path) {
-  const h = createHash('sha256');
-  const buf = readFileSync(path);
-  h.update(buf);
-  return h.digest('hex');
+function sha256File(p) {
+  return new Promise((resolve, reject) => {
+    const hash = createHash('sha256')
+    const s = createReadStream(p)
+    s.on('data', d => hash.update(d))
+    s.on('error', reject)
+    s.on('end', () => resolve(hash.digest('hex')))
+  })
 }
 
-function listBackups(dir) {
-  const files = readdirSync(dir).filter(f => f.startsWith('backup-') && f.endsWith('.zip'));
-  files.sort((a,b) => {
-    const sa = statSync(join(dir,a)).mtimeMs;
-    const sb = statSync(join(dir,b)).mtimeMs;
-    return sb - sa;
-  });
-  return files.slice(0, LIMIT);
-}
-
-function unzipList(path) {
+function listZip(zipPath) {
   try {
-    const out = execFileSync('unzip', ['-Z1', path], { encoding: 'utf8' });
-    return out.split('\n').filter(Boolean);
+    const out = execFileSync('unzip', ['-l', zipPath], { encoding: 'utf8' })
+    const lines = out.split('\n').slice(3, -2)
+    const files = []
+    for (const line of lines) {
+      const parts = line.trim().split(/\s+/)
+      const fname = parts.slice(3).join(' ')
+      if (fname) files.push(fname)
+    }
+    return files
   } catch (e) {
-    return [];
+    return { error: String(e) }
   }
 }
 
-function hasPath(entries, req) {
-  if (req.endsWith('/')) return entries.some(x => x.startsWith(req));
-  if (req.endsWith('*')) return entries.some(x => x.startsWith(req.slice(0,-1)));
-  if (req.includes('.')) return entries.some(x => x === req || x.startsWith(req));
-  return entries.some(x => x.startsWith(req));
-}
-
-function main() {
-  const zips = listBackups(OUTDIR);
-  const rows = [];
-  let allOk = true;
-
-  for (const z of zips) {
-    const zipPath = join(OUTDIR, z);
-    const shaPath = `${zipPath}.sha256`;
-    const metaPath = `${zipPath}.meta.json`;
-
-    const computed = sha256(zipPath);
-    let recorded = null;
+function loadRequiredList() {
+  if (existsSync(REQUIRED_PATH)) {
     try {
-      const first = readFileSync(shaPath, 'utf8').trim().split(/\s+/)[0];
-      recorded = first || null;
+      const list = JSON.parse(readFileSync(REQUIRED_PATH, 'utf8'))
+      if (Array.isArray(list) && list.every(x => typeof x === 'string')) return list
     } catch {}
-    const shaOk = Boolean(recorded) && recorded === computed;
-
-    const entries = unzipList(zipPath);
-    const missing = REQUIRED.filter(req => !hasPath(entries, req));
-
-    const size = statSync(zipPath).size;
-    const ts = statSync(zipPath).mtime.toISOString();
-
-    const row = { zip: z, size, ts, shaOk, recorded, computed, missing, count: entries.length, metaPath };
-    rows.push(row);
-    if (!shaOk || missing.length > 0) allOk = false;
   }
-
-  const report = { ok: allOk, checked: rows.length, dir: OUTDIR, required: REQUIRED, rows };
-  const jsonOut = join(OUTDIR, 'verify.json');
-  const htmlOut = join(OUTDIR, 'verify.html');
-
-  writeFileSync(jsonOut, JSON.stringify(report, null, 2));
-
-  const html = `<!doctype html>
-<html><head><meta charset="utf-8"><title>Backups Verify</title>
-<style>body{font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;padding:16px}
-table{border-collapse:collapse;width:100%}td,th{border:1px solid #ddd;padding:8px}th{background:#f5f5f5;text-align:left}
-.bad{color:#b00020;font-weight:600}.ok{color:#0a7a2a;font-weight:600}.mono{font-family:ui-monospace,Menlo,Monaco,monospace}
-</style></head>
-<body>
-<h1>Backups Verify</h1>
-<p><b>Status:</b> ${allOk ? '<span class="ok">OK</span>' : '<span class="bad">FAIL</span>'}</p>
-<p>Directory: <span class="mono">${OUTDIR}</span> • Required: <span class="mono">${REQUIRED.join(', ')}</span></p>
-<table><thead><tr><th>Zip</th><th>Timestamp</th><th>Size</th><th>Entries</th><th>SHA256</th><th>Missing</th></tr></thead><tbody>
-${rows.map(r=>`<tr>
-<td class="mono">${r.zip}</td>
-<td>${r.ts}</td>
-<td>${r.size}</td>
-<td>${r.count}</td>
-<td>${r.shaOk ? '<span class="ok">OK</span>' : '<span class="bad">MISMATCH</span>'}</td>
-<td>${r.missing.length?'<span class="bad">'+r.missing.join(', ')+'</span>':'<span class="ok">None</span>'}</td>
-</tr>`).join('')}
-</tbody></table>
-</body></html>`;
-  writeFileSync(htmlOut, html);
-
-  console.log(JSON.stringify({ ok: allOk, json: jsonOut, html: htmlOut, checked: rows.length }, null, 2));
+  return ['README.md', 'package.json', 'scripts/', 'docs/']
 }
 
-if (import.meta.url === `file://${process.argv[1]}`) main();
+function htmlEscape(s) {
+  return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
+}
+
+const zips = readdirSync(OUT_DIR).filter(f => f.endsWith('.zip')).sort()
+const required = loadRequiredList()
+const report = { ok: true, checked: [], totals: { passed:0, failed:0, skipped:0 } }
+
+const shaLine = s => s.trim().split(/\s+/)[0]
+
+for (const zip of zips) {
+  const zipPath = join(OUT_DIR, zip)
+  const base = zip.replace(/\.zip$/,'')
+  const metaPath = join(OUT_DIR, base + '.zip.meta.json')
+  const shaPath  = join(OUT_DIR, base + '.zip.sha256')
+  let status = { zip, ok: true, checks: [] }
+
+  const files = listZip(zipPath)
+  if (Array.isArray(files)) {
+    const present = new Set(files)
+    for (const req of required) {
+      const hit = [...present].some(f => req.endsWith('/') ? f.startsWith(req) : f === req)
+      status.checks.push({ type:'required', target:req, ok:hit })
+      if (!hit) status.ok = false
+    }
+  } else {
+    status.checks.push({ type:'zip_list', ok:false, error:String(files.error || 'list error') })
+    status.ok = false
+  }
+
+  if (existsSync(metaPath)) {
+    try {
+      const meta = JSON.parse(readFileSync(metaPath, 'utf8'))
+      const minimal = typeof meta === 'object' && meta && (meta.created || meta.ts || meta.timestamp)
+      status.checks.push({ type:'meta', ok: !!minimal })
+      if (!minimal) status.ok = false
+    } catch {
+      status.checks.push({ type:'meta', ok:false })
+      status.ok = false
+    }
+  } else {
+    status.checks.push({ type:'meta', ok:false })
+    status.ok = false
+  }
+
+  if (existsSync(shaPath)) {
+    const expected = shaLine(readFileSync(shaPath, 'utf8') || '')
+    let computed = ''
+    try {
+      computed = await sha256File(zipPath)
+    } catch {}
+    const ok = expected && computed && expected.toLowerCase() === computed.toLowerCase()
+    status.checks.push({ type:'sha256', ok, expected, computed })
+    if (!ok) status.ok = false
+  } else {
+    status.checks.push({ type:'sha256', ok:false, expected:null, computed:null })
+    status.ok = false
+  }
+
+  report.checked.push(status)
+  if (status.ok) report.totals.passed++; else report.totals.failed++
+}
+
+report.ok = report.totals.failed === 0
+const jsonPath = join(OUT_DIR, 'verify.json')
+const htmlPath = join(OUT_DIR, 'verify.html')
+writeFileSync(jsonPath, JSON.stringify(report, null, 2), 'utf8')
+
+let rows = ''
+for (const item of report.checked) {
+  const cls = item.ok ? 'ok' : 'fail'
+  const details = item.checks.map(c => {
+    if (c.type === 'sha256') return `${c.type}: ${c.ok ? 'OK' : 'FAIL'}`
+    if (c.type === 'required') return `${c.type} [${c.target}]: ${c.ok ? 'OK' : 'FAIL'}`
+    return `${c.type}: ${c.ok ? 'OK' : 'FAIL'}`
+  }).join(' • ')
+  rows += `<tr class="${cls}"><td>${htmlEscape(item.zip)}</td><td>${item.ok?'PASS':'FAIL'}</td><td>${htmlEscape(details)}</td></tr>\n`
+}
+
+const html = `<!doctype html>
+<meta charset="utf-8">
+<title>Backup Verify</title>
+<style>
+body{font-family:system-ui,Segoe UI,Roboto,Arial,sans-serif;margin:20px}
+table{border-collapse:collapse;width:100%}
+th,td{border:1px solid #ddd;padding:8px}
+tr.ok{background:#f6ffed}
+tr.fail{background:#fff1f0}
+th{background:#fafafa}
+.summary{margin:10px 0;font-weight:600}
+</style>
+<h1>Backup Verify</h1>
+<div class="summary">Passed: ${report.totals.passed} • Failed: ${report.totals.failed}</div>
+<table>
+<thead><tr><th>ZIP</th><th>Status</th><th>Checks</th></tr></thead>
+<tbody>
+${rows}
+</tbody>
+</table>`
+writeFileSync(htmlPath, html, 'utf8')
+
+if (!report.ok) process.exit(1)

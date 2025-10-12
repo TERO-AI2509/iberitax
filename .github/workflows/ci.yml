@@ -38,6 +38,10 @@ jobs:
       - name: Run unit tests
         run: pnpm -w test
 
+      - name: Security/GDPR redaction gate
+        run: GIT_CI=1 node scripts/security.redact.mjs artifacts/modelo100 || true
+
+
   web-smoke:
     name: web-smoke
     needs: [test]

@@ -58,3 +58,11 @@
 - [ ] Step 40: Cleanup scan report generated
 - [ ] Step 40: Quarantine tested on a small set if needed
 - [ ] Step 40: Runbook updated with Phase 06 summary and one-shot CLI
+
+- [ ] Phase 07.1: Validate mapping (`node scripts/modelo100.fields.map.validate.mjs`)
+
+- [ ] Phase 07.2: Run dry-run and apply for mapper (`node scripts/modelo100.rules.apply.mjs`)
+
+- [ ] Phase 07.3: Generate mapped CSV and HTML reports
+
+- [ ] Phase 07.4: CLI commands `map-apply`, `map-report`, `map-all` tested (dry-run + apply).

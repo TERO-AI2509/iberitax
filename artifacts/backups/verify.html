@@ -1,0 +1,21 @@
+<!doctype html>
+<meta charset="utf-8">
+<title>Backup Verify</title>
+<style>
+body{font-family:system-ui,Segoe UI,Roboto,Arial,sans-serif;margin:20px}
+table{border-collapse:collapse;width:100%}
+th,td{border:1px solid #ddd;padding:8px}
+tr.ok{background:#f6ffed}
+tr.fail{background:#fff1f0}
+th{background:#fafafa}
+.summary{margin:10px 0;font-weight:600}
+</style>
+<h1>Backup Verify</h1>
+<div class="summary">Passed: 0 • Failed: 1</div>
+<table>
+<thead><tr><th>ZIP</th><th>Status</th><th>Checks</th></tr></thead>
+<tbody>
+<tr class="fail"><td>backup-20251012T125736Z.zip</td><td>FAIL</td><td>required [README.md]: FAIL • required [package.json]: FAIL • required [scripts/]: FAIL • required [docs/]: OK • meta: OK • sha256: OK</td></tr>
+
+</tbody>
+</table>

@@ -29,9 +29,32 @@ async function readJSONMaybe(p){
   }
 }
 
+function toArray(v){
+  if(Array.isArray(v)) return v
+  if(v && typeof v==='object'){
+    if(Array.isArray(v.rows)) return v.rows
+    if(Array.isArray(v.items)) return v.items
+    if(Array.isArray(v.data)) return v.data
+    const vals = Object.values(v).filter(x=>x && typeof x==='object' && !Array.isArray(x))
+    if(vals.length===0) return []
+    return []
+  }
+  return []
+}
+
 async function sha256File(p){
   const b = await fs.readFile(p)
   return crypto.createHash('sha256').update(b).digest('hex')
+}
+
+async function gitCommit(){
+  try{
+    await fs.readFile('.git/HEAD','utf8')
+    const { execSync } = await import('node:child_process')
+    return execSync('git rev-parse HEAD').toString().trim()
+  }catch{
+    return 'unknown'
+  }
 }
 
 async function main(){
@@ -40,22 +63,25 @@ async function main(){
   const artifactsDir = path.join(repo,'artifacts','modelo100')
   const outFile = path.join(artifactsDir,'sla.export.json')
 
-  const commit = (await fs.readFile('.git/HEAD','utf8').catch(()=>null)) ? (await import('node:child_process')).execSync('git rev-parse HEAD').toString().trim() : 'unknown'
+  const commit = await gitCommit()
   const ts = new Date().toISOString()
 
-  const ownersAlerts = await readJSONMaybe(path.join(artifactsDir,'sla.owner.alerts.json')) || []
-  const ownersEsc = await readJSONMaybe(path.join(artifactsDir,'sla.owner.escalations.json')) || []
+  const ownersAlertsRaw = await readJSONMaybe(path.join(artifactsDir,'sla.owner.alerts.json'))
+  const ownersEscRaw = await readJSONMaybe(path.join(artifactsDir,'sla.owner.escalations.json'))
   const thresholds = await readJSONMaybe(path.join('docs','owner.sla.thresholds.json')) || {}
   const matrix = await readJSONMaybe(path.join('docs','sla.escalation.matrix.json')) || {}
+
+  const ownersAlerts = toArray(ownersAlertsRaw)
+  const ownersEsc = toArray(ownersEscRaw)
 
   const owners = new Set()
   for(const r of ownersAlerts){ if(r && r.owner) owners.add(r.owner) }
   for(const r of ownersEsc){ if(r && r.owner) owners.add(r.owner) }
 
   const alertsByOwner = {}
-  for(const r of ownersAlerts){ const k=r.owner||'unknown'; alertsByOwner[k]=(alertsByOwner[k]||0)+1 }
+  for(const r of ownersAlerts){ const k=r && r.owner ? r.owner : 'unknown'; alertsByOwner[k]=(alertsByOwner[k]||0)+1 }
   const escByOwner = {}
-  for(const r of ownersEsc){ const k=r.owner||'unknown'; escByOwner[k]=(escByOwner[k]||0)+1 }
+  for(const r of ownersEsc){ const k=r && r.owner ? r.owner : 'unknown'; escByOwner[k]=(escByOwner[k]||0)+1 }
 
   const totalAlerts = ownersAlerts.length
   const totalEscalations = ownersEsc.length

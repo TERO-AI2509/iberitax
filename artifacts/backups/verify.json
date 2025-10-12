@@ -1,0 +1,46 @@
+{
+  "ok": false,
+  "checked": [
+    {
+      "zip": "backup-20251012T125736Z.zip",
+      "ok": false,
+      "checks": [
+        {
+          "type": "required",
+          "target": "README.md",
+          "ok": false
+        },
+        {
+          "type": "required",
+          "target": "package.json",
+          "ok": false
+        },
+        {
+          "type": "required",
+          "target": "scripts/",
+          "ok": false
+        },
+        {
+          "type": "required",
+          "target": "docs/",
+          "ok": true
+        },
+        {
+          "type": "meta",
+          "ok": true
+        },
+        {
+          "type": "sha256",
+          "ok": true,
+          "expected": "982e8fd2c440f52d3878a9adda1b9cf0e95246f82309f664f0024dbdae07fb1d",
+          "computed": "982e8fd2c440f52d3878a9adda1b9cf0e95246f82309f664f0024dbdae07fb1d"
+        }
+      ]
+    }
+  ],
+  "totals": {
+    "passed": 0,
+    "failed": 1,
+    "skipped": 0
+  }
+}

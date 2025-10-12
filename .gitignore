@@ -21,3 +21,8 @@ tools/**/artifacts/
 .env
 .env.*
 !.env.example
+# TERO Security
+.env
+.env.*
+report/quarantine/
+artifacts/modelo100/export/

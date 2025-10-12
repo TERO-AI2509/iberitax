@@ -1,0 +1,63 @@
+Repo: TERO-AI2509/iberitax
+Branch: main
+Commit: 09358e9
+Date: 2025-10-12T13:27:07Z
+
+Workflows:
+- backup.daily.yml
+- backup.verify.yml
+- ci.yml
+- publish-rules-bundle.yml
+- repo-cleanup-scan.yml
+- rules-maintenance.yml
+- rules-validate.yml
+- security-baseline.yml
+- sla-check.yml
+- sla-export-bundle.yml
+- sla-pages.yml
+- sla-reporting.yml
+- sla-trends.yml
+- sla-trends.yml.bak
+
+Scripts:
+- scripts/backup.snapshot.mjs
+- scripts/backup.verify.mjs
+
+Artifacts tree (top-level):
+- artifacts
+- artifacts/smoke-20251001-162455
+- artifacts/release
+- artifacts/runbook
+- artifacts/18217367589
+- artifacts/18219057202
+- artifacts/smoke-20251001-162302
+- artifacts/modelo100
+- artifacts/modelo100/notify
+- artifacts/modelo100/dist
+- artifacts/modelo100/public
+- artifacts/modelo100/history
+- artifacts/modelo100/report
+- artifacts/modelo100/export
+- artifacts/smoke-20251001-163720
+- artifacts/backups
+- artifacts/phase05
+- artifacts/phase05/samples
+
+Recent backups:
+- backup-20251012T125736Z.zip
+- backup-20251012T125736Z.zip.meta.json
+- backup-20251012T125736Z.zip.sha256
+- verify.html
+- verify.json
+
+Docs set:
+- PR_CHECKLIST.md
+- RUNBOOK.md
+- modelo100.fields.map.json
+- modelo100.fields.map.schema.json
+- owner.sla.thresholds.json
+- owners.routes.json
+- publish-notes.md
+- security
+- sla.escalation.matrix.json
+- sla.thresholds.json

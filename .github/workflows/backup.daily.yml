@@ -1,0 +1,31 @@
+name: Daily Backup
+
+on:
+  schedule:
+    - cron: '0 1 * * *'
+  workflow_dispatch: {}
+
+jobs:
+  backup:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Plan/Run backup
+        env:
+          APPLY: ${{ vars.APPLY || secrets.APPLY || '0' }}
+          BACKUP_OUTDIR: artifacts/backups
+        run: |
+          node scripts/backup.snapshot.mjs | tee backup.out.json
+      - name: Upload artifact
+        if: ${{ vars.APPLY == '1' || secrets.APPLY == '1' }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: iberitax-backup-${{ github.run_id }}
+          path: |
+            artifacts/backups/*.zip
+            artifacts/backups/*.sha256
+            artifacts/backups/*.meta.json
+          retention-days: 30

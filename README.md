@@ -31,3 +31,13 @@ node scripts/modelo100.cli.mjs admin owners
 node scripts/modelo100.cli.mjs admin stale
 node scripts/modelo100.cli.mjs admin map-health --out artifacts/modelo100/health.report.json
 ```
+
+## Admin / Maintenance (Wrapper)
+
+Use the admin wrapper directly:
+
+```
+node scripts/modelo100.cli.admin.mjs owners
+node scripts/modelo100.cli.admin.mjs stale
+node scripts/modelo100.cli.admin.mjs map-health --out artifacts/modelo100/health.report.json
+```

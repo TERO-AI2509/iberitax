@@ -21,3 +21,13 @@ Latest bundle: https://TERO-AI2509.github.io/iberitax/
 
 ![Rules Maintenance](https://github.com/TERO-AI2509/iberitax/actions/workflows/rules-maintenance.yml/badge.svg)
 
+
+## Admin / Maintenance
+
+Use the main CLI with the `admin` subcommand:
+
+```
+node scripts/modelo100.cli.mjs admin owners
+node scripts/modelo100.cli.mjs admin stale
+node scripts/modelo100.cli.mjs admin map-health --out artifacts/modelo100/health.report.json
+```

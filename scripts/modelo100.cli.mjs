@@ -1,63 +1,72 @@
 #!/usr/bin/env node
 import { spawn } from 'node:child_process'
-import { fileURLToPath } from 'node:url'
 import path from 'node:path'
+import process from 'node:process'
 
-const isMain = process.argv[1] && fileURLToPath(import.meta.url) === process.argv[1]
-const repo = process.cwd()
-const P = (...xs)=>path.join(repo, ...xs)
-
-const cmds = {
-  export: ['node', [P('scripts/modelo100.sla.export.mjs')]],
-  bundle: ['node', [P('scripts/modelo100.public.bundle.mjs')]],
-  extras: ['node', [P('scripts/modelo100.public.extras.mjs')]],
-  'report-csv': ['node', [P('scripts/modelo100.report.csv.mjs')]],
-  'public-api': ['node', [P('scripts/modelo100.public.api.mjs')]],
-}
-
-function runOne([bin,args,envExtra={}]){
-  return new Promise((res,rej)=>{
-    const env = { ...process.env, ...envExtra }
-    const cp = spawn(bin, args, { stdio:'inherit', env })
-    cp.on('exit', code => code===0 ? res() : rej(new Error(`exit ${code}`)))
+function runNode(script, env = {}) {
+  return new Promise((resolve) => {
+    const child = spawn(process.execPath, [script], {
+      stdio: 'inherit',
+      env: { ...process.env, ...env }
+    })
+    child.on('close', (code) => resolve(code ?? 1))
   })
 }
 
-async function main(){
-  const sub = process.argv[2] || 'all'
-  const APPLY = process.env.APPLY === '1'
-  const MINIFY_HTML = process.env.MINIFY_HTML || ''
-  const MODE = process.env.MODE || 'all'
-
-  if(sub==='all'){
-    const plan = [
-      ['node',[P('scripts/modelo100.sla.export.mjs')],{}],
-      ['node',[P('scripts/modelo100.public.bundle.mjs')],{ MINIFY_HTML }],
-      ['node',[P('scripts/modelo100.public.extras.mjs')],{ MODE }],
-      ['node',[P('scripts/modelo100.report.csv.mjs')],{}],
-      ['node',[P('scripts/modelo100.public.api.mjs')],{}],
-    ]
-    if(!APPLY){
-      console.log(JSON.stringify({ ok:true, apply:false, plan: plan.map(x=>x[1][0].split('/').slice(-1)[0]) },null,2))
-      process.exit(0)
-    }
-    for(const step of plan) await runOne(step)
-    console.log(JSON.stringify({ ok:true, ran:'all' },null,2))
-    process.exit(0)
-  }
-
-  const cmd = cmds[sub]
-  if(!cmd){
-    console.error(JSON.stringify({ ok:false, error:`unknown subcommand: ${sub}` },null,2))
-    process.exit(2)
-  }
-
-  if(!APPLY){
-    console.log(JSON.stringify({ ok:true, apply:false, will: sub },null,2))
-    process.exit(0)
-  }
-
-  await runOne([...cmd,{}])
-  console.log(JSON.stringify({ ok:true, ran: sub },null,2))
+async function mapApply() {
+  const code = await runNode(path.join('scripts','modelo100.rules.apply.mjs'), {})
+  process.exitCode = code
 }
-if(isMain){ main() }
+
+async function mapReport() {
+  const csvCode  = await runNode(path.join('scripts','modelo100.mapped.csv.mjs'), {})
+  const htmlCode = await runNode(path.join('scripts','modelo100.mapped.html.mjs'), {})
+  process.exitCode = (csvCode || htmlCode) ? 1 : 0
+}
+
+async function mapAll() {
+  const applyCode = await runNode(path.join('scripts','modelo100.rules.apply.mjs'), { APPLY: '1' })
+  if (applyCode) { process.exitCode = 1; return }
+  const csvCode  = await runNode(path.join('scripts','modelo100.mapped.csv.mjs'), {})
+  const htmlCode = await runNode(path.join('scripts','modelo100.mapped.html.mjs'), {})
+  process.exitCode = (csvCode || htmlCode) ? 1 : 0
+}
+
+async function main() {
+  const cmd = process.argv[2]
+  if (!cmd || ['-h','--help','help'].includes(cmd)) {
+    console.log(`
+Modelo 100 CLI — mapping & reports
+
+Usage:
+  node scripts/modelo100.cli.mjs map-apply   # dry-run by default; use APPLY=1 to write mapped.json
+  node scripts/modelo100.cli.mjs map-report  # generate mapped.csv and mapped.html from mapped.json
+  node scripts/modelo100.cli.mjs map-all     # APPLY=1 then generate CSV+HTML
+
+Environment overrides:
+  OCR_JSON=/path/to/ocr.json
+  RULES_JSON=/path/to/rules.eval.json
+  MAP_JSON=/path/to/modelo100.fields.map.json
+  MAPPED_JSON=/path/to/mapped.json (for report commands)
+`)
+    return
+  }
+
+  if (cmd === 'map-apply') return mapApply()
+  if (cmd === 'map-report') return mapReport()
+  if (cmd === 'map-all') return mapAll()
+
+  console.error(`Unknown command: ${cmd}`)
+  process.exitCode = 1
+}
+
+if (import.meta.url === `file://${process.argv[1]}`) {
+  main().catch(e => { console.error(e.stack || String(e)); process.exitCode = 1 })
+}
+
+// === ADMIN BRIDGE (08.4) ===
+if (import.meta.url === `file://${process.cwd()}/scripts/modelo100.cli.mjs` && process.argv[2] === "admin") {
+  const { spawnSync } = await import("node:child_process");
+  const r = spawnSync(process.execPath, ["scripts/modelo100.cli.admin.mjs", ...process.argv.slice(3)], { stdio:"inherit" });
+  process.exit(r.status ?? 0);
+}

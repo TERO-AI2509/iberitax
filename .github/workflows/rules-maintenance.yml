@@ -39,6 +39,11 @@ jobs:
           echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
 
       - name: Stale Rules
+      - name: Stale Rules
+      - name: Fail if stale > 0
+        run: |
+          n=$(cut -d"=" -f2 artifacts/modelo100/rules.stale.badge.txt | awk '{print $1}')
+          if [ "$n" -gt 0 ]; then echo "Found $n stale rules"; exit 1; fi
         env:
           STALE_DAYS: "90"
         run: |

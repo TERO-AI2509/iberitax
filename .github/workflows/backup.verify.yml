@@ -1,0 +1,27 @@
+name: Verify Backups
+
+on:
+  schedule:
+    - cron: '10 1 * * *'
+  workflow_dispatch: {}
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Verify backups
+        run: |
+          node scripts/backup.verify.mjs | tee verify.out.json
+      - name: Upload verify report
+        uses: actions/upload-artifact@v4
+        with:
+          name: backup-verify-${{ github.run_id }}
+          path: |
+            artifacts/backups/verify.json
+            artifacts/backups/verify.html
+            verify.out.json
+          retention-days: 14

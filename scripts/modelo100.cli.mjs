@@ -1,8 +1,12 @@
 #!/usr/bin/env node
-import { spawnSync } from 'node:child_process';
-import process from 'node:process';
 if (process.argv[2] === 'admin') {
-  const r = spawnSync(process.execPath, ['scripts/modelo100.cli.admin.mjs', ...process.argv.slice(3)], { stdio: 'inherit' });
+  const child = await import('node:child_process');
+  const r = child.spawnSync(process.execPath, ['scripts/modelo100.cli.admin.mjs', ...process.argv.slice(3)], { stdio: 'inherit' });
+  process.exit(r.status ?? 0);
+}
+if (process.argv[2] === 'admin') {
+  const child = await import('node:child_process');
+  const r = child.spawnSync(process.execPath, ['scripts/modelo100.cli.admin.mjs', ...process.argv.slice(3)], { stdio: 'inherit' });
   process.exit(r.status ?? 0);
 }
 import { spawnSync } from 'node:child_process';

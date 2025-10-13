@@ -12,13 +12,24 @@ jobs:
         with:
           node-version: "20"
       - run: npm ci || true
-      - run: echo "GH_REPO=${{ github.repository }}" >> $GITHUB_ENV
       - run: |
           mkdir -p artifacts/backups
           OFFSITE_MODE=gh \
-          GH_REPO="${GH_REPO}" \
+          GH_REPO="${{ github.repository }}" \
           node scripts/backup.restore.mjs
-      - uses: actions/upload-artifact@v4
+      - name: Upload restore report
+        uses: actions/upload-artifact@v4
         with:
           name: dr-restore-report
           path: artifacts/backups/restore.report.html
+      - name: Notify Slack/Webhook
+        if: ${{ env.NOTIFY_WEBHOOK != '' }}
+        env:
+          NOTIFY_WEBHOOK: ${{ secrets.NOTIFY_WEBHOOK }}
+        run: |
+          STATUS=$(jq -r '.ok' artifacts/backups/restore.report.json)
+          SUMMARY="✅ DR Restore OK"
+          if [ "$STATUS" != "true" ]; then SUMMARY="❌ DR Restore FAILED"; fi
+          curl -s -X POST -H 'Content-type: application/json' \
+            --data "{\"text\":\"${SUMMARY}\nRepository: ${{ github.repository }}\nRun: ${{ github.run_id }}\"}" \
+            "$NOTIFY_WEBHOOK"

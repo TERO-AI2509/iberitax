@@ -1,0 +1,24 @@
+name: DR Restore Nightly
+on:
+  schedule:
+    - cron: "17 2 * * *"
+  workflow_dispatch: {}
+jobs:
+  restore:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+      - run: npm ci || true
+      - run: echo "GH_REPO=${{ github.repository }}" >> $GITHUB_ENV
+      - run: |
+          mkdir -p artifacts/backups
+          OFFSITE_MODE=gh \
+          GH_REPO="${GH_REPO}" \
+          node scripts/backup.restore.mjs
+      - uses: actions/upload-artifact@v4
+        with:
+          name: dr-restore-report
+          path: artifacts/backups/restore.report.html

@@ -2,6 +2,26 @@ import {promises as fs} from 'node:fs'
 import {execSync} from 'node:child_process'
 import path from 'node:path'
 
+async function slackNotify(url, summary){
+  if(!url) return;
+  const ok = !!summary.ok;
+  const emoji = ok ? ":white_check_mark:" : ":x:";
+  const title = ok ? "Backup offsite: Success" : "Backup offsite: Failure";
+  const fields = [];
+  if(summary.name) fields.push({type:"mrkdwn",text:"*Artifact:* " + summary.name});
+  if(summary.mode) fields.push({type:"mrkdwn",text:"*Mode:* " + summary.mode});
+  if(summary.ts)   fields.push({type:"mrkdwn",text:"*Time:* " + summary.ts});
+  if(summary.offsite && summary.offsite.index) fields.push({type:"mrkdwn",text:"*Index:* <"+summary.offsite.index+"|open>"});
+  if(summary.error) fields.push({type:"mrkdwn",text:"*Error:* " + String(summary.error).slice(0,400)});
+  const payload = {
+    text: (ok?"SUCCESS":"FAIL") + " · " + (summary.name||"") + " · " + (summary.mode||"") ,
+    blocks: [
+      {type:"header", text:{type:"plain_text", text: emoji+"  "+title }},
+      {type:"section", fields: fields.length?fields:[{type:"mrkdwn",text:"No details"}]}
+    ]
+  };
+  try { await fetch(url,{method:"POST",headers:{"Content-Type":"application/json"},body: JSON.stringify(payload)}); } catch(e) {}
+}
 const DRY = process.env.DRY_RUN === '1'
 const ENABLE = process.env.OFFSITE_ENABLE === '1'
 const MODE = (process.env.OFFSITE_MODE || 's3').toLowerCase()
@@ -111,11 +131,8 @@ async function main(){
 
   const summary = {ok:true, name, ts, mode:MODE, offsite}
   const payload = JSON.stringify(summary)
-  console.log(payload)
-  if (WEBHOOK){
-    try {
-      sh(`curl -sS -X POST -H 'Content-Type: application/json' --data '${payload.replace(/'/g,"'\\''")}' "${WEBHOOK}"`)
-    } catch {}
+  await slackNotify(WEBHOOK, summary);
+console.log(payload)
   }
 }
 

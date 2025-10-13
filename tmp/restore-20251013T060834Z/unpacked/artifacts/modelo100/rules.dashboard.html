@@ -1,0 +1,117 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Modelo 100 — Rules Dashboard</title>
+<style>
+:root{--bg:#0b0c10;--card:#121318;--muted:#69707d;--text:#d8dee9;--chip:#161922;--chip-on:#1e2533;--accent:#7aa2f7;--border:#262a36}
+*{box-sizing:border-box}body{margin:0;padding:20px;font-family:ui-sans-serif,system-ui,Segoe UI,Roboto,Helvetica,Arial;color:var(--text);background:var(--bg)}
+header{display:flex;flex-direction:column;gap:8px;margin-bottom:12px}
+.row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.k{font-size:12px;color:var(--muted)}
+.pill{font-size:12px;padding:4px 10px;border-radius:999px;border:1px solid var(--border);background:var(--chip);cursor:pointer}
+.grid{display:grid;gap:10px;grid-template-columns:1fr 1fr}
+iframe{width:100%;min-height:70vh;border:1px solid var(--border);border-radius:12px;background:#0e1016}
+h1{margin:0 0 6px 0;font-size:20px}.hint{font-size:12px;color:var(--muted)}
+</style>
+</head>
+<body>
+  <header>
+    <h1>Rules Dashboard</h1>
+    <div class="row"><span class="k">Totals by severity</span><span id="sevTotals"></span></div>
+    <div class="row"><span class="k">Top tags</span><span id="tagTotals"></span></div>
+    <div class="hint">Filters in either panel will sync across both.</div>
+  </header>
+  <main class="grid">
+    <iframe id="insights" title="Insights"></iframe>
+    <iframe id="explorer" title="Explorer"></iframe>
+  </main>
+  <script>
+  const sevTotals=[["critical",1],["high",1],["medium",2],["low",1]]
+  const tagTotals=[["modelo100",3],["identification",1],["residency",1],["totals",1],["validation",1],["withholding",1],["crosscheck",1],["bank",1],["interest",1]]
+  function mountTotals(){
+    const s=document.getElementById('sevTotals')
+    sevTotals.forEach(([k,v])=>{const b=document.createElement('button'); b.className='pill'; b.textContent=k+': '+v; b.addEventListener('click',()=>parent.postMessage({action:'set-filters',severity:k},'*')); s.appendChild(b)})
+    const t=document.getElementById('tagTotals')
+    tagTotals.slice(0,10).forEach(([k,v])=>{const b=document.createElement('button'); b.className='pill'; b.textContent=k+': '+v; b.addEventListener('click',()=>parent.postMessage({action:'set-filters',tag:k},'*')); t.appendChild(b)})
+  }
+  mountTotals()
+  </script>
+  <script>(()=>{
+  const params=new URL(location.href).searchParams
+  const setParam=(k,v)=>{const u=new URL(location.href); if(v) u.searchParams.set(k,v); else u.searchParams.delete(k); history.replaceState(null,'',u)}
+  const sev=params.get('severity')||''
+  const tag=params.get('tag')||''
+  const q=params.get('q')||''
+  const ins=document.getElementById('insights')
+  const exp=document.getElementById('explorer')
+  const buildUrl=(base,p)=>{return base+'?'+Object.entries(p).filter(([,v])=>v).map(([k,v])=>encodeURIComponent(k)+'='+encodeURIComponent(v)).join('&')}
+  function assignAll(){ ins.src=buildUrl('rules.insights.html',{severity:sev,tag:tag,q:q,ts:Date.now()}); exp.src=buildUrl('rules.index.html',{severity:sev,tag:tag,q:q,ts:Date.now()}) }
+  assignAll()
+  window.addEventListener('message', ev=>{
+    const {severity, tag, q, action} = ev.data||{}
+    if(action!=='set-filters') return
+    if(typeof severity==='string') setParam('severity', severity)
+    if(typeof tag==='string') setParam('tag', tag)
+    if(typeof q==='string') setParam('q', q)
+    location.replace(location.href)
+  })
+})()</script>
+
+<div class="card">
+  <div class="card-title">Owners to ping</div>
+  <div class="card-value">0</div>
+  <div class="card-sub">warns/pages/breaches</div>
+</div>
+
+<section id="sla-trends-tile" style="margin:16px 0;padding:12px;border:1px solid #e5e7eb;border-radius:12px">
+  <div style="display:flex;justify-content:space-between;align-items:center">
+    <div style="font:600 16px system-ui">SLA Breach Rate</div>
+    <div id="sla-triple" style="font:14px system-ui">7d: — 30d: — 90d: —</div>
+  </div>
+</section>
+<script>
+(async function(){
+  try{
+    const res = await fetch('./sla.trends.json',{cache:'no-store'})
+    const t = await res.json()
+    const d7 = t.rollups.d7?.breach_rate ?? 0
+    const d30 = t.rollups.d30?.breach_rate ?? 0
+    const d90 = t.rollups.d90?.breach_rate ?? 0
+    document.getElementById('sla-triple').textContent = '7d: ' + d7 + '%  30d: ' + d30 + '%  90d: ' + d90 + '%'
+  }catch(e){}
+})();
+</script>
+
+
+<section id="sla-alerts-tile" style="margin:16px 0;padding:12px;border:1px solid #e5e7eb;border-radius:12px">
+  <div style="display:flex;justify-content:space-between;align-items:center">
+    <div style="font:600 16px system-ui">SLA</div>
+    <span id="sla-badge-dash" style="padding:4px 8px;border-radius:999px;border:1px solid #e5e7eb;font:600 12px system-ui">—</span>
+  </div>
+  <div id="sla-windows" style="margin-top:8px;font:14px system-ui"></div>
+</section>
+<script>
+(async function(){
+  try{
+    const r = await fetch('./sla.alerts.json',{cache:'no-store'})
+    const a = await r.json()
+    const b = document.getElementById('sla-badge-dash')
+    const w = document.getElementById('sla-windows')
+    const color = a.overall==='fail' ? '#ef4444' : (a.overall==='warn' ? '#f59e0b' : '#10b981')
+    b.style.background = color + '20'; b.style.borderColor = color; b.style.color = color
+    b.textContent = a.overall.toUpperCase()
+    const seg = []
+    for (const k of ['d7','d30','d90']){
+      const x = a.windows?.[k]; if(!x) continue
+      seg.push(k.toUpperCase()+': '+x.status.toUpperCase()+' ('+x.rate+'%)')
+    }
+    w.textContent = seg.join('  •  ')
+  }catch(e){}
+})();
+</script>
+
+
+<p style="margin-top:8px"><a href="./sla.owners.html" style="text-decoration:none" class="badge">Owner SLA Rollups →</a></p>
+</body>
+</html>

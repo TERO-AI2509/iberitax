@@ -1,0 +1,14 @@
+import Banner from '@/components/Banner'
+export default function RootLayout({ children }: { children: React.ReactNode }) {
+  return (
+    <html lang="en">
+      <body>
+        <Banner />
+        <header style={{ padding: 16, borderBottom: "1px solid #eee" }}>
+          <a href="/">Home</a> | <a href="/login">Login</a> | <a href="/api/dev-logout">Logout</a> | <a href="/account/server-demo">SSR Demo</a>
+        </header>
+        {children}
+      </body>
+    </html>
+  );
+}

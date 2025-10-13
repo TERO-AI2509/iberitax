@@ -1,0 +1,40 @@
+{
+  "version": "0.1.0",
+  "model": "modelo100",
+  "notes": "MVP placeholder mappings. Sources refer to normalized OCR keys and/or rule outputs. Replace TODOs during 07.2.",
+  "fields": [
+    {
+      "id": "box_432",
+      "label": "Dividendos íntegros (TODO verify)",
+      "target": { "json_key": "box_432", "csv_col": "BOX_432", "decimals": 2, "round": "half-up" },
+      "combine": "sum",
+      "sources": [
+        { "ref": "ocr.income.dividends_gross", "multiplier": 1, "rule_hint": "R-DIV-GROSS" }
+      ],
+      "explain": "Sum of OCR dividends gross; final rule may adjust per residency/exemptions.",
+      "tags": ["mvp", "income", "dividends"]
+    },
+    {
+      "id": "box_433",
+      "label": "Retenciones a cuenta sobre dividendos (TODO verify)",
+      "target": { "json_key": "box_433", "csv_col": "BOX_433", "decimals": 2, "round": "half-up" },
+      "combine": "sum",
+      "sources": [
+        { "ref": "ocr.withholding.dividends_tax", "multiplier": 1, "rule_hint": "R-DIV-WHT" }
+      ],
+      "explain": "Sum of OCR dividend withholdings.",
+      "tags": ["mvp", "withholding"]
+    },
+    {
+      "id": "box_610",
+      "label": "Rentas inmobiliarias imputadas (TODO placeholder)",
+      "target": { "json_key": "box_610", "csv_col": "BOX_610", "decimals": 2, "round": "half-up" },
+      "combine": "sum",
+      "sources": [
+        { "ref": "rule.real_estate.imputed_income", "multiplier": 1, "rule_hint": "R-RE-IMPUTED" }
+      ],
+      "explain": "Placeholder mapping to rule-calculated imputed income.",
+      "tags": ["mvp", "real_estate"]
+    }
+  ]
+}

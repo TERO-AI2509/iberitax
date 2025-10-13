@@ -1,0 +1,82 @@
+{
+  "ok": false,
+  "checked": [
+    {
+      "zip": "backup-20251012T125736Z.zip",
+      "ok": false,
+      "checks": [
+        {
+          "type": "required",
+          "target": "RUNBOOK.md",
+          "ok": true
+        },
+        {
+          "type": "required",
+          "target": "docs/",
+          "ok": true
+        },
+        {
+          "type": "required",
+          "target": "artifacts/",
+          "ok": true
+        },
+        {
+          "type": "required",
+          "target": ".github/",
+          "ok": false
+        },
+        {
+          "type": "meta",
+          "ok": true
+        },
+        {
+          "type": "sha256",
+          "ok": true,
+          "expected": "982e8fd2c440f52d3878a9adda1b9cf0e95246f82309f664f0024dbdae07fb1d",
+          "computed": "982e8fd2c440f52d3878a9adda1b9cf0e95246f82309f664f0024dbdae07fb1d"
+        }
+      ]
+    },
+    {
+      "zip": "backup-20251013T045116Z.zip",
+      "ok": true,
+      "checks": [
+        {
+          "type": "required",
+          "target": "RUNBOOK.md",
+          "ok": true
+        },
+        {
+          "type": "required",
+          "target": "docs/",
+          "ok": true
+        },
+        {
+          "type": "required",
+          "target": "artifacts/",
+          "ok": true
+        },
+        {
+          "type": "required",
+          "target": ".github/",
+          "ok": true
+        },
+        {
+          "type": "meta",
+          "ok": true
+        },
+        {
+          "type": "sha256",
+          "ok": true,
+          "expected": "df7ae0e1ccd30423733b461187cc7f6433fd274952e93bac38a31a8136838739",
+          "computed": "df7ae0e1ccd30423733b461187cc7f6433fd274952e93bac38a31a8136838739"
+        }
+      ]
+    }
+  ],
+  "totals": {
+    "passed": 1,
+    "failed": 1,
+    "skipped": 0
+  }
+}

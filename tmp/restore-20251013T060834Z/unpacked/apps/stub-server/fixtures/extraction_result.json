@@ -1,0 +1,25 @@
+{
+  "jobId": "job_123",
+  "sourceFiles": [
+    { "filename": "payslip.pdf", "mimeType": "application/pdf", "pages": 2 }
+  ],
+  "modelo100": {
+    "taxYear": 2024,
+    "taxpayer": { "nif": "X1234567A", "fullName": "Alex Garcia", "residencyStatus": "resident" },
+    "spouse": { "nif": "Y7654321B", "fullName": "Jamie Lee" },
+    "incomes": [
+      { "category": "employment", "gross": 52000, "withheld": 9000 }
+    ],
+    "deductions": [
+      { "code": "HYPOTHEC", "description": "Mortgage interest", "amount": 1200 }
+    ],
+    "totals": { "taxableBase": 43000, "calculatedTax": 6500, "finalTaxDue": -300 }
+  },
+  "confidence": {
+    "overall": 0.93,
+    "fields": { "taxpayer.fullName": 0.99, "incomes[0].gross": 0.9 }
+  },
+  "issues": [
+    { "severity": "info", "message": "Rounded values applied", "path": "/totals" }
+  ]
+}

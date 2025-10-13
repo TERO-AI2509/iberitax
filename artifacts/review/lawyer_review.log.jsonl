@@ -1,0 +1,25 @@
+{"case_id":"YOUR_CASE_ID","action":"claim","user":"Eltjo","ts":"2025-10-13T10:32:13.563Z"}
+{"case_id":"R-001","state":"open","title_es":"Deducción vivienda","ts":"2025-10-13T10:00:00Z"}
+{"case_id":"R-001","state":"open","title_es":"Deducción vivienda","ts":"2025-10-13T10:00:00Z"}
+{"case_id":"R-001","state":"open","title_es":"Deducción vivienda","ts":"2025-10-13T10:00:00Z"}
+{"state":"picked_up","case_id":"R-001","who":"Abogada Ana","ts":"2025-10-13T11:11:41.120Z"}
+{"state":"picked_up","case_id":"R-001","who":"Abogada Ana","ts":"2025-10-13T11:13:02.179Z"}
+{"state":"answered","case_id":"R-001","who":"Abogada Ana","ts":"2025-10-13T11:13:02.527Z"}
+{"state":"picked_up","case_id":"C-LOCK","who":"lawyer.one","ts":"2025-10-13T11:56:51.921Z"}
+{"state":"picked_up","case_id":"C-LOCK","who":"lawyer.two","ts":"2025-10-13T11:56:51.941Z"}
+{"state":"picked_up","case_id":"C-LOCK","who":"lawyer.one","ts":"2025-10-13T11:58:51.334Z"}
+{"state":"picked_up","case_id":"C-LOCK","who":"lawyer.two","ts":"2025-10-13T11:58:51.354Z"}
+{"state":"picked_up","case_id":"C-LOCK","who":"lawyer.one","ts":"2025-10-13T11:58:59.745Z"}
+{"state":"picked_up","case_id":"C-LOCK","who":"lawyer.two","ts":"2025-10-13T11:58:59.765Z"}
+{"state":"picked_up","case_id":"C-LOCK2","who":"lawyer.one","ts":"2025-10-13T12:00:31.081Z"}
+{"state":"picked_up","case_id":"C-LOCK2","who":"lawyer.two","ts":"2025-10-13T12:00:31.101Z"}
+{"state":"picked_up","case_id":"C-LOCK3","who":"lawyer.one","ts":"2025-10-13T12:02:25.690Z"}
+{"state":"picked_up","case_id":"C-LOCK3","who":"lawyer.two","ts":"2025-10-13T12:02:25.708Z"}
+{"state":"picked_up","case_id":"C-LOCK5","who":"lawyer.one","ts":"2025-10-13T12:04:16.179Z"}
+{"state":"picked_up","case_id":"C-LOCK5","who":"lawyer.two","ts":"2025-10-13T12:04:16.198Z"}
+{"state":"picked_up","case_id":"C-LOCK6","who":"lawyer.one","ts":"2025-10-13T12:07:04.166Z"}
+{"state":"picked_up","case_id":"C-LOCK6","who":"lawyer.two","ts":"2025-10-13T12:07:04.186Z"}
+{"state":"picked_up","case_id":"C-LOCK7","who":"lawyer.one","ts":"2025-10-13T12:11:45.399Z"}
+{"state":"picked_up","case_id":"C-LOCK7","who":"lawyer.two","ts":"2025-10-13T12:11:45.418Z"}
+{"state":"picked_up","case_id":"C-LOCK8","who":"lawyer.one","ts":"2025-10-13T12:14:55.263Z"}
+{"state":"picked_up","case_id":"C-LOCK8","who":"lawyer.two","ts":"2025-10-13T12:14:55.282Z"}

@@ -1,0 +1,51 @@
+{
+  "ok": false,
+  "checks": {
+    "exists_schema": true,
+    "exists_map": true,
+    "exists_j": true,
+    "exists_c": true,
+    "exists_h": true,
+    "json_is_array": false,
+    "counts_match": false,
+    "html_nontrivial": true,
+    "schema_valid": false
+  },
+  "details": {
+    "exists_schema": {
+      "file": "docs/modelo100.fields.map.schema.json",
+      "exists": true
+    },
+    "exists_map": {
+      "file": "docs/modelo100.fields.map.json",
+      "exists": true
+    },
+    "exists_j": {
+      "file": "artifacts/modelo100/mapped.json",
+      "exists": true
+    },
+    "exists_c": {
+      "file": "artifacts/modelo100/mapped.csv",
+      "exists": true
+    },
+    "exists_h": {
+      "file": "artifacts/modelo100/mapped.html",
+      "exists": true
+    },
+    "json_length": null,
+    "csv_rows": 3,
+    "schema_valid": {
+      "ok": false,
+      "errors": [
+        "no schema with key or ref \"https://json-schema.org/draft/2020-12/schema\""
+      ]
+    }
+  },
+  "files": {
+    "schema": "docs/modelo100.fields.map.schema.json",
+    "map": "docs/modelo100.fields.map.json",
+    "j": "artifacts/modelo100/mapped.json",
+    "c": "artifacts/modelo100/mapped.csv",
+    "h": "artifacts/modelo100/mapped.html"
+  }
+}

@@ -1,0 +1,75 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://tero-fiscal.dev/schemas/rule_application.schema.json",
+  "title": "Rule Application Result",
+  "type": "object",
+  "properties": {
+    "input_context": {
+      "type": "object",
+      "additionalProperties": true
+    },
+    "applied_rules": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "rule": { "type": "object", "additionalProperties": true },
+          "selection_basis": {
+            "type": "object",
+            "properties": {
+              "authority_rank": { "type": "number" },
+              "clarity_score": { "type": "number" },
+              "recency_score": { "type": "number" }
+            },
+            "required": ["authority_rank", "clarity_score", "recency_score"],
+            "additionalProperties": false
+          },
+          "provenance": {
+            "type": ["object", "null"],
+            "additionalProperties": true
+          }
+        },
+        "required": ["rule", "selection_basis"],
+        "additionalProperties": false
+      }
+    },
+    "ignored_rules": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "rule": { "type": "object", "additionalProperties": true },
+          "reason": { "type": "string", "enum": ["temporal_mismatch", "condition_mismatch"] }
+        },
+        "required": ["rule", "reason"],
+        "additionalProperties": false
+      }
+    },
+    "conflicts": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "rule": { "type": "object", "additionalProperties": true },
+          "status": { "type": "string", "const": "Interesting reading" },
+          "reasons": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "enum": ["higher_authority", "greater_clarity", "more_recent"]
+            }
+          },
+          "provenance": {
+            "type": ["object", "null"],
+            "additionalProperties": true
+          }
+        },
+        "required": ["rule", "status", "reasons"],
+        "additionalProperties": false
+      }
+    },
+    "resolved_at": { "type": "string", "format": "date-time" }
+  },
+  "required": ["input_context", "applied_rules", "ignored_rules", "conflicts", "resolved_at"],
+  "additionalProperties": false
+}

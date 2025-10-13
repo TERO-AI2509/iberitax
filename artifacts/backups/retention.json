@@ -1,0 +1,22 @@
+{
+  "ok": true,
+  "totals": {
+    "backups": 1,
+    "keep": 1,
+    "archive": 0,
+    "quarantine": 0,
+    "moved": 0
+  },
+  "keepPolicy": {
+    "daily": 7,
+    "weekly": 4,
+    "monthly": 12
+  },
+  "actions": [
+    {
+      "zip": "backup-20251012T125736Z.zip",
+      "action": "keep",
+      "verified": false
+    }
+  ]
+}

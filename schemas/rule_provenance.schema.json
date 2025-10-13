@@ -1,0 +1,102 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "rule_provenance.schema.json",
+  "title": "RuleProvenance",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "published_at",
+    "updated_at",
+    "effective_from",
+    "effective_to",
+    "retroactive_to",
+    "official_refs",
+    "supporting_refs",
+    "discrepancy",
+    "questions",
+    "date_precision"
+  ],
+  "properties": {
+    "published_at": { "type": ["string","null"], "format": "date" },
+    "updated_at": { "type": ["string","null"], "format": "date" },
+    "effective_from": { "type": ["string","null"], "format": "date" },
+    "effective_to": { "type": ["string","null"], "format": "date" },
+    "retroactive_to": { "type": ["string","null"], "format": "date" },
+    "official_refs": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["url"],
+        "properties": {
+          "url": { "type": "string", "format": "uri" },
+          "id": { "type": ["string","null"] },
+          "title": { "type": ["string","null"] },
+          "archive_url": { "type": ["string","null"], "format": "uri" },
+          "note": { "type": ["string","null"] }
+        }
+      }
+    },
+    "supporting_refs": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["url"],
+        "properties": {
+          "url": { "type": "string", "format": "uri" },
+          "id": { "type": ["string","null"] },
+          "title": { "type": ["string","null"] },
+          "archive_url": { "type": ["string","null"], "format": "uri" },
+          "note": { "type": ["string","null"] }
+        }
+      }
+    },
+    "discrepancy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["has_discrepancy","sources"],
+      "properties": {
+        "has_discrepancy": { "type": "boolean" },
+        "sources": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["source","values"],
+            "properties": {
+              "source": { "type": "string" },
+              "values": {
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+                  "published_at": { "type": ["string","null"], "format": "date" },
+                  "updated_at": { "type": ["string","null"], "format": "date" },
+                  "effective_from": { "type": ["string","null"], "format": "date" },
+                  "effective_to": { "type": ["string","null"], "format": "date" },
+                  "retroactive_to": { "type": ["string","null"], "format": "date" }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "questions": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "date_precision": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["published_at","updated_at","effective_from","effective_to","retroactive_to"],
+      "properties": {
+        "published_at": { "type": "string", "enum": ["day","month","year","unknown"] },
+        "updated_at": { "type": "string", "enum": ["day","month","year","unknown"] },
+        "effective_from": { "type": "string", "enum": ["day","month","year","unknown"] },
+        "effective_to": { "type": "string", "enum": ["day","month","year","unknown"] },
+        "retroactive_to": { "type": "string", "enum": ["day","month","year","unknown"] }
+      }
+    }
+  }
+}

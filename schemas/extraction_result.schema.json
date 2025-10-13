@@ -1,47 +1,174 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://schemas.iberitax.local/extraction_result.schema.json",
-  "title": "ExtractionResult",
+  "$id": "https://tero.local/schemas/extraction_result.schema.json",
   "type": "object",
+  "required": [
+    "id",
+    "source",
+    "rule",
+    "meta"
+  ],
   "properties": {
-    "jobId": { "type": "string" },
-    "sourceFiles": {
-      "type": "array",
-      "items": {
-        "type": "object",
-        "properties": {
-          "filename": { "type": "string" },
-          "mimeType": { "type": "string" },
-          "pages": { "type": "integer", "minimum": 1 }
-        },
-        "required": ["filename", "mimeType"]
-      }
+    "id": {
+      "type": "string",
+      "minLength": 8
     },
-    "modelo100": { "$ref": "modelo100.schema.json" },
-    "confidence": {
+    "source": {
       "type": "object",
+      "required": [
+        "kind"
+      ],
       "properties": {
-        "overall": { "type": "number", "minimum": 0, "maximum": 1 },
-        "fields": {
-          "type": "object",
-          "additionalProperties": { "type": "number", "minimum": 0, "maximum": 1 }
+        "kind": {
+          "type": "string",
+          "enum": [
+            "file",
+            "stdin"
+          ]
+        },
+        "file": {
+          "type": [
+            "string",
+            "null"
+          ]
         }
       },
-      "required": ["overall"]
+      "additionalProperties": false
     },
-    "issues": {
+    "references": {
       "type": "array",
       "items": {
         "type": "object",
+        "required": [
+          "system",
+          "ref"
+        ],
         "properties": {
-          "severity": { "type": "string", "enum": ["info", "warn", "error"] },
-          "message": { "type": "string" },
-          "path": { "type": "string" }
+          "system": {
+            "type": "string"
+          },
+          "ref": {
+            "type": "string"
+          }
         },
-        "required": ["severity", "message"]
+        "additionalProperties": true
       }
+    },
+    "rule": {
+      "type": "object",
+      "required": [
+        "language",
+        "jurisdiction",
+        "tax_code",
+        "tax_name",
+        "intents",
+        "text_span"
+      ],
+      "properties": {
+        "language": {
+          "type": "string",
+          "const": "es"
+        },
+        "jurisdiction": {
+          "type": "string",
+          "const": "ES"
+        },
+        "tax_code": {
+          "type": "string"
+        },
+        "tax_name": {
+          "type": "string"
+        },
+        "intents": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string",
+            "enum": [
+              "tipo_impositivo",
+              "exencion",
+              "sujecion",
+              "devengo",
+              "deduccion",
+              "regla_general"
+            ]
+          }
+        },
+        "rates": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "kind": {
+                "type": "string"
+              },
+              "value": {
+                "type": "number"
+              },
+              "label": {
+                "type": "string"
+              }
+            },
+            "additionalProperties": false
+          }
+        },
+        "thresholds": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "amount",
+              "currency"
+            ],
+            "properties": {
+              "amount": {
+                "type": "number"
+              },
+              "currency": {
+                "type": "string",
+                "const": "EUR"
+              }
+            },
+            "additionalProperties": false
+          }
+        },
+        "scope": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "text_span": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "additionalProperties": false
+    },
+    "meta": {
+      "type": "object",
+      "required": [
+        "extractor_version",
+        "extracted_at",
+        "confidence"
+      ],
+      "properties": {
+        "extractor_version": {
+          "type": "string"
+        },
+        "extracted_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "confidence": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        }
+      },
+      "additionalProperties": false
     }
   },
-  "required": ["jobId", "sourceFiles", "modelo100", "confidence"],
-  "additionalProperties": false
+  "additionalProperties": false,
+  "$defs": {}
 }

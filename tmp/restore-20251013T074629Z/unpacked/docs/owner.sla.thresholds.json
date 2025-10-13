@@ -1,0 +1,13 @@
+{
+  "version": 1,
+  "defaults": {
+    "d7":  { "warn_max_breach_rate": 6,  "fail_max_breach_rate": 12 },
+    "d30": { "warn_max_breach_rate": 5,  "fail_max_breach_rate": 10 },
+    "d90": { "warn_max_breach_rate": 4,  "fail_max_breach_rate": 8  }
+  },
+  "owners": {
+    "*":   { "d7": { "warn_max_breach_rate": 6, "fail_max_breach_rate": 12 } },
+    "team-alpha": { "d7": { "warn_max_breach_rate": 5, "fail_max_breach_rate": 9 } },
+    "team-beta":  { "d30":{ "warn_max_breach_rate": 4, "fail_max_breach_rate": 8 } }
+  }
+}

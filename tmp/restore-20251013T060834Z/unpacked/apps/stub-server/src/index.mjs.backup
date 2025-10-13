@@ -1,0 +1,85 @@
+import "dotenv/config";
+
+
+import { extractFromUpload } from "@iberitax/extractor";
+import express from "express";
+import cors from "cors";
+
+
+const app = express();
+app.use(express.json());
+
+// Allow Next.js dev server on :3000 to call this stub
+app.use(
+  cors({
+    origin: "http://localhost:3000",
+    methods: ["GET", "POST", "PUT", "OPTIONS"],
+    allowedHeaders: ["Content-Type"],
+  })
+);
+
+// Health check
+app.get("/health", (_req, res) => {
+  res.json({ ok: true });
+});
+
+// STEP-04: deterministic extraction mock (Zod-compatible)
+const MOCK_EXTRACTION_RESPONSE = {
+  ok: true,
+  data: {
+    jobId: "demo-job-001",
+    sourceFiles: [{ filename: "demo.pdf", mimeType: "application/pdf", pages: 2 }],
+    modelo100: {
+      taxYear: 2024,
+      taxpayer: { nif: "X1234567Z", fullName: "Demo Taxpayer", residencyStatus: "resident" },
+      incomes: [{ category: "employment", gross: 42000, withheld: 6000 }],
+      deductions: [{ code: "H01", description: "Home rent deduction", amount: 500 }],
+      totals: { taxableBase: 41500, calculatedTax: 6200, finalTaxDue: 200 }
+    },
+    confidence: { overall: 0.92 }
+  },
+  errors: []
+};
+
+app.post("/extract", async (req, res) => {
+  try {
+    const key = String(req?.body?.key || "uploads/demo.pdf");
+    const result = await extractFromUpload(key, { mode: "mock" });
+    res.json(result);
+  } catch (e) {
+    res.status(500).json({ ok: false, errors: [String(e?.message || e)] });
+  }
+});
+
+// STEP-05: Local presign + upload stub
+app.post("/upload/presign", (req, res) => {
+  const filename = String(req?.body?.filename || "upload.bin");
+  const contentType = String(req?.body?.contentType || "application/octet-stream");
+  const url = `http://localhost:${PORT}/upload/put/${encodeURIComponent(filename)}`;
+  res.json({
+    ok: true,
+    data: { url, method: "PUT", headers: { "Content-Type": contentType }, key: `uploads/${filename}` },
+    errors: []
+  });
+});
+
+// Preflight handler for PUT
+app.options("/upload/put/:filename", (_req, res) => res.sendStatus(204));
+
+app.put("/upload/put/:filename", (req, res) => {
+  let bytes = 0;
+  req.on("data", (chunk) => { bytes += chunk.length; });
+  req.on("end", () => {
+    res.status(200).json({
+      ok: true,
+      data: { receivedBytes: bytes, storedAt: "/dev/null", filename: req.params.filename },
+      errors: []
+    });
+  });
+});
+
+// Start server
+const PORT = process.env.PORT || 4000;
+app.listen(PORT, () => {
+  console.log(`▶️  Stub server listening on http://localhost:${PORT}`);
+});

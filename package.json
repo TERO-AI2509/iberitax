@@ -17,7 +17,11 @@
     "demo:upload": "node demos/call-upload.mjs",
     "build:clients": "tsc -p packages/clients/tsconfig.json",
     "demo:extract": "tsc -p tsconfig.scripts.json && node dist-scripts/demos/call-extract.js",
-    "test": "pnpm -C packages/extractor test"
+    "test": "pnpm -C packages/extractor test",
+    "extract:one": "node scripts/ai.extract.rules.mjs fixtures/tax/boe_iva_sujecion.txt --write",
+    "validate:extractions": "node scripts/validate.extractions.mjs",
+    "test:rules": "node scripts/validate.applications.mjs",
+    "dev": "node apps/stub-server/src/dev.server.mjs"
   },
   "devDependencies": {
     "@babel/preset-env": "^7.28.3",

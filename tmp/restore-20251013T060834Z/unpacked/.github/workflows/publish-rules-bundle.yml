@@ -1,0 +1,77 @@
+name: Publish Rules Dashboard Bundle
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Prebuild rules dashboard
+        env:
+          ENABLE_RULES_DASHBOARD: 1
+          ENABLE_RULE_INSIGHTS_HTML: 1
+        shell: bash
+        run: |
+          mkdir -p artifacts/modelo100
+          [ -f artifacts/modelo100/rules.index.md ] || cat > artifacts/modelo100/rules.index.md <<'MD'
+          | id | tags | message | severity |
+          |----|------|---------|----------|
+          MD
+          node scripts/modelo100.rules.index.mjs || true
+          node scripts/modelo100.rules.index.html.mjs || true
+          node scripts/modelo100.rules.insights.html.mjs || true
+          node scripts/modelo100.rules.dashboard.html.mjs || true
+
+      - name: Build publish bundle
+        env:
+          ENABLE_RULES_PUBLISH: 1
+        shell: bash
+        run: |
+          node -v
+          node scripts/modelo100.rules.publish.mjs
+          test -f artifacts/modelo100/rules-dashboard-bundle.zip
+          echo "::notice title=Bundle Found::artifacts/modelo100/rules-dashboard-bundle.zip"
+
+      - name: Unzip for Pages
+        shell: bash
+        run: |
+          rm -rf artifacts/modelo100/dist
+          mkdir -p artifacts/modelo100/dist
+          unzip -q artifacts/modelo100/rules-dashboard-bundle.zip -d artifacts/modelo100/dist
+          ls -l artifacts/modelo100/dist
+
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: artifacts/modelo100/dist
+
+  deploy:
+    needs: publish
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/configure-pages@v5
+      - id: deployment
+        uses: actions/deploy-pages@v4

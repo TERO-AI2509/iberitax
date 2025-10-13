@@ -234,3 +234,54 @@ Progress:
 
 **Rollback:** Delete the release and rerun on a new tag.
 
+
+## Phase 11 — AI & Tax Rules Integration (Kickoff)
+- Started: 2025-10-13 08:06 UTC
+- Scope: AI-assisted extraction for tax law → rules DB; connect OCR outputs to rules mapping; build validation harness.
+- Next Steps: scaffold scripts/ai.extract.rules.mjs; define rules schema; add tests and sample inputs; wire to modelo100 rules apply.
+- Acceptance (initial): script scaffolded; rules accept auto-populated entries; sample tests pass.
+2025-10-13 · Phase 11 Step 11.1 started — AI extraction scaffolding initialized.
+## Phase 11 · Step 11.2 — Rule Scoring & Source Weighting — Completed $ts
+- Added schemas/rule_score.schema.json
+- Implemented scripts/ai.score.rules.mjs with authority/clarity/applicability in [0,1]
+- Integrated scoring into scripts/ai.extract.rules.mjs
+- Updated extraction_result schema to require "score"
+- Patched golden fixture with example scores
+**Acceptance:** Validation green on samples; extractor emits score{authority,clarity,applicability}; values within [0,1].
+**Next:** Step 11.3 starter prompt below; upload repo ZIP + manifest before starting.
+## Phase 11 · Step 11.5 — Rule Application & Conflict Resolution · Design Decisions ($ts)
+- Conflict handling: auto-select higher authority; also flag the alternative as "Interesting reading" for lawyer follow-up.
+- Temporal basis: situation-dependent; chatbot assists lawyer to refine if/then logic when ambiguity exists.
+- Output detail: include the entire applied rule snapshot (not just IDs) for auditability.
+- Post-build TODO: consider daily discrepancy notifier + weekly Slack digest (depends on real-world workflow outcomes).
+
+## 2025-10-13 12:52:33 +0200 — Phase 11 · Step 11.6 Complete
+- Lawyer review loop in Spanish with append-only log
+- Minimal states: open → picked_up → answered → closed
+- Deterministic export, transition script, optional Slack
+- Artifacts: artifacts/phase11-11.6.manifest.txt, artifacts/iberitax-post11.6.zip
+
+## 2025-10-13 12:55:47 +0200 — Start Phase 11 · Step 11.7
+- Lawyer dashboard UX scaffolded
+## 2025-10-13 — Phase 11 · Step 11.7 — Lawyer Dashboard & Hand-off UX (Spanish)
+Status: COMPLETE
+- UI: /lawyer/ (lista, filtros, acciones: Recoger, Responder, Cerrar).
+- API: GET /api/lawyer/review.jsonl; POST /api/lawyer/{picked_up,answered,closed}.
+- JSONL append con snapshots en cierre; Slack opcional por SLACK_WEBHOOK_URL.
+Acceptance:
+- Carga determinística desde JSONL: OK.
+- Cambios de estado visibles tras refresco: OK.
+- Slack opcional configurado: OK (simulado).
+Artifacts:
+- apps/stub-server/public/lawyer/index.html
+- apps/stub-server/src/dev.server.mjs
+- apps/stub-server/src/routes/lawyer.*.mjs
+- apps/stub-server/src/tools/slack.mjs
+- artifacts/review/lawyer_review.log.jsonl
+Next: Step 11.8 — Auth + ownership + CSV export.
+
+## 2025-10-13T12:44:44Z — Phase 11 · Step 11.8 (Hardening)
+- POST auth via x-lawyer-secret (+ ?dev-auth=1)
+- Ownership lock (409) on pick-up
+- CSV export wired in router at /api/lawyer/closed.csv and /api/lawyer/closed/csv (also GET /api/lawyer/closed)
+- Acceptance verified: 401 unauth, 409 second pick, CSV export OK

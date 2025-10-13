@@ -1,0 +1,13 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "rule_score.schema.json",
+  "title": "RuleScore",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["authority", "clarity", "applicability"],
+  "properties": {
+    "authority": { "type": "number", "minimum": 0, "maximum": 1 },
+    "clarity": { "type": "number", "minimum": 0, "maximum": 1 },
+    "applicability": { "type": "number", "minimum": 0, "maximum": 1 }
+  }
+}

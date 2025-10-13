@@ -1,0 +1,19 @@
+name: Phase11 Rule Application Validation
+on:
+  schedule:
+    - cron: "0 3 * * *"
+  workflow_dispatch:
+  push:
+    paths:
+      - "scripts/ai.apply.rules.mjs"
+      - "scripts/validate.applications.mjs"
+      - "schemas/rule_application.schema.json"
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+      - run: node scripts/validate.applications.mjs && echo "OK 11.5.application"

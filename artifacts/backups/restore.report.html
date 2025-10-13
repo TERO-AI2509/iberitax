@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html><head><meta charset="utf-8"><title>Restore Report</title>
+<style>body{font-family:system-ui,Segoe UI,Arial;margin:24px}code,pre{background:#f6f8fa;padding:8px;border-radius:8px;display:block;overflow:auto}table{border-collapse:collapse;margin-top:12px}td,th{border:1px solid #ddd;padding:8px}th{text-align:left;background:#fafafa}</style>
+</head><body>
+<h1>Disaster-Recovery Restore Report</h1>
+<p><b>Mode:</b> gh</p>
+<p><b>Started:</b> 2025-10-13T08:02:25.090Z · <b>Finished:</b> 2025-10-13T08:02:39.568Z</p>
+<p><b>ZIP:</b> backup-20251013T045443Z.zip</p>
+<p><b>Checksum:</b> ✔ Verified · expected 9b9dfeb2fff331522964241437226cd21beacba0f6e2db502ca622e750cc84ac · actual 9b9dfeb2fff331522964241437226cd21beacba0f6e2db502ca622e750cc84ac</p>
+<h2>Durations</h2>
+<table><thead><tr><th>Step</th><th>ms</th></tr></thead><tbody>
+<tr><td>downloadMs</td><td>1787</td></tr><tr><td>checksumMs</td><td>7</td></tr><tr><td>unzipMs</td><td>56</td></tr><tr><td>smoke.modelo100.map.health.ms</td><td>263</td></tr><tr><td>smoke.secrets.scan.ms</td><td>12364</td></tr>
+</tbody></table>
+<h2>Smoke Results</h2>
+<table><thead><tr><th>Name</th><th>Status</th><th>Exit</th></tr></thead><tbody>
+<tr><td>modelo100.map.health</td><td>OK</td><td>0</td></tr><tr><td>secrets.scan</td><td>OK</td><td>0</td></tr>
+</tbody></table>
+<h2>Tail Outputs</h2>
+<h3>modelo100.map.health</h3><details><summary>stdout</summary><pre>[map-health] PASS
+- mapped.json exists &amp; array: SKIPPED
+- mapped.csv rows == json length: SKIPPED
+- mapped.html non-trivial: OK
+- map.json validates schema: SKIPPED
+</pre></details><details><summary>stderr</summary><pre></pre></details><h3>secrets.scan</h3><details><summary>stdout</summary><pre>ver-production/0.pack&quot;,
+      &quot;rule&quot;: &quot;pem_private&quot;,
+      &quot;desc&quot;: &quot;PEM private key header&quot;,
+      &quot;type&quot;: &quot;content&quot;
+    },
+    {
+      &quot;file&quot;: &quot;apps/web/.next/cache/webpack/server-production/2.pack&quot;,
+      &quot;rule&quot;: &quot;pem_private&quot;,
+      &quot;desc&quot;: &quot;PEM private key header&quot;,
+      &quot;type&quot;: &quot;content&quot;
+    },
+    {
+      &quot;file&quot;: &quot;apps/web/.next/cache/webpack/server-production/7.pack&quot;,
+      &quot;rule&quot;: &quot;pem_private&quot;,
+      &quot;desc&quot;: &quot;PEM private key header&quot;,
+      &quot;type&quot;: &quot;content&quot;
+    },
+    {
+      &quot;file&quot;: &quot;apps/web/.next/server/chunks/47.js&quot;,
+      &quot;rule&quot;: &quot;pem_private&quot;,
+      &quot;desc&quot;: &quot;PEM private key header&quot;,
+      &quot;type&quot;: &quot;content&quot;
+    },
+    {
+      &quot;file&quot;: &quot;apps/web/.next/server/middleware.js&quot;,
+      &quot;rule&quot;: &quot;pem_private&quot;,
+      &quot;desc&quot;: &quot;PEM private key header&quot;,
+      &quot;type&quot;: &quot;content&quot;
+    },
+    {
+      &quot;file&quot;: &quot;apps/web/.next/server/middleware.js.map&quot;,
+      &quot;rule&quot;: &quot;pem_private&quot;,
+      &quot;desc&quot;: &quot;PEM private key header&quot;,
+      &quot;type&quot;: &quot;content&quot;
+    },
+    {
+      &quot;file&quot;: &quot;scripts/security.redaction.test.mjs&quot;,
+      &quot;rule&quot;: &quot;stripe_live&quot;,
+      &quot;desc&quot;: &quot;Stripe live secret&quot;,
+      &quot;type&quot;: &quot;content&quot;
+    },
+    {
+      &quot;file&quot;: &quot;tmp/restore-20251013T060834Z/unpacked/.env.example&quot;,
+      &quot;rule&quot;: &quot;dotenv_file&quot;,
+      &quot;desc&quot;: &quot;.env file committed&quot;,
+      &quot;type&quot;: &quot;filename&quot;
+    },
+    {
+      &quot;file&quot;: &quot;tmp/restore-20251013T060834Z/unpacked/apps/stub-server/.env.example&quot;,
+      &quot;rule&quot;: &quot;dotenv_file&quot;,
+      &quot;desc&quot;: &quot;.env file committed&quot;,
+      &quot;type&quot;: &quot;filename&quot;
+    },
+    {
+      &quot;file&quot;: &quot;tmp/restore-20251013T060834Z/unpacked/scripts/security.redaction.test.mjs&quot;,
+      &quot;rule&quot;: &quot;stripe_live&quot;,
+      &quot;desc&quot;: &quot;Stripe live secret&quot;,
+      &quot;type&quot;: &quot;content&quot;
+    },
+    {
+      &quot;file&quot;: &quot;tmp/restore-20251013T060834Z/unpacked/tmp/testredact/sample.txt&quot;,
+      &quot;rule&quot;: &quot;stripe_live&quot;,
+      &quot;desc&quot;: &quot;Stripe live secret&quot;,
+      &quot;type&quot;: &quot;content&quot;
+    },
+    {
+      &quot;file&quot;: &quot;tmp/testredact/sample.txt&quot;,
+      &quot;rule&quot;: &quot;stripe_live&quot;,
+      &quot;desc&quot;: &quot;Stripe live secret&quot;,
+      &quot;type&quot;: &quot;content&quot;
+    }
+  ]
+}
+</pre></details><details><summary>stderr</summary><pre></pre></details>
+</body></html>

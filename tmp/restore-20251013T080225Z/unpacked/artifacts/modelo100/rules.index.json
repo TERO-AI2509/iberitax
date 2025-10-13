@@ -1,0 +1,67 @@
+{
+  "generated_at": "2025-10-12T09:29:28.275Z",
+  "total": 5,
+  "items": [
+    {
+      "id": "RULE-M100-001",
+      "tags": [
+        "modelo100",
+        "identification"
+      ],
+      "message": "Declarant NIF (ID) must be present and valid",
+      "severity": "high",
+      "owner": "",
+      "status": "",
+      "updated": ""
+    },
+    {
+      "id": "RULE-M100-002",
+      "tags": [
+        "modelo100",
+        "residency"
+      ],
+      "message": "Residency status must be explicitly set (resident/non-resident)",
+      "severity": "medium",
+      "owner": "",
+      "status": "",
+      "updated": ""
+    },
+    {
+      "id": "RULE-M100-003",
+      "tags": [
+        "modelo100",
+        "totals",
+        "validation"
+      ],
+      "message": "Sum of income lines must equal declared total income",
+      "severity": "critical",
+      "owner": "",
+      "status": "",
+      "updated": ""
+    },
+    {
+      "id": "RULE-M100-004",
+      "tags": [
+        "withholding",
+        "crosscheck"
+      ],
+      "message": "Withholding certificate year should match fiscal year",
+      "severity": "low",
+      "owner": "",
+      "status": "",
+      "updated": ""
+    },
+    {
+      "id": "RULE-M100-005",
+      "tags": [
+        "bank",
+        "interest"
+      ],
+      "message": "Bank interest must include payer country code",
+      "severity": "medium",
+      "owner": "",
+      "status": "",
+      "updated": ""
+    }
+  ]
+}

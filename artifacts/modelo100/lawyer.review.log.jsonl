@@ -1,0 +1,22 @@
+{"ts":"2025-10-13T10:54:16.923Z","id":"R-001","actor":"sistema","action":"seed","state":"open","locale":"es-ES","message":"Nuevo conflicto para revisión: Deducción vivienda habitual 2012 vs 2013","meta":{"titulo":"Deducción vivienda habitual 2012 vs 2013","detalle":"Dos normas con periodos superpuestos","fuente":"AEAT","provenance":[{"type":"aeat","url":"https://www.agenciatributaria.es/"}]}}
+{"ts":"2025-10-13T10:54:16.923Z","id":"R-002","actor":"sistema","action":"seed","state":"open","locale":"es-ES","message":"Nuevo conflicto para revisión: Mínimo por descendientes residencia UE","meta":{"titulo":"Mínimo por descendientes residencia UE","detalle":"Criterios conflictivos en cambio de residencia","fuente":"BOE","provenance":[{"type":"boe","url":"https://www.boe.es/"}]}}
+{"ts":"2025-10-13T10:54:30.853Z","id":"R-001","actor":"abogada.marta","action":"picked_up","state":"picked_up","locale":"es-ES","message":"Caso recogido para revisión: Empiezo revisión","meta":{}}
+{"ts":"2025-10-13T10:54:30.925Z","id":"R-001","actor":"abogada.marta","action":"answered","state":"answered","locale":"es-ES","message":"Caso respondido: Aplicar DT 18ª LIRPF","meta":{}}
+{"ts":"2025-10-13T10:54:30.997Z","id":"R-001","actor":"abogada.marta","action":"closed","state":"closed","locale":"es-ES","message":"Caso cerrado: Cerrado con criterio","meta":{}}
+{"state":"picked_up","case_id":"C-LOCK9","who":"lawyer.one","ts":"2025-10-13T12:18:23.114Z"}
+{"state":"picked_up","case_id":"C-CSV","who":"csv.tester","ts":"2025-10-13T12:20:40.193Z"}
+{"state":"closed","case_id":"C-CSV","who":"csv.tester","applied_rule_snapshot":{"rule_id":"R-001","note":"ok"},"ts":"2025-10-13T12:20:40.213Z"}
+{"state":"picked_up","case_id":"C-CSV2","who":"csv.tester","ts":"2025-10-13T12:22:46.554Z"}
+{"state":"closed","case_id":"C-CSV2","who":"csv.tester","applied_rule_snapshot":{"rule_id":"R-001","note":"ok"},"ts":"2025-10-13T12:22:46.577Z"}
+{"state":"picked_up","case_id":"C-CSV3","who":"csv.tester","ts":"2025-10-13T12:26:42.223Z"}
+{"state":"closed","case_id":"C-CSV3","who":"csv.tester","applied_rule_snapshot":{"rule_id":"R-001","note":"ok"},"ts":"2025-10-13T12:26:42.244Z"}
+{"state":"picked_up","case_id":"C-CSV4","who":"csv.tester","ts":"2025-10-13T12:29:20.362Z"}
+{"state":"closed","case_id":"C-CSV4","who":"csv.tester","applied_rule_snapshot":{"rule_id":"R-001","note":"ok"},"ts":"2025-10-13T12:29:20.384Z"}
+{"state":"picked_up","case_id":"C-CSV5","who":"csv.tester","ts":"2025-10-13T12:31:35.531Z"}
+{"state":"closed","case_id":"C-CSV5","who":"csv.tester","applied_rule_snapshot":{"rule_id":"R-001","note":"ok"},"ts":"2025-10-13T12:31:35.551Z"}
+{"state":"picked_up","case_id":"C-CSV6","who":"csv.tester","ts":"2025-10-13T12:34:34.603Z"}
+{"state":"closed","case_id":"C-CSV6","who":"csv.tester","applied_rule_snapshot":{"rule_id":"R-001","note":"ok"},"ts":"2025-10-13T12:34:34.622Z"}
+{"state":"picked_up","case_id":"C-CSV7","who":"csv.tester","ts":"2025-10-13T12:37:59.770Z"}
+{"state":"closed","case_id":"C-CSV7","who":"csv.tester","applied_rule_snapshot":{"rule_id":"R-001","note":"ok"},"ts":"2025-10-13T12:37:59.790Z"}
+{"state":"picked_up","case_id":"C-CSV8","who":"csv.tester","ts":"2025-10-13T12:42:39.940Z"}
+{"state":"closed","case_id":"C-CSV8","who":"csv.tester","applied_rule_snapshot":{"rule_id":"R-001","note":"ok"},"ts":"2025-10-13T12:42:39.962Z"}

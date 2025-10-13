@@ -1,0 +1,10 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "module": "ESNext",
+    "moduleResolution": "NodeNext",
+    "types": ["jest","node"],
+    "noEmit": true,
+    "strict": true
+  }
+}

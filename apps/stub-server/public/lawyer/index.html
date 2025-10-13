@@ -1,0 +1,133 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Revisión de Conflictos — Abogados</title>
+<style>
+body{font-family:system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;margin:24px}
+header{display:flex;gap:12px;align-items:center;justify-content:space-between;margin-bottom:16px}
+h1{margin:0;font-size:20px}
+.controls{display:flex;gap:8px;flex-wrap:wrap}
+input,select,button{padding:8px 10px;border:1px solid #ddd;border-radius:10px}
+table{width:100%;border-collapse:collapse;margin-top:12px}
+th,td{border-bottom:1px solid #eee;padding:8px;text-align:left;font-size:14px}
+.badge{display:inline-block;padding:2px 8px;border-radius:999px;background:#eee}
+.state-open{background:#fde047}
+.state-picked{background:#bfdbfe}
+.state-answered{background:#a7f3d0}
+.state-closed{background:#e5e7eb}
+small{color:#666}
+</style>
+</head>
+<body>
+<header>
+  <h1>Casos en revisión</h1>
+  <div class="controls">
+    <input id="f-q" placeholder="Buscar id/título…"/>
+    <select id="f-state">
+      <option value="">Estado: todos</option>
+      <option value="open">Abierto</option>
+      <option value="picked_up">En curso</option>
+      <option value="answered">Respondido</option>
+      <option value="closed">Cerrado</option>
+    </select>
+    <input id="f-who" placeholder="Abogado…"/>
+    <button id="btn-refresh">Refrescar</button>
+  </div>
+</header>
+
+<table id="grid">
+  <thead>
+    <tr><th>ID</th><th>Título</th><th>Estado</th><th>Abogado</th><th>Actualizado</th><th>Acciones</th></tr>
+  </thead>
+  <tbody></tbody>
+</table>
+
+<template id="row">
+  <tr>
+    <td class="id"></td>
+    <td class="title"></td>
+    <td class="state"></td>
+    <td class="who"></td>
+    <td class="ts"></td>
+    <td class="actions"></td>
+  </tr>
+</template>
+
+<script>
+const byId = x=>document.getElementById(x);
+const fQ=byId('f-q'), fS=byId('f-state'), fW=byId('f-who'), T=byId('grid').querySelector('tbody');
+
+async function load() {
+  const res = await fetch('/api/lawyer/review.jsonl',{cache:'no-store'});
+  const txt = await res.text();
+  const lines = txt.trim()?txt.trim().split(/\n/):[];
+  const events = lines.map(l=>{try{return JSON.parse(l)}catch{return null}}).filter(Boolean);
+  const cases = new Map();
+  for (const e of events) {
+    const id = e.case_id || e.id || 'SIN_ID';
+    const prev = cases.get(id) || {id, title: e.title_es || e.title || '', history: []};
+    prev.history.push(e);
+    cases.set(id, prev);
+  }
+  const rows = Array.from(cases.values()).map(c=>{
+    c.history.sort((a,b)=>new Date(a.ts)-new Date(b.ts));
+    const last = c.history[c.history.length-1]||{};
+    c.state = last.state || 'open';
+    c.who = last.who || '';
+    c.updated_at = last.ts || '';
+    c.title = c.title || last.title_es || last.title || '';
+    c.provenance = last.provenance || last.sources || [];
+    return c;
+  });
+  render(rows);
+}
+
+function render(rows){
+  const q=(fQ.value||'').toLowerCase();
+  const s=fS.value||'';
+  const w=(fW.value||'').toLowerCase();
+  const tb=document.createDocumentFragment();
+  T.innerHTML='';
+  rows
+    .filter(r=>!q || r.id.toLowerCase().includes(q) || (r.title||'').toLowerCase().includes(q))
+    .filter(r=>!s || r.state===s)
+    .filter(r=>!w || (r.who||'').toLowerCase().includes(w))
+    .sort((a,b)=>String(a.id).localeCompare(String(b.id)))
+    .forEach(r=>{
+      const tr = document.getElementById('row').content.firstElementChild.cloneNode(true);
+      tr.querySelector('.id').textContent=r.id;
+      const t=r.title||'(Sin título)'; tr.querySelector('.title').textContent=t;
+      const st=tr.querySelector('.state'); st.innerHTML=`<span class="badge state-${mapState(r.state)}">${labelState(r.state)}</span>`;
+      tr.querySelector('.who').textContent=r.who||'';
+      tr.querySelector('.ts').innerHTML = r.updated_at ? `<small>${r.updated_at}</small>` : '';
+      const A = tr.querySelector('.actions');
+      A.append(actionBtn('Recoger', ()=>post('picked_up',r.id)));
+      A.append(actionBtn('Responder', ()=>post('answered',r.id)));
+      A.append(actionBtn('Cerrar', ()=>closeCase(r.id)));
+      tb.append(tr);
+    });
+  T.append(tb);
+}
+function mapState(s){return ({picked_up:'picked',answered:'answered',closed:'closed'})[s]||'open'}
+function labelState(s){return ({open:'Abierto',picked_up:'En curso',answered:'Respondido',closed:'Cerrado'})[s]||'Abierto'}
+
+function actionBtn(label,fn){const b=document.createElement('button'); b.textContent=label; b.onclick=async()=>{b.disabled=true;try{await fn();await load()}finally{b.disabled=false}}; return b}
+
+async function post(state, case_id){
+  const who = prompt('Tu nombre (abogado):')||'';
+  await fetch(`/api/lawyer/${state}`,{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({case_id,who})});
+}
+async function closeCase(case_id){
+  const who = prompt('Tu nombre (abogado):')||'';
+  const note = prompt('Criterio/resolución (opcional):')||'';
+  const applied_rule_snapshot = prompt('ID/snapshot de regla aplicada (opcional):')||'';
+  await fetch(`/api/lawyer/closed`,{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({case_id,who,note,applied_rule_snapshot})});
+}
+
+byId('btn-refresh').onclick=load;
+load();
+</script>
+</body>
+</html>

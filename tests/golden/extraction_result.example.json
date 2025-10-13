@@ -1,25 +1,52 @@
 {
-  "jobId": "job_123",
-  "sourceFiles": [
-    { "filename": "payslip.pdf", "mimeType": "application/pdf", "pages": 2 }
-  ],
-  "modelo100": {
-    "taxYear": 2024,
-    "taxpayer": { "nif": "X1234567A", "fullName": "Alex Garcia", "residencyStatus": "resident" },
-    "spouse": { "nif": "Y7654321B", "fullName": "Jamie Lee" },
-    "incomes": [
-      { "category": "employment", "gross": 52000, "withheld": 9000 }
-    ],
-    "deductions": [
-      { "code": "HYPOTHEC", "description": "Mortgage interest", "amount": 1200 }
-    ],
-    "totals": { "taxableBase": 43000, "calculatedTax": 6500, "finalTaxDue": -300 }
-  },
-  "confidence": {
-    "overall": 0.93,
-    "fields": { "taxpayer.fullName": 0.99, "incomes[0].gross": 0.9 }
-  },
-  "issues": [
-    { "severity": "info", "message": "Rounded values applied", "path": "/totals" }
+  "rules": [
+    {
+      "id": "RULE-M100-001",
+      "title": "Example Rule",
+      "jurisdiction": "ES",
+      "year": 2025,
+      "source": {
+        "url": "https://www.aeat.es"
+      },
+      "text": "Deberá aplicarse...",
+      "normalized": {
+        "form": "Modelo 100",
+        "article": "Art. X"
+      },
+      "score": {
+        "authority": 1,
+        "clarity": 0.9,
+        "applicability": 1
+      },
+      "provenance": {
+        "published_at": "2025-01-01",
+        "updated_at": "2025-01-15",
+        "effective_from": "2025-01-01",
+        "effective_to": null,
+        "retroactive_to": null,
+        "official_refs": [
+          {
+            "url": "https://www.boe.es"
+          }
+        ],
+        "supporting_refs": [
+          {
+            "url": "https://www.aeat.es"
+          }
+        ],
+        "discrepancy": {
+          "has_discrepancy": false,
+          "sources": []
+        },
+        "questions": [],
+        "date_precision": {
+          "published_at": "day",
+          "updated_at": "day",
+          "effective_from": "day",
+          "effective_to": "unknown",
+          "retroactive_to": "unknown"
+        }
+      }
+    }
   ]
 }

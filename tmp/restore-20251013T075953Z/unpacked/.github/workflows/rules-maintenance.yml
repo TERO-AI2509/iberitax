@@ -1,0 +1,72 @@
+name: Rules Maintenance
+
+on:
+  push:
+    branches: [ main ]
+    paths:
+      - "docs/modelo100.rules/**"
+      - "scripts/**"
+      - ".github/workflows/rules-maintenance.yml"
+  workflow_dispatch: {}
+
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Prepare artifacts dir
+        run: mkdir -p artifacts/modelo100
+
+      - name: Map Health
+        run: |
+          APPLY=1 node scripts/modelo100.map.health.mjs --out artifacts/modelo100/health.report.json
+          node -e "const fs=require('fs');const t=fs.readFileSync('artifacts/modelo100/health.report.json','utf8');const j=JSON.parse(t);const ok=j.ok?'PASS':'FAIL';console.log('Map Health:',ok);fs.appendFileSync(process.env.GITHUB_STEP_SUMMARY, '## Map Health\\n\\n'+ok+'\\n')"
+
+      - name: Owners Summary
+        run: |
+          APPLY=1 node scripts/modelo100.rules.owners.build.mjs
+          echo "## Owners Summary" >> $GITHUB_STEP_SUMMARY
+          echo >> $GITHUB_STEP_SUMMARY
+          echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
+          head -n 5 artifacts/modelo100/owners.csv >> $GITHUB_STEP_SUMMARY
+          echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
+
+      - name: Stale Rules
+      - name: Stale Rules
+      - name: Fail if stale > 0
+        run: |
+          n=$(cut -d"=" -f2 artifacts/modelo100/rules.stale.badge.txt | awk '{print $1}')
+          if [ "$n" -gt 0 ]; then echo "Found $n stale rules"; exit 1; fi
+        env:
+          STALE_DAYS: "90"
+        run: |
+          APPLY=1 node scripts/modelo100.rules.stale.flag.mjs
+          echo "## Stale Rules" >> $GITHUB_STEP_SUMMARY
+          echo >> $GITHUB_STEP_SUMMARY
+          echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
+          head -n 5 artifacts/modelo100/rules.stale.csv >> $GITHUB_STEP_SUMMARY
+          echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
+          echo >> $GITHUB_STEP_SUMMARY
+          echo "**Badge:**" >> $GITHUB_STEP_SUMMARY
+          echo >> $GITHUB_STEP_SUMMARY
+          cat artifacts/modelo100/rules.stale.badge.txt >> $GITHUB_STEP_SUMMARY
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: modelo100-maintenance
+          path: |
+            artifacts/modelo100/owners.csv
+            artifacts/modelo100/owners.html
+            artifacts/modelo100/rules.stale.json
+            artifacts/modelo100/rules.stale.csv
+            artifacts/modelo100/rules.stale.html
+            artifacts/modelo100/rules.stale.badge.txt
+            artifacts/modelo100/health.report.json

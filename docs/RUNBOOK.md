@@ -290,3 +290,23 @@ APPLY=1 STALE_DAYS=90 node scripts/modelo100.cli.mjs admin stale
 
 ### Next
 - Finish 10.2, then 10.3 Governance report and 10.4 Final audit bundle.
+## 2025-10-13 — Phase 11 · Step 11.1 — AI Extraction & Schema Scaffolding
+
+Status: Done
+Outputs:
+- scripts/ai.extract.rules.mjs
+- schemas/extraction_result.schema.json
+- fixtures/tax/*.txt
+- scripts/validate.extractions.mjs
+
+Acceptance:
+- Extractor runs on samples
+- JSON validates against schema
+- Validation harness green
+
+Notes:
+- Lawyer-facing content remains in Spanish; build and dev artifacts in English.
+- Formats enforced via ajv-formats.
+
+Next:
+- Step 11.2 — Scoring layer for authority, clarity, and applicability.

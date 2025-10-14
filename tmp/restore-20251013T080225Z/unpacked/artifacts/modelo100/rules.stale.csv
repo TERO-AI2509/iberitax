@@ -1,6 +1,0 @@
-id,owner,updatedAt,hasUpdatedAt,stale,file,tags
-RULE-M100-001,tax-team,,false,true,,identification|modelo100
-RULE-M100-002,unassigned,,false,true,,modelo100|residency
-RULE-M100-003,unassigned,,false,true,,modelo100|totals|validation
-RULE-M100-004,unassigned,,false,true,,crosscheck|withholding
-RULE-M100-005,unassigned,,false,true,,bank|interest

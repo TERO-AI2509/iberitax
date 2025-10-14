@@ -26,3 +26,11 @@ tools/**/artifacts/
 .env.*
 report/quarantine/
 artifacts/modelo100/export/
+
+# Local DBs and temp
+apps/web/dev.db
+apps/web/prisma/dev.db
+tmp/
+artifacts/backups/
+artifacts/*.html
+artifacts/*.json

@@ -1,0 +1,21 @@
+  ▲ Next.js 14.2.10
+  - Local:        http://localhost:3000
+  - Environments: .env.local
+
+ ✓ Starting...
+ ✓ Ready in 1893ms
+ ✓ Compiled /middleware in 137ms (72 modules)
+ ✓ Compiled /api/lawyer/[...slug] in 89ms (27 modules)
+ GET /api/lawyer/cases 200 in 447ms
+ GET /api/lawyer/cases 200 in 9ms
+ POST /api/lawyer/picked_up 200 in 12ms
+ POST /api/lawyer/answered 200 in 8ms
+ POST /api/lawyer/closed 200 in 8ms
+ GET /api/lawyer/export.csv 200 in 7ms
+ ✓ Compiled in 1290ms (274 modules)
+ ✓ Compiled in 129ms (274 modules)
+ ○ Compiling / ...
+ ✓ Compiled / in 1166ms (451 modules)
+ GET / 200 in 1313ms
+ ✓ Compiled /api/health in 170ms (27 modules)
+ GET /api/health 200 in 244ms

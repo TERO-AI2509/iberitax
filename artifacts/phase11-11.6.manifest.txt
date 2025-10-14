@@ -1,7 +1,0 @@
-Phase 11 · Step 11.6 artifacts
-schemas/lawyer_review.schema.json
-scripts/lawyer.export.conflicts.mjs
-scripts/lawyer.mark.mjs
-scripts/validate.lawyer.log.mjs
-artifacts/modelo100/conflicts.json
-artifacts/modelo100/lawyer.review.log.jsonl

@@ -1,0 +1,29 @@
+name: Deploy Prod
+on:
+  workflow_dispatch:
+env:
+  NODE_VERSION: '20'
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    environment: prod
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: '${{ env.NODE_VERSION }}' }
+      - run: npm ci
+      - run: npm --prefix apps/web run build
+      - run: tar -czf bundle.tar.gz apps web apps/stub-server scripts package.json pnpm-*
+      - uses: actions/upload-artifact@v4
+        with: { name: bundle, path: bundle.tar.gz }
+  deploy-vm:
+    needs: build
+    runs-on: ubuntu-latest
+    environment: prod
+    steps:
+      - uses: actions/download-artifact@v4
+        with: { name: bundle }
+      - name: Ship to VM
+        run: |
+          echo "Use your preferred SSH action or runner-to-VM copy here"
+          echo "OK 11.14.placeholder.ship"

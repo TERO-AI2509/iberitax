@@ -20,3 +20,11 @@
 {"state":"closed","case_id":"C-CSV7","who":"csv.tester","applied_rule_snapshot":{"rule_id":"R-001","note":"ok"},"ts":"2025-10-13T12:37:59.790Z"}
 {"state":"picked_up","case_id":"C-CSV8","who":"csv.tester","ts":"2025-10-13T12:42:39.940Z"}
 {"state":"closed","case_id":"C-CSV8","who":"csv.tester","applied_rule_snapshot":{"rule_id":"R-001","note":"ok"},"ts":"2025-10-13T12:42:39.962Z"}
+{"state":"picked_up","case_id":"CASE-11-10","who":"lucas","ts":"2025-10-13T14:12:31.257Z"}
+{"state":"picked_up","case_id":"CASE-11-10A","who":"lucas","ts":"2025-10-13T14:31:27.979Z"}
+{"state":"picked_up","case_id":"CASE-11-10B","who":"lucas","ts":"2025-10-13T14:34:02.984Z"}
+{"state":"picked_up","case_id":"CASE-11-10E","who":"lucas","ts":"2025-10-13T14:46:51.105Z","applied_rule_snapshot":""}
+{"state":"picked_up","case_id":"CASE-11-10-BANNER","who":"lucas","ts":"2025-10-13T14:50:26.971Z","applied_rule_snapshot":""}
+{"type":"picked_up","case_id":"CASE-TEST","who":"dev","ts":"2025-10-13T16:12:03.513Z","applied_rule_snapshot":{}}
+{"type":"answered","case_id":"CASE-TEST","who":"dev","ts":"2025-10-13T16:12:03.528Z","applied_rule_snapshot":{"msg":"ok"}}
+{"type":"closed","case_id":"CASE-TEST","who":"dev","ts":"2025-10-13T16:12:03.542Z","applied_rule_snapshot":{}}

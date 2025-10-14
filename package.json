@@ -21,7 +21,10 @@
     "extract:one": "node scripts/ai.extract.rules.mjs fixtures/tax/boe_iva_sujecion.txt --write",
     "validate:extractions": "node scripts/validate.extractions.mjs",
     "test:rules": "node scripts/validate.applications.mjs",
-    "dev": "node apps/stub-server/src/dev.server.mjs"
+    "dev": "node apps/stub-server/src/dev.server.mjs",
+    "lawyer:mock": "LAWYER_POST_SECRET=\"${LAWYER_POST_SECRET:-dev-secret}\" PORT=8787 node scripts/lawyer.mock.api.mjs",
+    "web:dev": "NEXT_PUBLIC_LAWYER_API_BASE=\"${LAWYER_API_BASE:-http://localhost:8787}\" npm --prefix apps/web run dev",
+    "web:build": "NEXT_PUBLIC_LAWYER_API_BASE=\"${LAWYER_API_BASE:-http://localhost:8787}\" npm --prefix apps/web run build"
   },
   "devDependencies": {
     "@babel/preset-env": "^7.28.3",

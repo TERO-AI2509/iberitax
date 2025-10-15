@@ -1,0 +1,15 @@
+{
+  "doc": "salary",
+  "amount": 1234.56,
+  "date": "2024-05-32",
+  "iban": "DE89370400440532013000",
+  "_meta": {
+    "field_confidence": {
+      "doc": 0.995,
+      "amount": 0.995,
+      "date": 0.978,
+      "iban": 0.995
+    },
+    "iban_source": "ocr_roi"
+  }
+}

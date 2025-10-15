@@ -1,0 +1,17 @@
+{
+  "doc": "rental",
+  "rent_amount": "1500,00",
+  "period_start": "2024-06-01",
+  "period_end": "2024-06-30",
+  "iban": "NL91ABNA0417164300",
+  "_meta": {
+    "field_confidence": {
+      "doc": 0.995,
+      "rent_amount": 0.995,
+      "period_start": 0.995,
+      "period_end": 0.995,
+      "iban": 0.995
+    },
+    "iban_source": "ocr_roi"
+  }
+}

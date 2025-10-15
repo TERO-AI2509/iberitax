@@ -1,0 +1,22 @@
+{
+  "users": [
+    {
+      "id": "39f59db3-ee7b-46ef-a75f-5e522fe2ca50",
+      "email": "someone@somewhere.com"
+    },
+    {
+      "id": "35b1d28f-c8ff-486f-899d-b0aafc9d71a5",
+      "email": "user@example.com"
+    },
+    {
+      "id": "1c0c1c2ac8d818c6",
+      "email": "tester+tamper@iberitax.local",
+      "name": "Tamper Tester"
+    },
+    {
+      "id": "64544445-a771-4f30-9247-87df5440aa5e",
+      "email": "tester+cb@iberitax.local",
+      "name": "CB Tester"
+    }
+  ]
+}

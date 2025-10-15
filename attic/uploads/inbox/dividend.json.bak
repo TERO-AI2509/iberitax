@@ -1,0 +1,16 @@
+{
+  "doc": "dividend",
+  "gross_amount": "987,68",
+  "withholding_tax": "123,45",
+  "payment_date": "2024-03-15",
+  "isin": "US0378331005",
+  "_meta": {
+    "field_confidence": {
+      "doc": 0.995,
+      "gross_amount": 0.995,
+      "withholding_tax": 0.995,
+      "payment_date": 0.995,
+      "isin": 0.995
+    }
+  }
+}

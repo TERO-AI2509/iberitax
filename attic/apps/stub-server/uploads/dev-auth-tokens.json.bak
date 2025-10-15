@@ -1,0 +1,60 @@
+{
+  "tokens": [
+    {
+      "token": "925992a6f287ec6568ff6659d33d64cf1f5b51e78c5f5f94",
+      "email": "someone@somewhere.com",
+      "userId": "39f59db3-ee7b-46ef-a75f-5e522fe2ca50",
+      "expiresAt": 1759128120259,
+      "used": false
+    },
+    {
+      "token": "985be1d5343505e756090407b0a7ffa2354010c1f35ebfde",
+      "email": "user@example.com",
+      "userId": "35b1d28f-c8ff-486f-899d-b0aafc9d71a5",
+      "expiresAt": 1759128546321,
+      "used": false
+    },
+    {
+      "token": "aaea24d7f74c8129709f055703e9094a8f781416db86fca9",
+      "email": "user@example.com",
+      "userId": "35b1d28f-c8ff-486f-899d-b0aafc9d71a5",
+      "expiresAt": 1759128687832,
+      "used": true
+    },
+    {
+      "token": "4429ff0aa6404ab871738109ff4cd2ac",
+      "email": "tester+tamper@iberitax.local",
+      "userId": "1c0c1c2ac8d818c6",
+      "expiresAt": 1759141726394,
+      "used": false
+    },
+    {
+      "token": "3baec86556ccc1121ac7c37aed5529833851a7bb0d5578be",
+      "email": "tester+tamper@iberitax.local",
+      "userId": "1c0c1c2ac8d818c6",
+      "expiresAt": 1759141910692,
+      "used": false
+    },
+    {
+      "token": "e3a97417a2e19953271c7d3792786a4a6c543eb949eca44a",
+      "email": "tester+tamper@iberitax.local",
+      "userId": "1c0c1c2ac8d818c6",
+      "expiresAt": 1759141977847,
+      "used": false
+    },
+    {
+      "token": "c7a66ee06dc2519be0d42a129e6bcb8d038cb431db2c5ffa",
+      "email": "tester+tamper@iberitax.local",
+      "userId": "1c0c1c2ac8d818c6",
+      "expiresAt": 1759146071306,
+      "used": false
+    },
+    {
+      "token": "d9d2380ea8aa94fc7dde538cb8250dbb64fd0a3cb6b0a6db",
+      "email": "tester+tamper@iberitax.local",
+      "userId": "1c0c1c2ac8d818c6",
+      "expiresAt": 1759150084461,
+      "used": true
+    }
+  ]
+}

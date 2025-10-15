@@ -1,0 +1,270 @@
+./artifacts/scan.12.3.rebrand.txt:1:./artifacts/modelo100/sla.export.json:86:      "project": "TERO Fiscal · Iberitax · Modelo 100",
+./artifacts/scan.12.3.rebrand.txt:2:./artifacts/modelo100/dotenv.lint.json:14:      "key": "IBERITAX_API_KEY",
+./artifacts/scan.12.3.rebrand.txt:3:./dist-scripts/packages/clients/src/api.d.ts:11:export type IberitaxClientOptions = {
+./artifacts/scan.12.3.rebrand.txt:4:./dist-scripts/packages/clients/src/api.d.ts:28:export declare class IberitaxClient {
+./artifacts/scan.12.3.rebrand.txt:5:./dist-scripts/packages/clients/src/api.d.ts:32:    constructor(opts?: IberitaxClientOptions);
+./artifacts/scan.12.3.rebrand.txt:6:./dist-scripts/packages/clients/src/api.js:1:/* IberitaxClient — lightweight fetch client with Zod validation */
+./artifacts/scan.12.3.rebrand.txt:7:./dist-scripts/packages/clients/src/api.js:13:export class IberitaxClient {
+./artifacts/scan.12.3.rebrand.txt:8:./docs/security/gdpr.md:3:Scope: local developer environment for Iberitax MVP.  
+./artifacts/scan.12.3.rebrand.txt:9:./README.md:1:# Iberitax MVP
+./artifacts/scan.12.3.rebrand.txt:10:./README.md:3:Mono-repo for Iberitax MVP (apps, packages, infra).
+./artifacts/scan.12.3.rebrand.txt:11:./scripts/modelo100.sla.export.mjs:108:      project: 'TERO Fiscal · Iberitax · Modelo 100',
+./artifacts/scan.12.3.rebrand.txt:12:./packages/clients/src/api.ts:1:/* IberitaxClient — lightweight fetch client with Zod validation */
+./artifacts/scan.12.3.rebrand.txt:13:./packages/clients/src/api.ts:17:export type IberitaxClientOptions = {
+./artifacts/scan.12.3.rebrand.txt:14:./packages/clients/src/api.ts:38:export class IberitaxClient {
+./artifacts/scan.12.3.rebrand.txt:15:./packages/clients/src/api.ts:43:  constructor(opts: IberitaxClientOptions = {}) {
+./artifacts/scan.12.3.rebrand.txt:16:./rebrand.scan.filtered.txt:42:docs/security/gdpr.md:Scope: local developer environment for Iberitax MVP.  
+./artifacts/scan.12.3.rebrand.txt:17:./rebrand.scan.filtered.txt:57:demos/call-health.mjs:import { IberitaxClient } from '../packages/clients/dist/api.js';
+./artifacts/scan.12.3.rebrand.txt:18:./rebrand.scan.filtered.txt:58:demos/call-health.mjs:  const client = new IberitaxClient({ baseUrl: 'http://localhost:4000' });
+./artifacts/scan.12.3.rebrand.txt:19:./rebrand.scan.filtered.txt:60:README.md:# Iberitax MVP
+./artifacts/scan.12.3.rebrand.txt:20:./rebrand.scan.filtered.txt:61:README.md:Mono-repo for Iberitax MVP (apps, packages, infra).
+./artifacts/scan.12.3.rebrand.txt:21:./rebrand.scan.filtered.txt:75:dist-scripts/packages/clients/src/api.js:/* IberitaxClient — lightweight fetch client with Zod validation */
+./artifacts/scan.12.3.rebrand.txt:22:./rebrand.scan.filtered.txt:77:dist-scripts/packages/clients/src/api.js:export class IberitaxClient {
+./artifacts/scan.12.3.rebrand.txt:23:./rebrand.scan.filtered.txt:85:dist-scripts/packages/clients/src/api.d.ts:export type IberitaxClientOptions = {
+./artifacts/scan.12.3.rebrand.txt:24:./rebrand.scan.filtered.txt:86:dist-scripts/packages/clients/src/api.d.ts:export declare class IberitaxClient {
+./artifacts/scan.12.3.rebrand.txt:25:./rebrand.scan.filtered.txt:87:dist-scripts/packages/clients/src/api.d.ts:    constructor(opts?: IberitaxClientOptions);
+./artifacts/scan.12.3.rebrand.txt:26:./rebrand.scan.filtered.txt:90:apps/stub-server/tests/download-url.test.mjs:  return process.env.IBERITAX_STORAGE_ROOT || defaultRoot;
+./artifacts/scan.12.3.rebrand.txt:27:./rebrand.scan.filtered.txt:92:openapi/iberitax.yaml:  title: Iberitax MVP API
+./artifacts/scan.12.3.rebrand.txt:28:./rebrand.scan.filtered.txt:100:scripts/modelo100.sla.export.mjs:      project: 'TERO Fiscal · Iberitax · Modelo 100',
+./artifacts/scan.12.3.rebrand.txt:29:./rebrand.scan.filtered.txt:101:apps/web/app/page.tsx:  return <main style={{ padding: 16 }}><h1>Iberitax Demo</h1><p>Use SSR demo link to test server-side redirect behavior.</p></main>;
+./artifacts/scan.12.3.rebrand.txt:30:./rebrand.scan.filtered.txt:104:packages/clients/src/api.ts:/* IberitaxClient — lightweight fetch client with Zod validation */
+./artifacts/scan.12.3.rebrand.txt:31:./rebrand.scan.filtered.txt:106:packages/clients/src/api.ts:export type IberitaxClientOptions = {
+./artifacts/scan.12.3.rebrand.txt:32:./rebrand.scan.filtered.txt:107:packages/clients/src/api.ts:export class IberitaxClient {
+./artifacts/scan.12.3.rebrand.txt:33:./rebrand.scan.filtered.txt:108:packages/clients/src/api.ts:  constructor(opts: IberitaxClientOptions = {}) {
+./artifacts/scan.12.3.rebrand.txt:34:./tmp/restore-20251013T074629Z/unpacked/artifacts/modelo100/sla.export.json:86:      "project": "TERO Fiscal · Iberitax · Modelo 100",
+./artifacts/scan.12.3.rebrand.txt:35:./tmp/restore-20251013T074629Z/unpacked/artifacts/modelo100/dotenv.lint.json:14:      "key": "IBERITAX_API_KEY",
+./artifacts/scan.12.3.rebrand.txt:36:./tmp/restore-20251013T074629Z/unpacked/docs/security/gdpr.md:3:Scope: local developer environment for Iberitax MVP.  
+./artifacts/scan.12.3.rebrand.txt:37:./tmp/restore-20251013T075953Z/unpacked/artifacts/modelo100/sla.export.json:86:      "project": "TERO Fiscal · Iberitax · Modelo 100",
+./artifacts/scan.12.3.rebrand.txt:38:./tmp/restore-20251013T075953Z/unpacked/artifacts/modelo100/dotenv.lint.json:14:      "key": "IBERITAX_API_KEY",
+./artifacts/scan.12.3.rebrand.txt:39:./tmp/restore-20251013T075953Z/unpacked/docs/security/gdpr.md:3:Scope: local developer environment for Iberitax MVP.  
+./artifacts/scan.12.3.rebrand.txt:40:./tmp/restore-20251013T080225Z/unpacked/artifacts/modelo100/sla.export.json:86:      "project": "TERO Fiscal · Iberitax · Modelo 100",
+./artifacts/scan.12.3.rebrand.txt:41:./tmp/restore-20251013T080225Z/unpacked/artifacts/modelo100/dotenv.lint.json:14:      "key": "IBERITAX_API_KEY",
+./artifacts/scan.12.3.rebrand.txt:42:./tmp/restore-20251013T080225Z/unpacked/docs/security/gdpr.md:3:Scope: local developer environment for Iberitax MVP.  
+./artifacts/scan.12.3.rebrand.txt:43:./tmp/restore-20251013T060834Z/unpacked/artifacts/modelo100/sla.export.json:86:      "project": "TERO Fiscal · Iberitax · Modelo 100",
+./artifacts/scan.12.3.rebrand.txt:44:./tmp/restore-20251013T060834Z/unpacked/artifacts/modelo100/dotenv.lint.json:14:      "key": "IBERITAX_API_KEY",
+./artifacts/scan.12.3.rebrand.txt:45:./tmp/restore-20251013T060834Z/unpacked/dist-scripts/packages/clients/src/api.d.ts:11:export type IberitaxClientOptions = {
+./artifacts/scan.12.3.rebrand.txt:46:./tmp/restore-20251013T060834Z/unpacked/dist-scripts/packages/clients/src/api.d.ts:28:export declare class IberitaxClient {
+./artifacts/scan.12.3.rebrand.txt:47:./tmp/restore-20251013T060834Z/unpacked/dist-scripts/packages/clients/src/api.d.ts:32:    constructor(opts?: IberitaxClientOptions);
+./artifacts/scan.12.3.rebrand.txt:48:./tmp/restore-20251013T060834Z/unpacked/dist-scripts/packages/clients/src/api.js:1:/* IberitaxClient — lightweight fetch client with Zod validation */
+./artifacts/scan.12.3.rebrand.txt:49:./tmp/restore-20251013T060834Z/unpacked/dist-scripts/packages/clients/src/api.js:13:export class IberitaxClient {
+./artifacts/scan.12.3.rebrand.txt:50:./tmp/restore-20251013T060834Z/unpacked/docs/security/gdpr.md:3:Scope: local developer environment for Iberitax MVP.  
+./artifacts/scan.12.3.rebrand.txt:51:./tmp/restore-20251013T060834Z/unpacked/openapi/iberitax.yaml:3:  title: Iberitax MVP API
+./artifacts/scan.12.3.rebrand.txt:52:./tmp/restore-20251013T060834Z/unpacked/README.md:1:# Iberitax MVP
+./artifacts/scan.12.3.rebrand.txt:53:./tmp/restore-20251013T060834Z/unpacked/README.md:3:Mono-repo for Iberitax MVP (apps, packages, infra).
+./artifacts/scan.12.3.rebrand.txt:54:./tmp/restore-20251013T060834Z/unpacked/scripts/modelo100.sla.export.mjs:108:      project: 'TERO Fiscal · Iberitax · Modelo 100',
+./artifacts/scan.12.3.rebrand.txt:55:./tmp/restore-20251013T060834Z/unpacked/packages/clients/src/api.ts:1:/* IberitaxClient — lightweight fetch client with Zod validation */
+./artifacts/scan.12.3.rebrand.txt:56:./tmp/restore-20251013T060834Z/unpacked/packages/clients/src/api.ts:17:export type IberitaxClientOptions = {
+./artifacts/scan.12.3.rebrand.txt:57:./tmp/restore-20251013T060834Z/unpacked/packages/clients/src/api.ts:38:export class IberitaxClient {
+./artifacts/scan.12.3.rebrand.txt:58:./tmp/restore-20251013T060834Z/unpacked/packages/clients/src/api.ts:43:  constructor(opts: IberitaxClientOptions = {}) {
+./artifacts/scan.12.3.rebrand.txt:59:./tmp/restore-20251013T060834Z/unpacked/.env.example:2:IBERITAX_API_URL=http://localhost:4000
+./artifacts/scan.12.3.rebrand.txt:60:./tmp/restore-20251013T060834Z/unpacked/.env.example:4:IBERITAX_API_KEY=dev-key
+./artifacts/scan.12.3.rebrand.txt:61:./tmp/restore-20251013T060834Z/unpacked/apps/web/app/page.tsx:2:  return <main style={{ padding: 16 }}><h1>Iberitax Demo</h1><p>Use SSR demo link to test server-side redirect behavior.</p></main>;
+./artifacts/scan.12.3.rebrand.txt:62:./tmp/restore-20251013T060834Z/unpacked/apps/stub-server/tests/download-url.test.mjs:29:  return process.env.IBERITAX_STORAGE_ROOT || defaultRoot;
+./artifacts/scan.12.3.rebrand.txt:63:./tmp/restore-20251013T060834Z/unpacked/demos/call-health.mjs:2:import { IberitaxClient } from '../packages/clients/dist/api.js';
+./artifacts/scan.12.3.rebrand.txt:64:./tmp/restore-20251013T060834Z/unpacked/demos/call-health.mjs:5:  const client = new IberitaxClient({ baseUrl: 'http://localhost:4000' });
+./artifacts/scan.12.3.rebrand.txt:65:./apps/stub-server/tests/download-url.test.mjs:29:  return process.env.IBERITAX_STORAGE_ROOT || defaultRoot;
+./artifacts/scan.12.3.rebrand.txt:66:./backups/phase12.2-20251015132137/apps__web__app__page.tsx:2:  return <main style={{ padding: 16 }}><h1>Iberitax Demo</h1><p>Use SSR demo link to test server-side redirect behavior.</p></main>;
+./artifacts/scan.12.3.rebrand.txt:67:./backups/phase12.2-20251015132137/README.md:1:# Iberitax MVP
+./artifacts/scan.12.3.rebrand.txt:68:./backups/phase12.2-20251015132137/README.md:3:Mono-repo for Iberitax MVP (apps, packages, infra).
+./artifacts/scan.12.3.rebrand.txt:69:./backups/phase12.2-20251015132137/openapi__iberitax.yaml:3:  title: Iberitax MVP API
+./artifacts/scan.12.3.rebrand.txt:70:./demos/call-health.mjs:2:import { IberitaxClient } from '../packages/clients/dist/api.js';
+./artifacts/scan.12.3.rebrand.txt:71:./demos/call-health.mjs:5:  const client = new IberitaxClient({ baseUrl: 'http://localhost:4000' });
+./artifacts/scan.12.3.rebrand.txt.bak:1:./artifacts/modelo100/sla.export.json:86:      "project": "TERO Fiscal · Iberitax · Modelo 100",
+./artifacts/scan.12.3.rebrand.txt.bak:2:./artifacts/modelo100/dotenv.lint.json:14:      "key": "IBERITAX_API_KEY",
+./artifacts/scan.12.3.rebrand.txt.bak:3:./dist-scripts/packages/clients/src/api.d.ts:11:export type IberitaxClientOptions = {
+./artifacts/scan.12.3.rebrand.txt.bak:4:./dist-scripts/packages/clients/src/api.d.ts:28:export declare class IberitaxClient {
+./artifacts/scan.12.3.rebrand.txt.bak:5:./dist-scripts/packages/clients/src/api.d.ts:32:    constructor(opts?: IberitaxClientOptions);
+./artifacts/scan.12.3.rebrand.txt.bak:6:./dist-scripts/packages/clients/src/api.js:1:/* IberitaxClient — lightweight fetch client with Zod validation */
+./artifacts/scan.12.3.rebrand.txt.bak:7:./dist-scripts/packages/clients/src/api.js:13:export class IberitaxClient {
+./artifacts/scan.12.3.rebrand.txt.bak:8:./docs/security/gdpr.md:3:Scope: local developer environment for Iberitax MVP.  
+./artifacts/scan.12.3.rebrand.txt.bak:9:./README.md:1:# Iberitax MVP
+./artifacts/scan.12.3.rebrand.txt.bak:10:./README.md:3:Mono-repo for Iberitax MVP (apps, packages, infra).
+./artifacts/scan.12.3.rebrand.txt.bak:11:./scripts/modelo100.sla.export.mjs:108:      project: 'TERO Fiscal · Iberitax · Modelo 100',
+./artifacts/scan.12.3.rebrand.txt.bak:12:./packages/clients/src/api.ts:1:/* IberitaxClient — lightweight fetch client with Zod validation */
+./artifacts/scan.12.3.rebrand.txt.bak:13:./packages/clients/src/api.ts:17:export type IberitaxClientOptions = {
+./artifacts/scan.12.3.rebrand.txt.bak:14:./packages/clients/src/api.ts:38:export class IberitaxClient {
+./artifacts/scan.12.3.rebrand.txt.bak:15:./packages/clients/src/api.ts:43:  constructor(opts: IberitaxClientOptions = {}) {
+./artifacts/scan.12.3.rebrand.txt.bak:16:./rebrand.scan.filtered.txt:42:docs/security/gdpr.md:Scope: local developer environment for Iberitax MVP.  
+./artifacts/scan.12.3.rebrand.txt.bak:17:./rebrand.scan.filtered.txt:57:demos/call-health.mjs:import { IberitaxClient } from '../packages/clients/dist/api.js';
+./artifacts/scan.12.3.rebrand.txt.bak:18:./rebrand.scan.filtered.txt:58:demos/call-health.mjs:  const client = new IberitaxClient({ baseUrl: 'http://localhost:4000' });
+./artifacts/scan.12.3.rebrand.txt.bak:19:./rebrand.scan.filtered.txt:60:README.md:# Iberitax MVP
+./artifacts/scan.12.3.rebrand.txt.bak:20:./rebrand.scan.filtered.txt:61:README.md:Mono-repo for Iberitax MVP (apps, packages, infra).
+./artifacts/scan.12.3.rebrand.txt.bak:21:./rebrand.scan.filtered.txt:75:dist-scripts/packages/clients/src/api.js:/* IberitaxClient — lightweight fetch client with Zod validation */
+./artifacts/scan.12.3.rebrand.txt.bak:22:./rebrand.scan.filtered.txt:77:dist-scripts/packages/clients/src/api.js:export class IberitaxClient {
+./artifacts/scan.12.3.rebrand.txt.bak:23:./rebrand.scan.filtered.txt:85:dist-scripts/packages/clients/src/api.d.ts:export type IberitaxClientOptions = {
+./artifacts/scan.12.3.rebrand.txt.bak:24:./rebrand.scan.filtered.txt:86:dist-scripts/packages/clients/src/api.d.ts:export declare class IberitaxClient {
+./artifacts/scan.12.3.rebrand.txt.bak:25:./rebrand.scan.filtered.txt:87:dist-scripts/packages/clients/src/api.d.ts:    constructor(opts?: IberitaxClientOptions);
+./artifacts/scan.12.3.rebrand.txt.bak:26:./rebrand.scan.filtered.txt:90:apps/stub-server/tests/download-url.test.mjs:  return process.env.IBERITAX_STORAGE_ROOT || defaultRoot;
+./artifacts/scan.12.3.rebrand.txt.bak:27:./rebrand.scan.filtered.txt:92:openapi/iberitax.yaml:  title: Iberitax MVP API
+./artifacts/scan.12.3.rebrand.txt.bak:28:./rebrand.scan.filtered.txt:100:scripts/modelo100.sla.export.mjs:      project: 'TERO Fiscal · Iberitax · Modelo 100',
+./artifacts/scan.12.3.rebrand.txt.bak:29:./rebrand.scan.filtered.txt:101:apps/web/app/page.tsx:  return <main style={{ padding: 16 }}><h1>Iberitax Demo</h1><p>Use SSR demo link to test server-side redirect behavior.</p></main>;
+./artifacts/scan.12.3.rebrand.txt.bak:30:./rebrand.scan.filtered.txt:104:packages/clients/src/api.ts:/* IberitaxClient — lightweight fetch client with Zod validation */
+./artifacts/scan.12.3.rebrand.txt.bak:31:./rebrand.scan.filtered.txt:106:packages/clients/src/api.ts:export type IberitaxClientOptions = {
+./artifacts/scan.12.3.rebrand.txt.bak:32:./rebrand.scan.filtered.txt:107:packages/clients/src/api.ts:export class IberitaxClient {
+./artifacts/scan.12.3.rebrand.txt.bak:33:./rebrand.scan.filtered.txt:108:packages/clients/src/api.ts:  constructor(opts: IberitaxClientOptions = {}) {
+./artifacts/scan.12.3.rebrand.txt.bak:34:./tmp/restore-20251013T074629Z/unpacked/artifacts/modelo100/sla.export.json:86:      "project": "TERO Fiscal · Iberitax · Modelo 100",
+./artifacts/scan.12.3.rebrand.txt.bak:35:./tmp/restore-20251013T074629Z/unpacked/artifacts/modelo100/dotenv.lint.json:14:      "key": "IBERITAX_API_KEY",
+./artifacts/scan.12.3.rebrand.txt.bak:36:./tmp/restore-20251013T074629Z/unpacked/docs/security/gdpr.md:3:Scope: local developer environment for Iberitax MVP.  
+./artifacts/scan.12.3.rebrand.txt.bak:37:./tmp/restore-20251013T075953Z/unpacked/artifacts/modelo100/sla.export.json:86:      "project": "TERO Fiscal · Iberitax · Modelo 100",
+./artifacts/scan.12.3.rebrand.txt.bak:38:./tmp/restore-20251013T075953Z/unpacked/artifacts/modelo100/dotenv.lint.json:14:      "key": "IBERITAX_API_KEY",
+./artifacts/scan.12.3.rebrand.txt.bak:39:./tmp/restore-20251013T075953Z/unpacked/docs/security/gdpr.md:3:Scope: local developer environment for Iberitax MVP.  
+./artifacts/scan.12.3.rebrand.txt.bak:40:./tmp/restore-20251013T080225Z/unpacked/artifacts/modelo100/sla.export.json:86:      "project": "TERO Fiscal · Iberitax · Modelo 100",
+./artifacts/scan.12.3.rebrand.txt.bak:41:./tmp/restore-20251013T080225Z/unpacked/artifacts/modelo100/dotenv.lint.json:14:      "key": "IBERITAX_API_KEY",
+./artifacts/scan.12.3.rebrand.txt.bak:42:./tmp/restore-20251013T080225Z/unpacked/docs/security/gdpr.md:3:Scope: local developer environment for Iberitax MVP.  
+./artifacts/scan.12.3.rebrand.txt.bak:43:./tmp/restore-20251013T060834Z/unpacked/artifacts/modelo100/sla.export.json:86:      "project": "TERO Fiscal · Iberitax · Modelo 100",
+./artifacts/scan.12.3.rebrand.txt.bak:44:./tmp/restore-20251013T060834Z/unpacked/artifacts/modelo100/dotenv.lint.json:14:      "key": "IBERITAX_API_KEY",
+./artifacts/scan.12.3.rebrand.txt.bak:45:./tmp/restore-20251013T060834Z/unpacked/dist-scripts/packages/clients/src/api.d.ts:11:export type IberitaxClientOptions = {
+./artifacts/scan.12.3.rebrand.txt.bak:46:./tmp/restore-20251013T060834Z/unpacked/dist-scripts/packages/clients/src/api.d.ts:28:export declare class IberitaxClient {
+./artifacts/scan.12.3.rebrand.txt.bak:47:./tmp/restore-20251013T060834Z/unpacked/dist-scripts/packages/clients/src/api.d.ts:32:    constructor(opts?: IberitaxClientOptions);
+./artifacts/scan.12.3.rebrand.txt.bak:48:./tmp/restore-20251013T060834Z/unpacked/dist-scripts/packages/clients/src/api.js:1:/* IberitaxClient — lightweight fetch client with Zod validation */
+./artifacts/scan.12.3.rebrand.txt.bak:49:./tmp/restore-20251013T060834Z/unpacked/dist-scripts/packages/clients/src/api.js:13:export class IberitaxClient {
+./artifacts/scan.12.3.rebrand.txt.bak:50:./tmp/restore-20251013T060834Z/unpacked/docs/security/gdpr.md:3:Scope: local developer environment for Iberitax MVP.  
+./artifacts/scan.12.3.rebrand.txt.bak:51:./tmp/restore-20251013T060834Z/unpacked/openapi/iberitax.yaml:3:  title: Iberitax MVP API
+./artifacts/scan.12.3.rebrand.txt.bak:52:./tmp/restore-20251013T060834Z/unpacked/README.md:1:# Iberitax MVP
+./artifacts/scan.12.3.rebrand.txt.bak:53:./tmp/restore-20251013T060834Z/unpacked/README.md:3:Mono-repo for Iberitax MVP (apps, packages, infra).
+./artifacts/scan.12.3.rebrand.txt.bak:54:./tmp/restore-20251013T060834Z/unpacked/scripts/modelo100.sla.export.mjs:108:      project: 'TERO Fiscal · Iberitax · Modelo 100',
+./artifacts/scan.12.3.rebrand.txt.bak:55:./tmp/restore-20251013T060834Z/unpacked/packages/clients/src/api.ts:1:/* IberitaxClient — lightweight fetch client with Zod validation */
+./artifacts/scan.12.3.rebrand.txt.bak:56:./tmp/restore-20251013T060834Z/unpacked/packages/clients/src/api.ts:17:export type IberitaxClientOptions = {
+./artifacts/scan.12.3.rebrand.txt.bak:57:./tmp/restore-20251013T060834Z/unpacked/packages/clients/src/api.ts:38:export class IberitaxClient {
+./artifacts/scan.12.3.rebrand.txt.bak:58:./tmp/restore-20251013T060834Z/unpacked/packages/clients/src/api.ts:43:  constructor(opts: IberitaxClientOptions = {}) {
+./artifacts/scan.12.3.rebrand.txt.bak:59:./tmp/restore-20251013T060834Z/unpacked/.env.example:2:IBERITAX_API_URL=http://localhost:4000
+./artifacts/scan.12.3.rebrand.txt.bak:60:./tmp/restore-20251013T060834Z/unpacked/.env.example:4:IBERITAX_API_KEY=dev-key
+./artifacts/scan.12.3.rebrand.txt.bak:61:./tmp/restore-20251013T060834Z/unpacked/apps/web/app/page.tsx:2:  return <main style={{ padding: 16 }}><h1>Iberitax Demo</h1><p>Use SSR demo link to test server-side redirect behavior.</p></main>;
+./artifacts/scan.12.3.rebrand.txt.bak:62:./tmp/restore-20251013T060834Z/unpacked/apps/stub-server/tests/download-url.test.mjs:29:  return process.env.IBERITAX_STORAGE_ROOT || defaultRoot;
+./artifacts/scan.12.3.rebrand.txt.bak:63:./tmp/restore-20251013T060834Z/unpacked/demos/call-health.mjs:2:import { IberitaxClient } from '../packages/clients/dist/api.js';
+./artifacts/scan.12.3.rebrand.txt.bak:64:./tmp/restore-20251013T060834Z/unpacked/demos/call-health.mjs:5:  const client = new IberitaxClient({ baseUrl: 'http://localhost:4000' });
+./artifacts/scan.12.3.rebrand.txt.bak:65:./apps/stub-server/tests/download-url.test.mjs:29:  return process.env.IBERITAX_STORAGE_ROOT || defaultRoot;
+./artifacts/scan.12.3.rebrand.txt.bak:66:./backups/phase12.2-20251015132137/apps__web__app__page.tsx:2:  return <main style={{ padding: 16 }}><h1>Iberitax Demo</h1><p>Use SSR demo link to test server-side redirect behavior.</p></main>;
+./artifacts/scan.12.3.rebrand.txt.bak:67:./backups/phase12.2-20251015132137/README.md:1:# Iberitax MVP
+./artifacts/scan.12.3.rebrand.txt.bak:68:./backups/phase12.2-20251015132137/README.md:3:Mono-repo for Iberitax MVP (apps, packages, infra).
+./artifacts/scan.12.3.rebrand.txt.bak:69:./backups/phase12.2-20251015132137/openapi__iberitax.yaml:3:  title: Iberitax MVP API
+./artifacts/scan.12.3.rebrand.txt.bak:70:./demos/call-health.mjs:2:import { IberitaxClient } from '../packages/clients/dist/api.js';
+./artifacts/scan.12.3.rebrand.txt.bak:71:./demos/call-health.mjs:5:  const client = new IberitaxClient({ baseUrl: 'http://localhost:4000' });
+./artifacts/modelo100/sla.export.json.bak:86:      "project": "TERO Fiscal · Iberitax · Modelo 100",
+./artifacts/modelo100/sla.export.json:86:      "project": "TERO Fiscal · Iberitax · Modelo 100",
+./artifacts/modelo100/dotenv.lint.json.bak:14:      "key": "IBERITAX_API_KEY",
+./artifacts/modelo100/dotenv.lint.json:14:      "key": "IBERITAX_API_KEY",
+./dist-scripts/packages/clients/src/api.d.ts:11:export type IberitaxClientOptions = {
+./dist-scripts/packages/clients/src/api.d.ts:28:export declare class IberitaxClient {
+./dist-scripts/packages/clients/src/api.d.ts:32:    constructor(opts?: IberitaxClientOptions);
+./dist-scripts/packages/clients/src/api.d.ts.bak:11:export type IberitaxClientOptions = {
+./dist-scripts/packages/clients/src/api.d.ts.bak:28:export declare class IberitaxClient {
+./dist-scripts/packages/clients/src/api.d.ts.bak:32:    constructor(opts?: IberitaxClientOptions);
+./dist-scripts/packages/clients/src/api.js:1:/* IberitaxClient — lightweight fetch client with Zod validation */
+./dist-scripts/packages/clients/src/api.js:13:export class IberitaxClient {
+./docs/security/gdpr.md.bak:3:Scope: local developer environment for Iberitax MVP.  
+./docs/security/gdpr.md:3:Scope: local developer environment for Iberitax MVP.  
+./README.md:1:# Iberitax MVP
+./README.md:3:Mono-repo for Iberitax MVP (apps, packages, infra).
+./README.md.bak:1:# Iberitax MVP
+./README.md.bak:3:Mono-repo for Iberitax MVP (apps, packages, infra).
+./rebrand.scan.filtered.txt.bak:42:docs/security/gdpr.md:Scope: local developer environment for Iberitax MVP.  
+./rebrand.scan.filtered.txt.bak:57:demos/call-health.mjs:import { IberitaxClient } from '../packages/clients/dist/api.js';
+./rebrand.scan.filtered.txt.bak:58:demos/call-health.mjs:  const client = new IberitaxClient({ baseUrl: 'http://localhost:4000' });
+./rebrand.scan.filtered.txt.bak:60:README.md:# Iberitax MVP
+./rebrand.scan.filtered.txt.bak:61:README.md:Mono-repo for Iberitax MVP (apps, packages, infra).
+./rebrand.scan.filtered.txt.bak:75:dist-scripts/packages/clients/src/api.js:/* IberitaxClient — lightweight fetch client with Zod validation */
+./rebrand.scan.filtered.txt.bak:77:dist-scripts/packages/clients/src/api.js:export class IberitaxClient {
+./rebrand.scan.filtered.txt.bak:85:dist-scripts/packages/clients/src/api.d.ts:export type IberitaxClientOptions = {
+./rebrand.scan.filtered.txt.bak:86:dist-scripts/packages/clients/src/api.d.ts:export declare class IberitaxClient {
+./rebrand.scan.filtered.txt.bak:87:dist-scripts/packages/clients/src/api.d.ts:    constructor(opts?: IberitaxClientOptions);
+./rebrand.scan.filtered.txt.bak:90:apps/stub-server/tests/download-url.test.mjs:  return process.env.IBERITAX_STORAGE_ROOT || defaultRoot;
+./rebrand.scan.filtered.txt.bak:92:openapi/iberitax.yaml:  title: Iberitax MVP API
+./rebrand.scan.filtered.txt.bak:100:scripts/modelo100.sla.export.mjs:      project: 'TERO Fiscal · Iberitax · Modelo 100',
+./rebrand.scan.filtered.txt.bak:101:apps/web/app/page.tsx:  return <main style={{ padding: 16 }}><h1>Iberitax Demo</h1><p>Use SSR demo link to test server-side redirect behavior.</p></main>;
+./rebrand.scan.filtered.txt.bak:104:packages/clients/src/api.ts:/* IberitaxClient — lightweight fetch client with Zod validation */
+./rebrand.scan.filtered.txt.bak:106:packages/clients/src/api.ts:export type IberitaxClientOptions = {
+./rebrand.scan.filtered.txt.bak:107:packages/clients/src/api.ts:export class IberitaxClient {
+./rebrand.scan.filtered.txt.bak:108:packages/clients/src/api.ts:  constructor(opts: IberitaxClientOptions = {}) {
+./scripts/modelo100.sla.export.mjs:108:      project: 'TERO Fiscal · Iberitax · Modelo 100',
+./packages/clients/src/api.ts.bak:1:/* IberitaxClient — lightweight fetch client with Zod validation */
+./packages/clients/src/api.ts.bak:17:export type IberitaxClientOptions = {
+./packages/clients/src/api.ts.bak:38:export class IberitaxClient {
+./packages/clients/src/api.ts.bak:43:  constructor(opts: IberitaxClientOptions = {}) {
+./packages/clients/src/api.ts:1:/* IberitaxClient — lightweight fetch client with Zod validation */
+./packages/clients/src/api.ts:17:export type IberitaxClientOptions = {
+./packages/clients/src/api.ts:38:export class IberitaxClient {
+./packages/clients/src/api.ts:43:  constructor(opts: IberitaxClientOptions = {}) {
+./rebrand.scan.filtered.txt:42:docs/security/gdpr.md:Scope: local developer environment for Iberitax MVP.  
+./rebrand.scan.filtered.txt:57:demos/call-health.mjs:import { IberitaxClient } from '../packages/clients/dist/api.js';
+./rebrand.scan.filtered.txt:58:demos/call-health.mjs:  const client = new IberitaxClient({ baseUrl: 'http://localhost:4000' });
+./rebrand.scan.filtered.txt:60:README.md:# Iberitax MVP
+./rebrand.scan.filtered.txt:61:README.md:Mono-repo for Iberitax MVP (apps, packages, infra).
+./rebrand.scan.filtered.txt:75:dist-scripts/packages/clients/src/api.js:/* IberitaxClient — lightweight fetch client with Zod validation */
+./rebrand.scan.filtered.txt:77:dist-scripts/packages/clients/src/api.js:export class IberitaxClient {
+./rebrand.scan.filtered.txt:85:dist-scripts/packages/clients/src/api.d.ts:export type IberitaxClientOptions = {
+./rebrand.scan.filtered.txt:86:dist-scripts/packages/clients/src/api.d.ts:export declare class IberitaxClient {
+./rebrand.scan.filtered.txt:87:dist-scripts/packages/clients/src/api.d.ts:    constructor(opts?: IberitaxClientOptions);
+./rebrand.scan.filtered.txt:90:apps/stub-server/tests/download-url.test.mjs:  return process.env.IBERITAX_STORAGE_ROOT || defaultRoot;
+./rebrand.scan.filtered.txt:92:openapi/iberitax.yaml:  title: Iberitax MVP API
+./rebrand.scan.filtered.txt:100:scripts/modelo100.sla.export.mjs:      project: 'TERO Fiscal · Iberitax · Modelo 100',
+./rebrand.scan.filtered.txt:101:apps/web/app/page.tsx:  return <main style={{ padding: 16 }}><h1>Iberitax Demo</h1><p>Use SSR demo link to test server-side redirect behavior.</p></main>;
+./rebrand.scan.filtered.txt:104:packages/clients/src/api.ts:/* IberitaxClient — lightweight fetch client with Zod validation */
+./rebrand.scan.filtered.txt:106:packages/clients/src/api.ts:export type IberitaxClientOptions = {
+./rebrand.scan.filtered.txt:107:packages/clients/src/api.ts:export class IberitaxClient {
+./rebrand.scan.filtered.txt:108:packages/clients/src/api.ts:  constructor(opts: IberitaxClientOptions = {}) {
+./tmp/restore-20251013T074629Z/unpacked/artifacts/modelo100/sla.export.json.bak:86:      "project": "TERO Fiscal · Iberitax · Modelo 100",
+./tmp/restore-20251013T074629Z/unpacked/artifacts/modelo100/sla.export.json:86:      "project": "TERO Fiscal · Iberitax · Modelo 100",
+./tmp/restore-20251013T074629Z/unpacked/artifacts/modelo100/dotenv.lint.json.bak:14:      "key": "IBERITAX_API_KEY",
+./tmp/restore-20251013T074629Z/unpacked/artifacts/modelo100/dotenv.lint.json:14:      "key": "IBERITAX_API_KEY",
+./tmp/restore-20251013T074629Z/unpacked/docs/security/gdpr.md.bak:3:Scope: local developer environment for Iberitax MVP.  
+./tmp/restore-20251013T074629Z/unpacked/docs/security/gdpr.md:3:Scope: local developer environment for Iberitax MVP.  
+./tmp/restore-20251013T075953Z/unpacked/artifacts/modelo100/sla.export.json.bak:86:      "project": "TERO Fiscal · Iberitax · Modelo 100",
+./tmp/restore-20251013T075953Z/unpacked/artifacts/modelo100/sla.export.json:86:      "project": "TERO Fiscal · Iberitax · Modelo 100",
+./tmp/restore-20251013T075953Z/unpacked/artifacts/modelo100/dotenv.lint.json.bak:14:      "key": "IBERITAX_API_KEY",
+./tmp/restore-20251013T075953Z/unpacked/artifacts/modelo100/dotenv.lint.json:14:      "key": "IBERITAX_API_KEY",
+./tmp/restore-20251013T075953Z/unpacked/docs/security/gdpr.md.bak:3:Scope: local developer environment for Iberitax MVP.  
+./tmp/restore-20251013T075953Z/unpacked/docs/security/gdpr.md:3:Scope: local developer environment for Iberitax MVP.  
+./tmp/restore-20251013T080225Z/unpacked/artifacts/modelo100/sla.export.json.bak:86:      "project": "TERO Fiscal · Iberitax · Modelo 100",
+./tmp/restore-20251013T080225Z/unpacked/artifacts/modelo100/sla.export.json:86:      "project": "TERO Fiscal · Iberitax · Modelo 100",
+./tmp/restore-20251013T080225Z/unpacked/artifacts/modelo100/dotenv.lint.json.bak:14:      "key": "IBERITAX_API_KEY",
+./tmp/restore-20251013T080225Z/unpacked/artifacts/modelo100/dotenv.lint.json:14:      "key": "IBERITAX_API_KEY",
+./tmp/restore-20251013T080225Z/unpacked/docs/security/gdpr.md.bak:3:Scope: local developer environment for Iberitax MVP.  
+./tmp/restore-20251013T080225Z/unpacked/docs/security/gdpr.md:3:Scope: local developer environment for Iberitax MVP.  
+./tmp/restore-20251013T060834Z/unpacked/artifacts/modelo100/sla.export.json.bak:86:      "project": "TERO Fiscal · Iberitax · Modelo 100",
+./tmp/restore-20251013T060834Z/unpacked/artifacts/modelo100/sla.export.json:86:      "project": "TERO Fiscal · Iberitax · Modelo 100",
+./tmp/restore-20251013T060834Z/unpacked/artifacts/modelo100/dotenv.lint.json.bak:14:      "key": "IBERITAX_API_KEY",
+./tmp/restore-20251013T060834Z/unpacked/artifacts/modelo100/dotenv.lint.json:14:      "key": "IBERITAX_API_KEY",
+./tmp/restore-20251013T060834Z/unpacked/dist-scripts/packages/clients/src/api.d.ts:11:export type IberitaxClientOptions = {
+./tmp/restore-20251013T060834Z/unpacked/dist-scripts/packages/clients/src/api.d.ts:28:export declare class IberitaxClient {
+./tmp/restore-20251013T060834Z/unpacked/dist-scripts/packages/clients/src/api.d.ts:32:    constructor(opts?: IberitaxClientOptions);
+./tmp/restore-20251013T060834Z/unpacked/dist-scripts/packages/clients/src/api.d.ts.bak:11:export type IberitaxClientOptions = {
+./tmp/restore-20251013T060834Z/unpacked/dist-scripts/packages/clients/src/api.d.ts.bak:28:export declare class IberitaxClient {
+./tmp/restore-20251013T060834Z/unpacked/dist-scripts/packages/clients/src/api.d.ts.bak:32:    constructor(opts?: IberitaxClientOptions);
+./tmp/restore-20251013T060834Z/unpacked/dist-scripts/packages/clients/src/api.js:1:/* IberitaxClient — lightweight fetch client with Zod validation */
+./tmp/restore-20251013T060834Z/unpacked/dist-scripts/packages/clients/src/api.js:13:export class IberitaxClient {
+./tmp/restore-20251013T060834Z/unpacked/.env.example.bak:2:IBERITAX_API_URL=http://localhost:4000
+./tmp/restore-20251013T060834Z/unpacked/.env.example.bak:4:IBERITAX_API_KEY=dev-key
+./tmp/restore-20251013T060834Z/unpacked/docs/security/gdpr.md.bak:3:Scope: local developer environment for Iberitax MVP.  
+./tmp/restore-20251013T060834Z/unpacked/docs/security/gdpr.md:3:Scope: local developer environment for Iberitax MVP.  
+./tmp/restore-20251013T060834Z/unpacked/openapi/iberitax.yaml.bak:3:  title: Iberitax MVP API
+./tmp/restore-20251013T060834Z/unpacked/openapi/iberitax.yaml:3:  title: Iberitax MVP API
+./tmp/restore-20251013T060834Z/unpacked/README.md:1:# Iberitax MVP
+./tmp/restore-20251013T060834Z/unpacked/README.md:3:Mono-repo for Iberitax MVP (apps, packages, infra).
+./tmp/restore-20251013T060834Z/unpacked/README.md.bak:1:# Iberitax MVP
+./tmp/restore-20251013T060834Z/unpacked/README.md.bak:3:Mono-repo for Iberitax MVP (apps, packages, infra).
+./tmp/restore-20251013T060834Z/unpacked/scripts/modelo100.sla.export.mjs:108:      project: 'TERO Fiscal · Iberitax · Modelo 100',
+./tmp/restore-20251013T060834Z/unpacked/packages/clients/src/api.ts.bak:1:/* IberitaxClient — lightweight fetch client with Zod validation */
+./tmp/restore-20251013T060834Z/unpacked/packages/clients/src/api.ts.bak:17:export type IberitaxClientOptions = {
+./tmp/restore-20251013T060834Z/unpacked/packages/clients/src/api.ts.bak:38:export class IberitaxClient {
+./tmp/restore-20251013T060834Z/unpacked/packages/clients/src/api.ts.bak:43:  constructor(opts: IberitaxClientOptions = {}) {
+./tmp/restore-20251013T060834Z/unpacked/packages/clients/src/api.ts:1:/* IberitaxClient — lightweight fetch client with Zod validation */
+./tmp/restore-20251013T060834Z/unpacked/packages/clients/src/api.ts:17:export type IberitaxClientOptions = {
+./tmp/restore-20251013T060834Z/unpacked/packages/clients/src/api.ts:38:export class IberitaxClient {
+./tmp/restore-20251013T060834Z/unpacked/packages/clients/src/api.ts:43:  constructor(opts: IberitaxClientOptions = {}) {
+./tmp/restore-20251013T060834Z/unpacked/apps/web/app/page.tsx:2:  return <main style={{ padding: 16 }}><h1>Iberitax Demo</h1><p>Use SSR demo link to test server-side redirect behavior.</p></main>;
+./tmp/restore-20251013T060834Z/unpacked/apps/web/app/page.tsx.bak:2:  return <main style={{ padding: 16 }}><h1>Iberitax Demo</h1><p>Use SSR demo link to test server-side redirect behavior.</p></main>;
+./tmp/restore-20251013T060834Z/unpacked/apps/stub-server/tests/download-url.test.mjs:29:  return process.env.IBERITAX_STORAGE_ROOT || defaultRoot;
+./tmp/restore-20251013T060834Z/unpacked/demos/call-health.mjs:2:import { IberitaxClient } from '../packages/clients/dist/api.js';
+./tmp/restore-20251013T060834Z/unpacked/demos/call-health.mjs:5:  const client = new IberitaxClient({ baseUrl: 'http://localhost:4000' });
+./apps/stub-server/tests/download-url.test.mjs:29:  return process.env.IBERITAX_STORAGE_ROOT || defaultRoot;
+./backups/phase12.2-20251015132137/apps__web__app__page.tsx.bak:2:  return <main style={{ padding: 16 }}><h1>Iberitax Demo</h1><p>Use SSR demo link to test server-side redirect behavior.</p></main>;
+./backups/phase12.2-20251015132137/apps__web__app__page.tsx:2:  return <main style={{ padding: 16 }}><h1>Iberitax Demo</h1><p>Use SSR demo link to test server-side redirect behavior.</p></main>;
+./backups/phase12.2-20251015132137/README.md:1:# Iberitax MVP
+./backups/phase12.2-20251015132137/README.md:3:Mono-repo for Iberitax MVP (apps, packages, infra).
+./backups/phase12.2-20251015132137/README.md.bak:1:# Iberitax MVP
+./backups/phase12.2-20251015132137/README.md.bak:3:Mono-repo for Iberitax MVP (apps, packages, infra).
+./backups/phase12.2-20251015132137/openapi__iberitax.yaml.bak:3:  title: Iberitax MVP API
+./backups/phase12.2-20251015132137/openapi__iberitax.yaml:3:  title: Iberitax MVP API
+./demos/call-health.mjs:2:import { IberitaxClient } from '../packages/clients/dist/api.js';
+./demos/call-health.mjs:5:  const client = new IberitaxClient({ baseUrl: 'http://localhost:4000' });

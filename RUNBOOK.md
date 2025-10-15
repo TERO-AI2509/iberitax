@@ -285,3 +285,5 @@ Next: Step 11.8 — Auth + ownership + CSV export.
 - Ownership lock (409) on pick-up
 - CSV export wired in router at /api/lawyer/closed.csv and /api/lawyer/closed/csv (also GET /api/lawyer/closed)
 - Acceptance verified: 401 unauth, 409 second pick, CSV export OK
+
+- 2025-10-15T10:14:32Z — Phase 11: production isolated via apps/web.deploy (prebuilt + alias). Deploy URL: N/A

@@ -1,0 +1,5 @@
+package.json
+pnpm-workspace.yaml
+apps/web/package.json
+apps/web/package-lock.json
+TESTS-RUNBOOK.md

@@ -34,3 +34,4 @@ tmp/
 artifacts/backups/
 artifacts/*.html
 artifacts/*.json
+.vercel

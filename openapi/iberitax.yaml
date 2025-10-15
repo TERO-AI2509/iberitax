@@ -1,10 +1,10 @@
 openapi: 3.1.0
 info:
-  title: Iberitax MVP API
+  title: TERO Fiscal API
   version: 0.1.0
   summary: Stubs only (no external calls). Assists expats with Spanish Modelo 100.
 servers:
-  - url: https://api.iberitax.local
+  - url: https://api.terofiscal.local
 paths:
   /health:
     get:

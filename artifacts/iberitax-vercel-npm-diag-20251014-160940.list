@@ -1,0 +1,13 @@
+package.json
+pnpm-workspace.yaml
+apps/web/package.json
+apps/web/package-lock.json
+apps/web/next.config.mjs
+apps/web/tsconfig.json
+apps/web/next-env.d.ts
+apps/web/.vercel/project.json
+apps/web/vercel.json
+apps/web/.npmrc
+apps/web/prisma/schema.prisma
+apps/web/prisma/dev.db
+apps/web/src/ui/feedback.tsx

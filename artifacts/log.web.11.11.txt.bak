@@ -1,0 +1,37 @@
+  ▲ Next.js 14.2.10
+  - Local:        http://localhost:3000
+  - Environments: .env.local
+
+ ✓ Starting...
+ ✓ Ready in 1893ms
+ ✓ Compiled /middleware in 137ms (72 modules)
+ ✓ Compiled /api/lawyer/[...slug] in 89ms (27 modules)
+ GET /api/lawyer/cases 200 in 447ms
+ GET /api/lawyer/cases 200 in 9ms
+ POST /api/lawyer/picked_up 200 in 12ms
+ POST /api/lawyer/answered 200 in 8ms
+ POST /api/lawyer/closed 200 in 8ms
+ GET /api/lawyer/export.csv 200 in 7ms
+ ✓ Compiled in 1290ms (274 modules)
+ ✓ Compiled in 129ms (274 modules)
+ ○ Compiling / ...
+ ✓ Compiled / in 1166ms (451 modules)
+ GET / 200 in 1313ms
+ ✓ Compiled /api/health in 170ms (27 modules)
+ GET /api/health 200 in 244ms
+ ⚠ Found a change in next.config.mjs. Restarting the server to apply the changes...
+node:internal/modules/cjs/loader:1210
+  throw err;
+  ^
+
+Error: Cannot find module '/Users/eltjotimmerman/TERO-AI/dev/iberitax/node_modules/.pnpm/next@14.2.10_@babel+core@7.28.4_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/next/dist/server/lib/start-server.js'
+    at Module._resolveFilename (node:internal/modules/cjs/loader:1207:15)
+    at Module._load (node:internal/modules/cjs/loader:1038:27)
+    at Function.executeUserEntryPoint [as runMain] (node:internal/modules/run_main:164:12)
+    at node:internal/main/run_main_module:28:49 {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: []
+}
+
+Node.js v20.19.5
+[?25h

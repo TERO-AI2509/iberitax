@@ -1,0 +1,27 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://tero.ai/schemas/lawyer_review.schema.json",
+  "title": "Registro de revisión legal (entrada)",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["ts", "id", "actor", "action", "state", "locale", "message"],
+  "properties": {
+    "ts": { "type": "string", "format": "date-time" },
+    "id": { "type": "string", "minLength": 1 },
+    "actor": { "type": "string", "minLength": 1 },
+    "action": { "type": "string", "enum": ["seed", "picked_up", "answered", "closed"] },
+    "state": { "type": "string", "enum": ["open", "picked_up", "answered", "closed"] },
+    "locale": { "type": "string", "const": "es-ES" },
+    "message": { "type": "string" },
+    "meta": {
+      "type": "object",
+      "additionalProperties": true,
+      "properties": {
+        "titulo": { "type": "string" },
+        "detalle": { "type": "string" },
+        "fuente": { "type": "string" },
+        "provenance": { "type": ["object", "array", "null"] }
+      }
+    }
+  }
+}

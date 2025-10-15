@@ -1,0 +1,131 @@
+tsconfig.base.json:      "@iberitax/extractor": [
+tsconfig.base.json:      "@iberitax/extractor/*": [
+rollback.11.15.sh:cd /opt/iberitax/releases
+rollback.11.15.sh:ln -sfn "/opt/iberitax/releases/$PREV" /opt/iberitax/current
+rollback.11.15.sh:sudo systemctl restart iberitax-web.service || true
+deploy.prod.sh:ssh -o StrictHostKeyChecking=accept-new "$VM_USER@$VM_HOST" 'sudo mkdir -p /opt/iberitax/releases /opt/iberitax/shared/logs /opt/iberitax/shared/env && sudo chown -R $USER: /opt/iberitax'
+deploy.prod.sh:scp "$BUNDLE" "$VM_USER@$VM_HOST:/opt/iberitax/releases/$TS.tar.gz"
+deploy.prod.sh:  cd /opt/iberitax/releases
+deploy.prod.sh:  ln -sfn /opt/iberitax/releases/$TS /opt/iberitax/current
+deploy.prod.sh:  if systemctl is-enabled iberitax-web.service >/dev/null 2>&1; then sudo systemctl restart iberitax-web.service; fi
+artifacts/phase11.final.20251015-101554.manifest.json:{"phase":"11","finalized_at_utc":"20251015-101554","deploy_url":"","alias":"iberitax-web.vercel.app","git_rev":"d72bc9f","zip":"artifacts/phase11.final.20251015-101554.zip","sha256":"208805a2b6f7e8acece87fa71c90c5a1ade3e4c3544bdb3a5cea0dd6c90482c9"}
+tools/make-phase02-step10-bundle.sh:outname="iberitax-phase02-step10"
+docs/RUNBOOK.md:- Browser PUT with progress (`putFile`) in @iberitax/uploader.
+docs/RUNBOOK.md:- Client-only import path via subpath export (`@iberitax/uploader/client`).
+docs/RUNBOOK.md:  - Web code imports from "@iberitax/uploader/client".
+docs/RUNBOOK.md:- Live: https://tero-ai2509.github.io/iberitax/
+docs/RUNBOOK.md:- Bundle: `iberitax-phase10-step01.zip`
+repo-manifest.txt:openapi/iberitax.yaml
+repo-manifest.txt:tmp/restore-20251013T060834Z/unpacked/openapi/iberitax.yaml
+runbook/phase11.md:- iberitax-step11.11-final.zip
+tools/make-bundle.sh:    outname="iberitax-phase${phase}-step${step}"
+tools/make-bundle.sh:    outname="iberitax-${label}"
+.last_deploy_url.txt:https://iberitax-j975zdh97-tero-ais-projects.vercel.app
+.last_deploy_url.txt:https://iberitax-j975zdh97-tero-ais-projects.vercel.app
+.last_deploy_url.txt:https://iberitax-dnyk7wdq6-tero-ais-projects.vercel.app
+.last_deploy_url.txt:https://iberitax-782o6safz-tero-ais-projects.vercel.app
+.last_deploy_url.txt:https://iberitax-mw583ym2x-tero-ais-projects.vercel.app
+.last_deploy_url.txt:https://iberitax-7qcu9vj2z-tero-ais-projects.vercel.app
+.last_deploy_url.txt:https://iberitax-bckcfcq9r-tero-ais-projects.vercel.app
+.last_deploy_url.txt:https://iberitax-38hvlt2be-tero-ais-projects.vercel.app
+.last_deploy_url.txt:https://iberitax-90d047hm7-tero-ais-projects.vercel.app
+.last_deploy_url.txt:https://iberitax-6w7di9rpm-tero-ais-projects.vercel.app
+.last_deploy_url.txt:https://iberitax-qwtx9s5gh-tero-ais-projects.vercel.app
+.last_deploy_url.txt:https://iberitax-5r7ol23aa-tero-ais-projects.vercel.app
+artifacts/log.stub-server.11.11.txt:dev.server listening on http://localhost:8787 (root=/Users/eltjotimmerman/TERO-AI/dev/iberitax)
+tools/make-phase02-step08-bundle.sh:repo="${1:-/Users/eltjotimmerman/TERO-AI/dev/iberitax}"
+tools/make-phase02-step08-bundle.sh:outname="${2:-iberitax-phase02-step08-debug}"
+artifacts/runbook.md:- New Vercel project: `iberitax-web-deploy` (root = `apps/web.deploy`)
+artifacts/runbook.md:- Alias: `iberitax-web.vercel.app → <latest deploy>`
+artifacts/runbook.md:2. `vercel link` (project = `iberitax-web-deploy`, root = `.`)
+artifacts/runbook.md:6. `vercel alias "<URL>" "iberitax-web.vercel.app"`
+docs/security/gdpr.md:Scope: local developer environment for Iberitax MVP.  
+tests/golden/golden.test.js:    const v_extraction = ajv.getSchema("https://schemas.iberitax.local/extraction_result.schema.json")
+tests/golden/golden.test.js:    const v_summary = ajv.getSchema("https://schemas.iberitax.local/plain_summary.schema.json")
+tests/golden/golden.test.js:    const v_tip = ajv.getSchema("https://schemas.iberitax.local/deduction_tip.schema.json")
+tests/golden/golden.test.js:    const v_progress = ajv.getSchema("https://schemas.iberitax.local/user_progress.schema.json")
+RUNBOOK.md:- Gate: `pnpm -F @iberitax/ocr run check:drift:gate`
+RUNBOOK.md:- `pnpm -F @iberitax/ocr run audit:gen` regenerates a populated audit table when entries exist.
+RUNBOOK.md:- Artifacts: artifacts/phase11-11.6.manifest.txt, artifacts/iberitax-post11.6.zip
+artifacts/log.web.11.11.txt:Error: Cannot find module '/Users/eltjotimmerman/TERO-AI/dev/iberitax/node_modules/.pnpm/next@14.2.10_@babel+core@7.28.4_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/next/dist/server/lib/start-server.js'
+tools/repo-sanitize.step11.14.sh:ROOT="${ROOT:-$HOME/TERO-AI/dev/iberitax}"
+repo-manifest.step10.4.txt:Repo: /Users/eltjotimmerman/TERO-AI/dev/iberitax
+tests/contracts/server.contract.test.js:    const v = ajv.getSchema("https://schemas.iberitax.local/extraction_result.schema.json");
+tests/contracts/server.contract.test.js:    const v = ajv.getSchema("https://schemas.iberitax.local/plain_summary.schema.json");
+tests/contracts/server.contract.test.js:    const v = ajv.getSchema("https://schemas.iberitax.local/deduction_tip.schema.json");
+tests/contracts/server.contract.test.js:    const v = ajv.getSchema("https://schemas.iberitax.local/user_progress.schema.json");
+demos/call-health.mjs:import { IberitaxClient } from '../packages/clients/dist/api.js';
+demos/call-health.mjs:  const client = new IberitaxClient({ baseUrl: 'http://localhost:4000' });
+package.json:  "name": "iberitax-mvp",
+README.md:# Iberitax MVP
+README.md:Mono-repo for Iberitax MVP (apps, packages, infra).
+README.md:Latest bundle: https://TERO-AI2509.github.io/iberitax/
+README.md:[![Publish Rules Dashboard](https://github.com/TERO-AI2509/iberitax/actions/workflows/publish-rules-bundle.yml/badge.svg)](https://github.com/TERO-AI2509/iberitax/actions/workflows/publish-rules-bundle.yml)
+README.md:![Rules Maintenance](https://github.com/TERO-AI2509/iberitax/actions/workflows/rules-maintenance.yml/badge.svg)
+repo-manifest.phase12.txt:./artifacts/iberitax-vercel-npm-diag-20251014-160940.list
+repo-manifest.phase12.txt:./artifacts/iberitax-vercel-npm-diag-20251014-160940.node.txt
+repo-manifest.phase12.txt:./artifacts/iberitax-vercel-npm-diag-20251014-160940.npm.txt
+repo-manifest.phase12.txt:./artifacts/iberitax-vercel-npm-diag-20251014-160940.tgz
+repo-manifest.phase12.txt:./attic/2025-10-12T10-59-05-332Z/iberitax-phase06-consolidation-min.zip
+repo-manifest.phase12.txt:./attic/2025-10-12T10-59-05-332Z/iberitax-phase06-step39-min.zip
+repo-manifest.phase12.txt:./openapi/iberitax.yaml
+repo-manifest.phase12.txt:./tmp/restore-20251013T060834Z/unpacked/openapi/iberitax.yaml
+tools/run.smoke.local.sh:nohup pnpm --filter @iberitax/web exec next start -p 3001 >/dev/null 2>&1 &
+schemas/plain_summary.schema.json:  "$id": "https://schemas.iberitax.local/plain_summary.schema.json",
+dist-scripts/packages/clients/src/api.js:/* IberitaxClient — lightweight fetch client with Zod validation */
+dist-scripts/packages/clients/src/api.js:import { HealthResponseSchema, ExtractionRequestSchema, ExtractionResponseSchema } from '@iberitax/validators';
+dist-scripts/packages/clients/src/api.js:export class IberitaxClient {
+apps/stub-server/package.json:  "name": "@iberitax/stub-server",
+apps/stub-server/package.json:    "@iberitax/extractor": "workspace:*",
+apps/stub-server/package.json:    "@iberitax/uploader": "workspace:*",
+.github/workflows/ci.yml:        run: pnpm --filter @iberitax/web build
+.github/workflows/ci.yml:          nohup pnpm --filter @iberitax/web start > artifacts/server.log 2>&1 &
+schemas/modelo100.schema.json:  "$id": "https://schemas.iberitax.local/modelo100.schema.json",
+dist-scripts/packages/clients/src/api.d.ts:import { HealthResponseSchema, ExtractionRequestSchema, ExtractionResponseSchema } from '@iberitax/validators';
+dist-scripts/packages/clients/src/api.d.ts:export type IberitaxClientOptions = {
+dist-scripts/packages/clients/src/api.d.ts:export declare class IberitaxClient {
+dist-scripts/packages/clients/src/api.d.ts:    constructor(opts?: IberitaxClientOptions);
+schemas/user_progress.schema.json:  "$id": "https://schemas.iberitax.local/user_progress.schema.json",
+schemas/deduction_tip.schema.json:  "$id": "https://schemas.iberitax.local/deduction_tip.schema.json",
+apps/stub-server/tests/download-url.test.mjs:  return process.env.IBERITAX_STORAGE_ROOT || defaultRoot;
+.github/workflows/backup.daily.yml:          name: iberitax-backup-${{ github.run_id }}
+openapi/iberitax.yaml:  title: Iberitax MVP API
+openapi/iberitax.yaml:  - url: https://api.iberitax.local
+packages/validators/package.json:  "name": "@iberitax/validators",
+packages/extractor/src/schemas/extract.schema.ts:  $id: "https://iberitax.local/schemas/extract.response.json",
+apps/web/TESTS-RUNBOOK.md:   pnpm --filter @iberitax/web test
+apps/stub-server/src/server.mjs:    const schemaId = "https://schemas.iberitax.local/modelo100.schema.json";
+scripts/repo.cleanup.scan.mjs:  /^iberitax-.*\.zip$/i, /^repo-manifest-.*\.txt$/i
+packages/extractor/package.json:  "name": "@iberitax/extractor",
+scripts/modelo100.sla.export.mjs:      project: 'TERO Fiscal · Iberitax · Modelo 100',
+apps/web/app/page.tsx:  return <main style={{ padding: 16 }}><h1>Iberitax Demo</h1><p>Use SSR demo link to test server-side redirect behavior.</p></main>;
+packages/types/package.json:  "name": "@iberitax/types",
+packages/clients/src/demos/extract-demo.ts:import type { ExtractResult } from "@iberitax/extractor";
+packages/clients/src/api.ts:/* IberitaxClient — lightweight fetch client with Zod validation */
+packages/clients/src/api.ts:import { HealthResponseSchema, ExtractionRequestSchema, ExtractionResponseSchema } from '@iberitax/validators';
+packages/clients/src/api.ts:export type IberitaxClientOptions = {
+packages/clients/src/api.ts:export class IberitaxClient {
+packages/clients/src/api.ts:  constructor(opts: IberitaxClientOptions = {}) {
+apps/web/.env.local:DATABASE_URL=file:/Users/eltjotimmerman/TERO-AI/dev/iberitax/apps/web/dev.db
+apps/web/package.json:  "name": "@iberitax/web",
+apps/web/package.json:    "@iberitax/uploader": "workspace:*",
+packages/clients/package.json:  "name": "@iberitax/clients",
+packages/clients/package.json:    "@iberitax/types": "workspace:*",
+packages/clients/package.json:    "@iberitax/validators": "workspace:*",
+packages/uploader/src/schemas/upload.schema.ts:  $id: "com.iberitax.uploader.UploadInitRequest",
+packages/uploader/src/schemas/upload.schema.ts:  $id: "com.iberitax.uploader.UploadInitResponse",
+apps/web/README.md:# @iberitax/web — Upload Init Demo
+apps/web/README.md:This demo adds **/upload** which calls `@iberitax/uploader` client to hit the stub-server’s `/uploader/init` and shows the returned `key` and `putURL`.
+apps/web/package-lock.json:  "name": "@iberitax/web",
+apps/web/package-lock.json:      "name": "@iberitax/web",
+apps/web/package-lock.json:        "@iberitax/uploader": "file:../../packages/uploader",
+apps/web/package-lock.json:      "name": "@iberitax/uploader",
+apps/web/package-lock.json:    "node_modules/@iberitax/uploader": {
+packages/uploader/README.md:# @iberitax/uploader — API envelopes
+packages/uploader/jest.config.cjs:module.exports = { ...base, rootDir: __dirname, displayName: "@iberitax/uploader" };
+packages/uploader/package.json:  "name": "@iberitax/uploader",
+packages/uploader/tests/server/router.int.test.ts:  return fs.mkdtemp(path.join(os.tmpdir(), "iberitax-uploader-router-"));
+packages/uploader/tests/server/client.int.test.ts:  return fs.mkdtemp(path.join(os.tmpdir(), "iberitax-uploader-client-"));
+packages/uploader/tests/server/error-shapes.int.test.ts:  return fs.mkdtemp(path.join(os.tmpdir(), "iberitax-uploader-errors-"));
+TESTS-RUNBOOK.md:- Always check:  and iberitax-mvp@0.1.0 /Users/eltjotimmerman/TERO-AI/dev/iberitax
+packages/uploader/tests/storage/localfs.test.ts:  const p = fs.mkdtemp(path.join(os.tmpdir(), "iberitax-uploader-"));

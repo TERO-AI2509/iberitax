@@ -1,0 +1,153 @@
+openapi: 3.1.0
+info:
+  title: TERO Fiscal API
+  version: 0.1.0
+  summary: Stubs only (no external calls). Assists expats with Spanish Modelo 100.
+servers:
+  - url: https://api.terofiscal.local
+paths:
+  /health:
+    get:
+      operationId: healthCheck
+      summary: Health check
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  ok: { type: boolean }
+                required: [ok]
+  /extractions:
+    post:
+      operationId: startExtraction
+      summary: Start a document extraction job
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                sources:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      filename: { type: string }
+                      mimeType: { type: string }
+                      bytesBase64: { type: string, description: Base64 file contents }
+                    required: [filename, mimeType, bytesBase64]
+              required: [sources]
+      responses:
+        "202":
+          description: Accepted
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  jobId: { type: string }
+                required: [jobId]
+  /extractions/{jobId}:
+    get:
+      operationId: getExtractionResult
+      summary: Get extraction result
+      parameters:
+        - in: path
+          name: jobId
+          schema: { type: string }
+          required: true
+      responses:
+        "200":
+          description: Extraction result (stubbed)
+          content:
+            application/json:
+              schema:
+                $ref: ../schemas/extraction_result.schema.json
+  /summaries/plain:
+    post:
+      operationId: getPlainSummary
+      summary: Produce a plain-language summary from an extraction result
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: ../schemas/extraction_result.schema.json
+      responses:
+        "200":
+          description: Plain summary (stubbed)
+          content:
+            application/json:
+              schema:
+                $ref: ../schemas/plain_summary.schema.json
+  /tips/deductions:
+    post:
+      operationId: getDeductionTips
+      summary: Deduction tips based on extraction result
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: ../schemas/extraction_result.schema.json
+      responses:
+        "200":
+          description: Deduction tips (stubbed)
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: ../schemas/deduction_tip.schema.json
+  /progress/{userId}:
+    get:
+      operationId: getUserProgress
+      summary: Get progress for a user
+      parameters:
+        - in: path
+          name: userId
+          required: true
+          schema: { type: string }
+      responses:
+        "200":
+          description: Progress (stubbed)
+          content:
+            application/json:
+              schema:
+                $ref: ../schemas/user_progress.schema.json
+  /modelo100/validate:
+    post:
+      operationId: validateModelo100
+      summary: Validate a Modelo 100 payload
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: ../schemas/modelo100.schema.json
+      responses:
+        "200":
+          description: Valid
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  valid: { type: boolean }
+                required: [valid]
+components:
+  schemas:
+    Modelo100:
+      $ref: ../schemas/modelo100.schema.json
+    ExtractionResult:
+      $ref: ../schemas/extraction_result.schema.json
+    PlainSummary:
+      $ref: ../schemas/plain_summary.schema.json
+    DeductionTip:
+      $ref: ../schemas/deduction_tip.schema.json
+    UserProgress:
+      $ref: ../schemas/user_progress.schema.json

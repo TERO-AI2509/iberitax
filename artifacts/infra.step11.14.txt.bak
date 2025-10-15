@@ -1,0 +1,1 @@
+Infra: Ubuntu VM + Nginx, Node 20, web:3000, stub:8787, jobs via systemd, secrets via .env, CI mirrors via GitHub Environments.

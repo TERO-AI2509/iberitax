@@ -1,0 +1,52 @@
+{
+  "rules": [
+    {
+      "id": "RULE-M100-001",
+      "title": "Example Rule",
+      "jurisdiction": "ES",
+      "year": 2025,
+      "source": {
+        "url": "https://www.aeat.es"
+      },
+      "text": "Deberá aplicarse...",
+      "normalized": {
+        "form": "Modelo 100",
+        "article": "Art. X"
+      },
+      "score": {
+        "authority": 1,
+        "clarity": 0.9,
+        "applicability": 1
+      },
+      "provenance": {
+        "published_at": "2025-01-01",
+        "updated_at": "2025-01-15",
+        "effective_from": "2025-01-01",
+        "effective_to": null,
+        "retroactive_to": null,
+        "official_refs": [
+          {
+            "url": "https://www.boe.es"
+          }
+        ],
+        "supporting_refs": [
+          {
+            "url": "https://www.aeat.es"
+          }
+        ],
+        "discrepancy": {
+          "has_discrepancy": false,
+          "sources": []
+        },
+        "questions": [],
+        "date_precision": {
+          "published_at": "day",
+          "updated_at": "day",
+          "effective_from": "day",
+          "effective_to": "unknown",
+          "retroactive_to": "unknown"
+        }
+      }
+    }
+  ]
+}

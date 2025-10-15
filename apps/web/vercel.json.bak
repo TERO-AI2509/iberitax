@@ -1,0 +1,5 @@
+{
+  "installCommand": "pnpm -C .. install --frozen-lockfile --prod=false",
+  "buildCommand": "pnpm -C .. -r --filter @iberitax/web... run build",
+  "outputDirectory": ".next"
+}

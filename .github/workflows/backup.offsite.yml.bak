@@ -1,0 +1,47 @@
+name: backup.offsite
+on:
+  workflow_dispatch:
+    inputs:
+      mode:
+        description: "Offsite mode: s3 or gh"
+        required: true
+        default: "s3"
+      dry_run:
+        description: "1 to dry-run"
+        required: false
+        default: "0"
+  schedule:
+    - cron: "7 2 * * *"
+jobs:
+  offsite:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Install aws/gh CLIs
+        run: |
+          sudo apt-get update -y
+          sudo apt-get install -y awscli
+          type gh >/dev/null 2>&1 || sudo apt-get install -y gh
+          echo "OK tools"
+      - name: Offsite sync
+        env:
+          DRY_RUN: ${{ github.event.inputs.dry_run || '0' }}
+          OFFSITE_ENABLE: ${{ github.event.inputs.dry_run == '1' && '0' || '1' }}
+          OFFSITE_MODE: ${{ github.event.inputs.mode || 's3' }}
+          OFFSITE_S3_URI: ${{ secrets.OFFSITE_S3_URI }}
+          OFFSITE_GH_TAG: ${{ github.ref_name }}-offsite
+          NOTIFY_WEBHOOK: ${{ secrets.BACKUP_ALERT_WEBHOOK }}
+          REQUIRE_VERIFY: '1'
+        run: |
+          node scripts/backup.offsite.mjs && echo "OK 10.4.B: offsite"
+      - name: Upload local index as artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: backup-index
+          path: artifacts/backups/index.html

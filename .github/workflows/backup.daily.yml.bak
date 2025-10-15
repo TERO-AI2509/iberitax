@@ -1,0 +1,58 @@
+name: Daily Backup
+
+on:
+  schedule:
+    - cron: '0 1 * * *'
+  workflow_dispatch: {}
+
+jobs:
+  backup:
+    runs-on: ubuntu-latest
+    env:
+      APPLY: ${{ vars.APPLY || secrets.APPLY || '0' }}
+      BACKUP_OUTDIR: artifacts/backups
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      # If we're actually writing ZIPs, ensure 'zip' is present
+      - name: Ensure zip is installed (APPLY=1 only)
+        if: env.APPLY == '1'
+        run: |
+          sudo apt-get update -y
+          sudo apt-get install -y zip
+
+      - name: Plan/Run backup
+        run: |
+          node scripts/backup.snapshot.mjs | tee backup.out.json
+
+      - name: Debug listing
+        run: |
+          echo "APPLY=$APPLY"
+          node -v
+          ls -la
+          ls -la artifacts || true
+          ls -la artifacts/backups || true
+          test -f backup.out.json && node -e "console.log(require('fs').readFileSync('backup.out.json','utf8'))" || true
+
+      # Always upload the JSON plan so we have something to inspect
+      - name: Upload backup plan (always)
+        uses: actions/upload-artifact@v4
+        with:
+          name: backup-plan-${{ github.run_id }}
+          path: backup.out.json
+          retention-days: 7
+
+      # Upload real backups only when APPLY=1 and files exist
+      - name: Upload backups (APPLY=1)
+        if: env.APPLY == '1'
+        uses: actions/upload-artifact@v4
+        with:
+          name: iberitax-backup-${{ github.run_id }}
+          path: |
+            artifacts/backups/*.zip
+            artifacts/backups/*.sha256
+            artifacts/backups/*.meta.json
+          retention-days: 30

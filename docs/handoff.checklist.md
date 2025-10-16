@@ -23,3 +23,5 @@
 - [ ] Tag `v13.0-rc1` pushed  
 - [ ] Artifacts zipped and archived  
 - [ ] Repo-manifest updated  
+
+- [x] DB: Neon configured (Phase 12.3)

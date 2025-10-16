@@ -1,0 +1,35 @@
+{
+  "mode": "gh",
+  "startedAt": "2025-10-13T08:02:25.090Z",
+  "zip": "tmp/restore-20251013T080225Z/backup-20251013T045443Z.zip",
+  "shaFile": "tmp/restore-20251013T080225Z/backup-20251013T045443Z.zip.sha256",
+  "checksumMatch": true,
+  "smoke": [
+    {
+      "name": "modelo100.map.health",
+      "status": "OK",
+      "exitCode": 0,
+      "stdout": "[map-health] PASS\n- mapped.json exists & array: SKIPPED\n- mapped.csv rows == json length: SKIPPED\n- mapped.html non-trivial: OK\n- map.json validates schema: SKIPPED\n",
+      "stderr": ""
+    },
+    {
+      "name": "secrets.scan",
+      "status": "OK",
+      "exitCode": 0,
+      "stdout": "ver-production/0.pack\",\n      \"rule\": \"pem_private\",\n      \"desc\": \"PEM private key header\",\n      \"type\": \"content\"\n    },\n    {\n      \"file\": \"apps/web/.next/cache/webpack/server-production/2.pack\",\n      \"rule\": \"pem_private\",\n      \"desc\": \"PEM private key header\",\n      \"type\": \"content\"\n    },\n    {\n      \"file\": \"apps/web/.next/cache/webpack/server-production/7.pack\",\n      \"rule\": \"pem_private\",\n      \"desc\": \"PEM private key header\",\n      \"type\": \"content\"\n    },\n    {\n      \"file\": \"apps/web/.next/server/chunks/47.js\",\n      \"rule\": \"pem_private\",\n      \"desc\": \"PEM private key header\",\n      \"type\": \"content\"\n    },\n    {\n      \"file\": \"apps/web/.next/server/middleware.js\",\n      \"rule\": \"pem_private\",\n      \"desc\": \"PEM private key header\",\n      \"type\": \"content\"\n    },\n    {\n      \"file\": \"apps/web/.next/server/middleware.js.map\",\n      \"rule\": \"pem_private\",\n      \"desc\": \"PEM private key header\",\n      \"type\": \"content\"\n    },\n    {\n      \"file\": \"scripts/security.redaction.test.mjs\",\n      \"rule\": \"stripe_live\",\n      \"desc\": \"Stripe live secret\",\n      \"type\": \"content\"\n    },\n    {\n      \"file\": \"tmp/restore-20251013T060834Z/unpacked/.env.example\",\n      \"rule\": \"dotenv_file\",\n      \"desc\": \".env file committed\",\n      \"type\": \"filename\"\n    },\n    {\n      \"file\": \"tmp/restore-20251013T060834Z/unpacked/apps/stub-server/.env.example\",\n      \"rule\": \"dotenv_file\",\n      \"desc\": \".env file committed\",\n      \"type\": \"filename\"\n    },\n    {\n      \"file\": \"tmp/restore-20251013T060834Z/unpacked/scripts/security.redaction.test.mjs\",\n      \"rule\": \"stripe_live\",\n      \"desc\": \"Stripe live secret\",\n      \"type\": \"content\"\n    },\n    {\n      \"file\": \"tmp/restore-20251013T060834Z/unpacked/tmp/testredact/sample.txt\",\n      \"rule\": \"stripe_live\",\n      \"desc\": \"Stripe live secret\",\n      \"type\": \"content\"\n    },\n    {\n      \"file\": \"tmp/testredact/sample.txt\",\n      \"rule\": \"stripe_live\",\n      \"desc\": \"Stripe live secret\",\n      \"type\": \"content\"\n    }\n  ]\n}\n",
+      "stderr": ""
+    }
+  ],
+  "durations": {
+    "downloadMs": 1787,
+    "checksumMs": 7,
+    "unzipMs": 56,
+    "smoke.modelo100.map.health.ms": 263,
+    "smoke.secrets.scan.ms": 12364
+  },
+  "actualChecksum": "9b9dfeb2fff331522964241437226cd21beacba0f6e2db502ca622e750cc84ac",
+  "expectedChecksum": "9b9dfeb2fff331522964241437226cd21beacba0f6e2db502ca622e750cc84ac",
+  "unpackedDir": "tmp/restore-20251013T080225Z/unpacked",
+  "finishedAt": "2025-10-13T08:02:39.568Z",
+  "ok": true
+}

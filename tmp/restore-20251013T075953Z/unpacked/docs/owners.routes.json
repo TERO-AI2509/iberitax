@@ -1,0 +1,4 @@
+{
+  "_note": "Map owner to webhook or email-like sink. Leave empty to disable.",
+  "default": { "webhook": "", "email": "" }
+}

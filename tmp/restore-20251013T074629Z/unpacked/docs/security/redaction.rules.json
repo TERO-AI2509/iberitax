@@ -1,0 +1,66 @@
+{
+  "version": "1.0.0",
+  "strategies": {
+    "placeholder": {"mask": "[REDACTED]"},
+    "hash": {"algo": "sha256", "prefix": "[H:" , "suffix": "]"},
+    "partial_keep_last4": {"prefix": "[REDACTED:*]", "keep": 4}
+  },
+  "rules": [
+    {
+      "id": "email",
+      "description": "Email addresses",
+      "class": "PII",
+      "pattern": "(?i)([A-Z0-9._%+-]+)@([A-Z0-9.-]+\\.[A-Z]{2,})",
+      "engine": "regex",
+      "strategy": "placeholder"
+    },
+    {
+      "id": "phone_intl",
+      "description": "International phone numbers",
+      "class": "PII",
+      "pattern": "\\+?[0-9][0-9 ()\\-]{7,}[0-9]",
+      "engine": "regex",
+      "strategy": "partial_keep_last4"
+    },
+    {
+      "id": "spain_nif",
+      "description": "Spanish NIF (8 digits + letter)",
+      "class": "SENSITIVE_PII",
+      "pattern": "\\b[0-9]{8}[A-Z]\\b",
+      "engine": "regex",
+      "strategy": "placeholder"
+    },
+    {
+      "id": "spain_nie",
+      "description": "Spanish NIE (X/Y/Z + 7 digits + letter)",
+      "class": "SENSITIVE_PII",
+      "pattern": "\\b[XYZ][0-9]{7}[A-Z]\\b",
+      "engine": "regex",
+      "strategy": "placeholder"
+    },
+    {
+      "id": "iban_es",
+      "description": "Spanish IBAN (ES + 22 digits)",
+      "class": "SENSITIVE_PII",
+      "pattern": "\\bES[0-9]{22}\\b",
+      "engine": "regex",
+      "strategy": "partial_keep_last4"
+    },
+    {
+      "id": "address_number",
+      "description": "Street numbers (basic)",
+      "class": "PII",
+      "pattern": "\\bC(\\/)?\\.?\\s*[A-Za-zÁÉÍÓÚÜÑáéíóúüñ]+[^\\n]*?\\s(\\d{1,4})(\\s*(bis|º|°|\\-|\\w+)*)?\\b",
+      "engine": "regex",
+      "strategy": "placeholder"
+    },
+    {
+      "id": "api_key_like",
+      "description": "API/secret-ish tokens",
+      "class": "CONFIDENTIAL",
+      "pattern": "\\b(sk|key|token|secret)[_\\-]?[A-Za-z0-9]{16,}\\b",
+      "engine": "regex",
+      "strategy": "placeholder"
+    }
+  ]
+}

@@ -1,0 +1,6 @@
+id,severity,updated_at,age_days,threshold_days,status,status_next
+RULE-M100-001,,2025-10-12T00:00:00.000Z,0,,ignored,ignored
+RULE-M100-002,,,,,unknown,unknown
+RULE-M100-003,,,,,unknown,unknown
+RULE-M100-004,,,,,unknown,unknown
+RULE-M100-005,,,,,unknown,unknown

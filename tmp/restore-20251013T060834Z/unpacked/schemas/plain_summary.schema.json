@@ -1,0 +1,28 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.iberitax.local/plain_summary.schema.json",
+  "title": "PlainSummary",
+  "type": "object",
+  "properties": {
+    "headline": { "type": "string" },
+    "bullets": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "totals": {
+      "type": "object",
+      "properties": {
+        "taxableBase": { "type": "number" },
+        "finalTaxDue": { "type": "number" }
+      },
+      "required": ["taxableBase", "finalTaxDue"]
+    },
+    "disclaimers": {
+      "type": "array",
+      "items": { "type": "string" },
+      "default": []
+    }
+  },
+  "required": ["headline", "bullets", "totals"],
+  "additionalProperties": false
+}

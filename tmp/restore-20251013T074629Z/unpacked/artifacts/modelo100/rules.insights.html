@@ -1,0 +1,142 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Modelo 100 — Insights</title>
+<style>
+:root{--bg:#0b0c10;--card:#121318;--muted:#69707d;--text:#d8dee9;--accent:#7aa2f7;--border:#262a36;--warn:#df6d57}
+*{box-sizing:border-box}body{margin:0;padding:20px;font-family:ui-sans-serif,system-ui,Segoe UI,Roboto,Helvetica,Arial;color:var(--text);background:var(--bg)}
+h1{margin:0 0 10px 0;font-size:20px}
+.grid{display:grid;gap:12px}
+.panel{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:14px}
+.k{color:var(--muted);font-size:12px}
+.badge{display:inline-block;padding:2px 8px;border-radius:999px;border:1px solid var(--border);margin-right:6px}
+.warn{color:#fff;background:var(--warn);border-color:#c55b49}
+table{width:100%;border-collapse:collapse;margin-top:8px}
+th,td{padding:8px 10px;border-bottom:1px solid var(--border);text-align:left;font-size:13px}
+th{color:var(--muted)}
+input[type="search"]{width:100%;background:#171a22;border:1px solid var(--border);color:var(--text);padding:8px 10px;border-radius:10px}
+</style>
+</head>
+<body>
+  <h1>Insights</h1>
+  <div class="grid">
+    <div class="panel">
+      <div class="k">Metadata completeness</div>
+      <div class="badge">Total rules: 5</div>
+      <div class="badge warn">Missing metadata: 4</div>
+      <input id="q1" type="search" placeholder="Search missing metadata">
+      <table><thead><tr><th>Rule</th><th>Owner</th><th>Status</th><th>Updated</th></tr></thead><tbody id="t1"></tbody></table>
+    </div>
+    <div class="panel">
+      <div class="k">Stale rules (>90 days)</div>
+      <div class="badge warn">Stale: 5</div>
+      <input id="q2" type="search" placeholder="Search stale rules">
+      <table><thead><tr><th>Rule</th><th>Owner</th><th>Status</th><th>Updated</th><th>Age</th></tr></thead><tbody id="t2"></tbody></table>
+    </div>
+    <div class="panel">
+      <div class="k">Tag hygiene</div>
+      <div class="badge">Empty tags: 0</div>
+      <div class="badge">Non-lowercase tags: 0</div>
+      <table><thead><tr><th>Non-lowercase tags</th></tr></thead><tbody id="t3"></tbody></table>
+    </div>
+  </div>
+<script>
+const missing={"total":5,"missing":4,"items":[{"id":"RULE-M100-002","owner":"","status":"","updated":""},{"id":"RULE-M100-003","owner":"","status":"","updated":""},{"id":"RULE-M100-004","owner":"","status":"","updated":""},{"id":"RULE-M100-005","owner":"","status":"","updated":""}]}
+const stale={"threshold_days":90,"total":5,"stale":5,"items":[{"id":"RULE-M100-001","owner":"","status":"","updated":"","age_days":"NA"},{"id":"RULE-M100-002","owner":"","status":"","updated":"","age_days":"NA"},{"id":"RULE-M100-003","owner":"","status":"","updated":"","age_days":"NA"},{"id":"RULE-M100-004","owner":"","status":"","updated":"","age_days":"NA"},{"id":"RULE-M100-005","owner":"","status":"","updated":"","age_days":"NA"}]}
+const tags={"total":5,"empty":0,"nonLower":[]}
+function fill1(q){const tb=document.getElementById('t1');tb.innerHTML='';(missing.items||[]).filter(x=>!q||[x.id,x.owner,x.status,x.updated].join(' ').toLowerCase().includes(q.toLowerCase())).forEach(x=>{const tr=document.createElement('tr');tr.innerHTML='<td>'+x.id+'</td><td>'+(x.owner||'-')+'</td><td>'+(x.status||'-')+'</td><td>'+(x.updated||'-')+'</td>';tb.appendChild(tr)})}
+function fill2(q){const tb=document.getElementById('t2');tb.innerHTML='';(stale.items||[]).filter(x=>!q||[x.id,x.owner,x.status,x.updated,String(x.age_days)].join(' ').toLowerCase().includes(q.toLowerCase())).forEach(x=>{const tr=document.createElement('tr');tr.innerHTML='<td>'+x.id+'</td><td>'+(x.owner||'-')+'</td><td>'+(x.status||'-')+'</td><td>'+(x.updated||'-')+'</td><td>'+(x.age_days||'-')+'</td>';tb.appendChild(tr)})}
+function fill3(){const tb=document.getElementById('t3');tb.innerHTML='';(tags.nonLower||[]).forEach(x=>{const tr=document.createElement('tr');tr.innerHTML='<td>'+x+'</td>';tb.appendChild(tr)})}
+document.getElementById('q1').addEventListener('input',e=>fill1(e.target.value))
+document.getElementById('q2').addEventListener('input',e=>fill2(e.target.value))
+fill1('');fill2('');fill3();
+</script>
+
+<section id="escalation-by-owner" style="margin:1rem 0;padding:1rem;border:1px solid #ddd;border-radius:8px">
+  <h2>Escalation by Owner</h2>
+  <div><strong>Owners:</strong> 2, <strong>Breaches:</strong> 0, <strong>Pages:</strong> 0, <strong>Warns:</strong> 0</div>
+  
+  <details style="margin-top:.5rem" open><summary>Owners needing attention</summary>
+    <table><thead><tr><th>owner</th><th>breaches</th><th>pages</th><th>warns</th><th>total</th></tr></thead>
+      <tbody>
+        
+      </tbody>
+    </table>
+  </details>
+</section>
+
+<section id="sla-trends-panel" style="margin:16px 0;padding:12px;border:1px solid #e5e7eb;border-radius:12px">
+  <h3 style="margin:0 0 8px 0;font:600 16px system-ui">SLA Trends</h3>
+  <div style="display:flex;gap:12px;align-items:center">
+    <canvas id="sla-spark" width="240" height="40"></canvas>
+    <div id="sla-rates" style="font:14px system-ui"></div>
+  </div>
+</section>
+<script>
+(async function(){
+  try{
+    const res = await fetch('./sla.trends.json',{cache:'no-store'})
+    const data = await res.json()
+    const daily = data.daily.slice(-30)
+    const vals = daily.map(r=>r.breach_rate||0)
+    const c = document.getElementById('sla-spark')
+    const ctx = c.getContext('2d')
+    const w = c.width, h = c.height
+    ctx.clearRect(0,0,w,h)
+    if (vals.length === 0) return
+    const min = Math.min(...vals), max = Math.max(...vals)
+    const rng = (max-min)||1
+    const step = w/(vals.length-1)
+    ctx.beginPath()
+    vals.forEach((v,i)=>{
+      const x = i*step
+      const y = h - ((v-min)/rng)*h
+      if(i===0) ctx.moveTo(x,y); else ctx.lineTo(x,y)
+    })
+    ctx.stroke()
+    const d7 = data.rollups.d7?.breach_rate ?? 0
+    const d30 = data.rollups.d30?.breach_rate ?? 0
+    const d90 = data.rollups.d90?.breach_rate ?? 0
+    document.getElementById('sla-rates').textContent = 'Breach rate — 7d: ' + d7 + '%, 30d: ' + d30 + '%, 90d: ' + d90 + '%'
+  }catch(e){}
+})();
+</script>
+
+
+<section id="sla-alerts-panel" style="margin:16px 0;padding:12px;border:1px solid #e5e7eb;border-radius:12px">
+  <h3 style="margin:0 0 8px 0;font:600 16px system-ui">SLA Status</h3>
+  <div style="display:flex;gap:12px;align-items:center">
+    <span id="sla-badge" style="padding:4px 8px;border-radius:999px;border:1px solid #e5e7eb;font:600 12px system-ui">—</span>
+    <span id="sla-updated" style="font:12px system-ui;color:#6b7280"></span>
+  </div>
+  <ul id="sla-alerts" style="margin:12px 0 0 18px;font:14px system-ui"></ul>
+</section>
+<script>
+(async function(){
+  try{
+    const res = await fetch('./sla.alerts.json',{cache:'no-store'})
+    const a = await res.json()
+    const b = document.getElementById('sla-badge')
+    const u = document.getElementById('sla-updated')
+    const l = document.getElementById('sla-alerts')
+    const color = a.overall==='fail' ? '#ef4444' : (a.overall==='warn' ? '#f59e0b' : '#10b981')
+    b.style.background = color + '20'
+    b.style.borderColor = color
+    b.style.color = color
+    b.textContent = a.overall.toUpperCase()
+    u.textContent = 'Updated ' + (a.updated_at||'')
+    const items = []
+    for (const k of ['d7','d30','d90']){
+      const w = a.windows?.[k]; if(!w) continue
+      items.push(k.toUpperCase()+': breach rate ' + w.rate + '% → ' + w.status.toUpperCase())
+    }
+    l.innerHTML = items.map(x=>'<li>'+x+'</li>').join('')
+  }catch(e){}
+})();
+</script>
+
+
+<p style="margin-top:8px"><a href="./sla.owners.html" style="text-decoration:none" class="badge">Open Owner SLA Rollups →</a></p>
+</body>
+</html>

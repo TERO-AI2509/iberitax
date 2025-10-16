@@ -1,0 +1,17 @@
+{
+  "apply": true,
+  "outdir": "artifacts/backups",
+  "zip": "/home/runner/work/iberitax/iberitax/artifacts/backups/backup-20251012T131620Z.zip",
+  "include": [
+    "RUNBOOK.md",
+    "docs",
+    "repo-manifest.txt",
+    "schemas",
+    "openapi"
+  ],
+  "ts": "20251012T131620Z",
+  "git": {
+    "sha": "4cab050",
+    "branch": "main"
+  }
+}

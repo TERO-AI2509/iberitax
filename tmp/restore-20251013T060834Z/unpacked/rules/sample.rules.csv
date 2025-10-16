@@ -1,0 +1,3 @@
+id,severity,tags,message,rationale,examples,owner,status,updated
+RULE-M100-004,low,withholding|crosscheck,Withholding certificate year should match fiscal year,Avoid mixing certificates from different years,Mismatch example||Certificate FY=2023 while return FY=2024,,,
+RULE-M100-005,medium,bank|interest,Bank interest must include payer country code,Country needed for double-tax and info exchange,Missing country code||Country code not ISO-3166-1 alpha-2,,,

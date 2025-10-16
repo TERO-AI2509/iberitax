@@ -1,0 +1,42 @@
+{
+  "threshold_days": 90,
+  "total": 5,
+  "stale": 5,
+  "items": [
+    {
+      "id": "RULE-M100-001",
+      "owner": "",
+      "status": "",
+      "updated": "",
+      "age_days": "NA"
+    },
+    {
+      "id": "RULE-M100-002",
+      "owner": "",
+      "status": "",
+      "updated": "",
+      "age_days": "NA"
+    },
+    {
+      "id": "RULE-M100-003",
+      "owner": "",
+      "status": "",
+      "updated": "",
+      "age_days": "NA"
+    },
+    {
+      "id": "RULE-M100-004",
+      "owner": "",
+      "status": "",
+      "updated": "",
+      "age_days": "NA"
+    },
+    {
+      "id": "RULE-M100-005",
+      "owner": "",
+      "status": "",
+      "updated": "",
+      "age_days": "NA"
+    }
+  ]
+}

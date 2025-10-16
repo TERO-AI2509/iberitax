@@ -1,0 +1,4 @@
+id,area,steps,expected,actual,severity,owner,fix,notes,status
+D-12.5-echo405,auth,/api/private/echo,200 on POST,405,P2,,check allowed methods; use GET or _diag alt,not blocking,Open
+D-12.5-071523,upload,/api/initUpload,200,405,P1,,,
+D-12.5-071532,billing,/api/checkout/create,200,401,P1,,,

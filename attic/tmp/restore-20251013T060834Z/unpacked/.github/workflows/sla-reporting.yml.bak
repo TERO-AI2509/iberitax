@@ -1,0 +1,41 @@
+name: SLA Reporting Exports
+on:
+  push:
+    branches: [ "**" ]
+  schedule:
+    - cron: "41 4 * * *"
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - run: npm ci || true
+      - run: APPLY=1 NODE_NO_WARNINGS=1 node scripts/modelo100.cli.mjs export
+      - run: APPLY=1 MINIFY_HTML=1 NODE_NO_WARNINGS=1 node scripts/modelo100.cli.mjs bundle
+      - run: APPLY=1 MODE=all NODE_NO_WARNINGS=1 node scripts/modelo100.cli.mjs extras
+      - run: APPLY=1 NODE_NO_WARNINGS=1 node scripts/modelo100.cli.mjs report-csv
+      - run: APPLY=1 NODE_NO_WARNINGS=1 node scripts/modelo100.cli.mjs public-api
+      - name: Upload CSV Reports
+        uses: actions/upload-artifact@v4
+        with:
+          name: sla-csv-reports
+          path: artifacts/modelo100/report
+      - name: Upload Public API
+        uses: actions/upload-artifact@v4
+        with:
+          name: public-api
+          path: artifacts/modelo100/public/api
+      - name: Job Summary
+        shell: bash
+        run: |
+          echo "## SLA Reporting" >> "$GITHUB_STEP_SUMMARY"
+          echo "" >> "$GITHUB_STEP_SUMMARY"
+          jq -r '"Owners: \(.payload.summary.owners) | Alerts: \(.payload.summary.alerts) | Escalations: \(.payload.summary.escalations)\nCommit: \(.payload.meta.repo_commit)\nHash: \(.signature.hash)"' artifacts/modelo100/sla.export.json >> "$GITHUB_STEP_SUMMARY"
+          echo "" >> "$GITHUB_STEP_SUMMARY"
+          echo "CSV Files:" >> "$GITHUB_STEP_SUMMARY"
+          ls -1 artifacts/modelo100/report | sed 's/^/- /' >> "$GITHUB_STEP_SUMMARY"

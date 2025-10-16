@@ -1,0 +1,4 @@
+field_id,label,json_key,csv_col,combine,value,decimals,round,status,warnings_count,used_refs
+box_432,Dividendos íntegros (TODO verify),box_432,BOX_432,sum,1234.56,2,half-up,ok,0,ocr.income.dividends_gross
+box_433,Retenciones a cuenta sobre dividendos (TODO verify),box_433,BOX_433,sum,321,2,half-up,ok,0,ocr.withholding.dividends_tax
+box_610,Rentas inmobiliarias imputadas (TODO placeholder),box_610,BOX_610,sum,,2,half-up,missing,1,rule.real_estate.imputed_income

@@ -1,0 +1,3 @@
+owner,rule_count,tagged_count,untagged_count,tags,latest_updated_at,rules
+unassigned,4,4,0,bank|crosscheck|interest|modelo100|residency|totals|validation|withholding,,RULE-M100-002;RULE-M100-003;RULE-M100-004;RULE-M100-005
+tax-team,1,1,0,identification|modelo100,,RULE-M100-001

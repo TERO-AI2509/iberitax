@@ -1,0 +1,4 @@
+NEG whoami(no cookie)=200
+NEG echo(no cookie POST)=500
+NEG whoami(bad cookie)=500
+NEG 401 401 401

@@ -1,0 +1,47 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.iberitax.local/extraction_result.schema.json",
+  "title": "ExtractionResult",
+  "type": "object",
+  "properties": {
+    "jobId": { "type": "string" },
+    "sourceFiles": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "filename": { "type": "string" },
+          "mimeType": { "type": "string" },
+          "pages": { "type": "integer", "minimum": 1 }
+        },
+        "required": ["filename", "mimeType"]
+      }
+    },
+    "modelo100": { "$ref": "modelo100.schema.json" },
+    "confidence": {
+      "type": "object",
+      "properties": {
+        "overall": { "type": "number", "minimum": 0, "maximum": 1 },
+        "fields": {
+          "type": "object",
+          "additionalProperties": { "type": "number", "minimum": 0, "maximum": 1 }
+        }
+      },
+      "required": ["overall"]
+    },
+    "issues": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "severity": { "type": "string", "enum": ["info", "warn", "error"] },
+          "message": { "type": "string" },
+          "path": { "type": "string" }
+        },
+        "required": ["severity", "message"]
+      }
+    }
+  },
+  "required": ["jobId", "sourceFiles", "modelo100", "confidence"],
+  "additionalProperties": false
+}

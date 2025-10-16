@@ -1,0 +1,42 @@
+{
+  "ok": false,
+  "total": 6,
+  "problems": [
+    {
+      "file": ".env.before.12.2.2.backup",
+      "line": 2,
+      "key": "REQUIRE_DEV_KEY",
+      "issue": "literal-secret-in-dotenv"
+    },
+    {
+      "file": ".env.local.backup",
+      "line": 2,
+      "key": "REQUIRE_DEV_KEY",
+      "issue": "literal-secret-in-dotenv"
+    },
+    {
+      "file": ".env.review",
+      "line": 1,
+      "key": "SLACK_BOT_TOKEN",
+      "issue": "literal-secret-in-dotenv"
+    },
+    {
+      "file": ".env.vercel",
+      "line": 2,
+      "key": "LAWYER_POST_SECRET",
+      "issue": "literal-secret-in-dotenv"
+    },
+    {
+      "file": ".env.vercel",
+      "line": 8,
+      "key": "TERO_LAWYER_POST_SECRET",
+      "issue": "literal-secret-in-dotenv"
+    },
+    {
+      "file": ".env.vercel",
+      "line": 27,
+      "key": "VERCEL_OIDC_TOKEN",
+      "issue": "literal-secret-in-dotenv"
+    }
+  ]
+}

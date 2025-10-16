@@ -1,0 +1,5 @@
+{
+  "income": { "dividends_gross": 1234.56 },
+  "withholding": { "dividends_tax": 321.00 },
+  "real_estate": { "imputed_income": 789.10 }
+}

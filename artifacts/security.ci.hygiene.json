@@ -1,0 +1,110 @@
+{
+  "ok": false,
+  "total": 26,
+  "warnings": [
+    {
+      "file": "backup.daily.yml",
+      "issue": "missing-permissions-block"
+    },
+    {
+      "file": "backup.daily.yml",
+      "issue": "checkout-persist-credentials-default"
+    },
+    {
+      "file": "backup.offsite.yml",
+      "issue": "checkout-persist-credentials-default"
+    },
+    {
+      "file": "backup.verify.yml",
+      "issue": "missing-permissions-block"
+    },
+    {
+      "file": "backup.verify.yml",
+      "issue": "checkout-persist-credentials-default"
+    },
+    {
+      "file": "ci.yml",
+      "issue": "missing-permissions-block"
+    },
+    {
+      "file": "ci.yml",
+      "issue": "checkout-persist-credentials-default"
+    },
+    {
+      "file": "dr.restore.nightly.yml",
+      "issue": "missing-permissions-block"
+    },
+    {
+      "file": "dr.restore.nightly.yml",
+      "issue": "checkout-persist-credentials-default"
+    },
+    {
+      "file": "publish-rules-bundle.yml",
+      "issue": "checkout-persist-credentials-default"
+    },
+    {
+      "file": "release-candidate.yml",
+      "issue": "checkout-persist-credentials-default"
+    },
+    {
+      "file": "repo-cleanup-scan.yml",
+      "issue": "missing-permissions-block"
+    },
+    {
+      "file": "repo-cleanup-scan.yml",
+      "issue": "checkout-persist-credentials-default"
+    },
+    {
+      "file": "rules-maintenance.yml",
+      "issue": "missing-permissions-block"
+    },
+    {
+      "file": "rules-maintenance.yml",
+      "issue": "checkout-persist-credentials-default"
+    },
+    {
+      "file": "rules-validate.yml",
+      "issue": "missing-permissions-block"
+    },
+    {
+      "file": "rules-validate.yml",
+      "issue": "checkout-persist-credentials-default"
+    },
+    {
+      "file": "security-baseline.yml",
+      "issue": "missing-permissions-block"
+    },
+    {
+      "file": "sla-check.yml",
+      "issue": "checkout-persist-credentials-default"
+    },
+    {
+      "file": "sla-export-bundle.yml",
+      "issue": "missing-permissions-block"
+    },
+    {
+      "file": "sla-export-bundle.yml",
+      "issue": "checkout-persist-credentials-default"
+    },
+    {
+      "file": "sla-pages.yml",
+      "issue": "checkout-persist-credentials-default"
+    },
+    {
+      "file": "sla-reporting.yml",
+      "issue": "missing-permissions-block"
+    },
+    {
+      "file": "sla-reporting.yml",
+      "issue": "checkout-persist-credentials-default"
+    },
+    {
+      "file": "sla-trends.yml",
+      "issue": "missing-permissions-block"
+    },
+    {
+      "file": "sla-trends.yml",
+      "issue": "checkout-persist-credentials-default"
+    }
+  ]
+}

@@ -12,3 +12,5 @@ Acceptance
 Next
 - Add owner, links, impacted_boxes fields
 - Wire UI filters for severity and tags
+2025-10-16T03:58:49Z | 12.3 | Neon DB configured; docs committed; PR #35 open
+2025-10-16T04:03:23Z | 12.4 | CI/Security baseline triage: artifacts produced, PR #35 commented.

@@ -1,0 +1,23 @@
+name: rules-validate
+on:
+  push:
+    paths:
+      - "rules/**"
+      - "scripts/modelo100.rules.*.mjs"
+      - ".github/workflows/rules-validate.yml"
+  pull_request:
+    paths:
+      - "rules/**"
+      - "scripts/modelo100.rules.*.mjs"
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - run: npm ci || true
+      - run: VERBOSE=1 node scripts/modelo100.rules.index.html.mjs
+      - run: VERBOSE=1 node scripts/modelo100.rules.dashboard.html.mjs
+      - run: node scripts/modelo100.rules.validate.mjs

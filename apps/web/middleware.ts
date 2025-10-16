@@ -1,19 +1,16 @@
-import { NextResponse } from "next/server"
-import type { NextRequest } from "next/server"
-
-export function middleware(req: NextRequest | Request) {
-  // Support both NextRequest (runtime) and plain Request (tests)
-  const nextReq = req as NextRequest & { nextUrl?: URL }
-  const urlLike: URL = nextReq.nextUrl ?? new URL((req as any).url)
-  const { pathname, search } = urlLike
-
-  // your existing auth logic…
-  const hasAuth = (nextReq as any).cookies?.get?.("auth") ?? false
-
-  if (pathname.startsWith("/account") && !hasAuth) {
-    const redirectTo = new URL(`/login?reason=expired&next=${pathname}${search}`, urlLike)
-    return NextResponse.redirect(redirectTo)
+import { NextResponse } from 'next/server';
+import { cookies } from 'next/headers';
+export function middleware(req: Request) {
+  const url = new URL(req.url);
+  if (url.pathname.startsWith('/api/private/')) {
+    const jar = cookies();
+    const ibx = jar.get('ibx_session')?.value ?? '';
+    const ok =
+      jar.has('__Secure-next-auth.session-token') ||
+      jar.has('next-auth.session-token') ||
+      (ibx && ibx.length >= 16 && ibx !== 'invalid');
+    if (!ok) return new NextResponse('Unauthorized', { status: 401 });
   }
-
-  return NextResponse.next()
+  return NextResponse.next();
 }
+export const config = { matcher: ['/api/private/:path*'] };

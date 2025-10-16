@@ -1,0 +1,18 @@
+{
+  "ok": false,
+  "total": 2,
+  "problems": [
+    {
+      "file": ".env",
+      "line": 2,
+      "key": "REQUIRE_DEV_KEY",
+      "issue": "literal-secret-in-dotenv"
+    },
+    {
+      "file": ".env.example",
+      "line": 4,
+      "key": "IBERITAX_API_KEY",
+      "issue": "literal-secret-in-dotenv"
+    }
+  ]
+}

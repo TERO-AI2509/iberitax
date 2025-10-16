@@ -1,0 +1,26 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.iberitax.local/user_progress.schema.json",
+  "title": "UserProgress",
+  "type": "object",
+  "properties": {
+    "userId": { "type": "string" },
+    "currentStep": { "type": "string", "enum": ["upload", "extraction", "review", "summary", "tips", "complete"] },
+    "percent": { "type": "integer", "minimum": 0, "maximum": 100 },
+    "lastUpdatedIso": { "type": "string", "format": "date-time" },
+    "checkpoints": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "step": { "type": "string" },
+          "completedIso": { "type": "string", "format": "date-time" }
+        },
+        "required": ["step", "completedIso"],
+        "additionalProperties": false
+      }
+    }
+  },
+  "required": ["userId", "currentStep", "percent", "lastUpdatedIso"],
+  "additionalProperties": false
+}

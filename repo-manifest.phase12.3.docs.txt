@@ -1,0 +1,2 @@
+./docs/handoff.checklist.md
+./docs/release.notes.md

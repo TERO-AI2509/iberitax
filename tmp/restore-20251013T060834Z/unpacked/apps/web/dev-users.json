@@ -1,0 +1,8 @@
+[
+  {
+    "email": "user@example.com",
+    "salt": "4185a891cc76d932b4e3148944996868",
+    "hash": "4710694e033e9451445103eadb763285d2e4a0cc7cc6a87fa6ae9a24a89d3047",
+    "role": "user"
+  }
+]

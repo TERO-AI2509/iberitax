@@ -1,0 +1,11 @@
+HTTP/1.1 200 OK
+vary: RSC, Next-Router-State-Tree, Next-Router-Prefetch
+content-type: application/json
+set-cookie: ibx_session=eyJzdWIiOiJkZXZAZXhhbXBsZS5jb20iLCJlbWFpbCI6ImRldkBleGFtcGxlLmNvbSJ9; Path=/; HttpOnly; SameSite=lax
+x-middleware-set-cookie: ibx_session=eyJzdWIiOiJkZXZAZXhhbXBsZS5jb20iLCJlbWFpbCI6ImRldkBleGFtcGxlLmNvbSJ9; Path=/; HttpOnly; SameSite=lax
+Date: Thu, 16 Oct 2025 05:15:16 GMT
+Connection: keep-alive
+Keep-Alive: timeout=5
+Transfer-Encoding: chunked
+
+{"ok":true}

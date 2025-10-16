@@ -1,0 +1,43 @@
+name: SLA Public Bundle to Pages
+on:
+  push:
+    branches: [ "**" ]
+  schedule:
+    - cron: "29 4 * * *"
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - run: npm ci || true
+      - run: APPLY=1 NODE_NO_WARNINGS=1 node scripts/modelo100.cli.mjs export
+      - run: APPLY=1 MINIFY_HTML=1 NODE_NO_WARNINGS=1 node scripts/modelo100.cli.mjs bundle
+      - run: MODE=all APPLY=1 NODE_NO_WARNINGS=1 node scripts/modelo100.public.extras.mjs
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: artifacts/modelo100/public
+      - name: Job Summary
+        shell: bash
+        run: |
+          echo "## SLA Public Bundle" >> "$GITHUB_STEP_SUMMARY"
+          echo "" >> "$GITHUB_STEP_SUMMARY"
+          jq -r '"Summary: \(.payload.summary.owners) owners, \(.payload.summary.alerts) alerts, \(.payload.summary.escalations) escalations\nCommit: \(.payload.meta.repo_commit)\nHash: \(.signature.hash)"' artifacts/modelo100/sla.export.json >> "$GITHUB_STEP_SUMMARY"
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4

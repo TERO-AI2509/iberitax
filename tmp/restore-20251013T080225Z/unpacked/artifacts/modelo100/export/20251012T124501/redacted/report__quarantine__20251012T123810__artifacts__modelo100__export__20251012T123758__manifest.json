@@ -1,0 +1,12 @@
+{
+  "ok": true,
+  "query": "[REDACTED]",
+  "total": 1,
+  "items": [
+    {
+      "file": "/Users/eltjotimmerman/TERO-AI/dev/iberitax/artifacts/modelo100/export/20251012T123702/manifest.json",
+      "hits": 1,
+      "snippet": "{\n  \"ok\": true,\n  \"query\": \"[REDACTED]\",\n  \"total\": 0,\n  "
+    }
+  ]
+}

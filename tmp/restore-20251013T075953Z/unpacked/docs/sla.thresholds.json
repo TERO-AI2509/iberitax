@@ -1,0 +1,8 @@
+{
+  "version": 1,
+  "windows": {
+    "d7":  { "warn_max_breach_rate": 5,  "fail_max_breach_rate": 10 },
+    "d30": { "warn_max_breach_rate": 4,  "fail_max_breach_rate": 8  },
+    "d90": { "warn_max_breach_rate": 3,  "fail_max_breach_rate": 6  }
+  }
+}

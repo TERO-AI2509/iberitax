@@ -1,0 +1,51 @@
+import { serverFetchJSON, UnauthorizedRedirect } from "../lib/server/fetcher";
+
+describe("serverFetchJSON", () => {
+  const originalFetch = global.fetch as any;
+
+  beforeEach(() => {
+    // @ts-ignore
+    global.fetch = jest.fn();
+  });
+
+  afterEach(() => {
+    global.fetch = originalFetch;
+    jest.restoreAllMocks();
+  });
+
+  test("redirects on 401 UNAUTHORIZED", async () => {
+    // @ts-ignore
+    (global.fetch as any).mockResolvedValueOnce({
+      status: 401,
+      ok: false,
+      headers: { get: () => "application/json" },
+      json: async () => ({ error: { code: "UNAUTHORIZED", message: "nope" } }),
+    });
+
+    let redirectedTo = "";
+    const onUnauthorized = (url: string) => {
+      redirectedTo = url;
+      throw new UnauthorizedRedirect(url);
+    };
+
+    await expect(
+      serverFetchJSON<any>("/api/private/whoami", { getCurrentUrl: () => "/account/server-demo", onUnauthorized })
+    ).rejects.toBeInstanceOf(UnauthorizedRedirect);
+
+    expect(redirectedTo).toBe("/login?reason=expired&next=%2Faccount%2Fserver-demo");
+  });
+
+  test("returns typed error on non-401", async () => {
+    // @ts-ignore
+    (global.fetch as any).mockResolvedValueOnce({
+      status: 500,
+      ok: false,
+      headers: { get: () => "application/json" },
+      json: async () => ({ error: { code: "E_OOPS", message: "boom" } }),
+    });
+
+    const res = await serverFetchJSON<any>("/api/private/whoami");
+    expect(res.error?.code).toBe("E_OOPS");
+    expect(res.error?.message).toBe("boom");
+  });
+});

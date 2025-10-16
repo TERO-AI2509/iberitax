@@ -1,0 +1,32 @@
+{
+  "ok": true,
+  "query": "ana.gomez@example.com",
+  "total": 5,
+  "items": [
+    {
+      "file": "/Users/eltjotimmerman/TERO-AI/dev/iberitax/report/quarantine/20251012T123810/artifacts__modelo100__export__20251012T123702__manifest.json",
+      "hits": 1,
+      "snippet": "{\n  \"ok\": true,\n  \"query\": \"ana.gomez@example.com\",\n  \"total\": 0,\n  "
+    },
+    {
+      "file": "/Users/eltjotimmerman/TERO-AI/dev/iberitax/report/quarantine/20251012T123810/artifacts__modelo100__export__20251012T123758__manifest.json",
+      "hits": 1,
+      "snippet": "{\n  \"ok\": true,\n  \"query\": \"ana.gomez@example.com\",\n  \"total\": 1,\n  "
+    },
+    {
+      "file": "/Users/eltjotimmerman/TERO-AI/dev/iberitax/report/quarantine/20251012T123810/delete.log.json",
+      "hits": 1,
+      "snippet": "{\n  \"ok\": true,\n  \"query\": \"ana.gomez@example.com\",\n  \"ops\": [\n    {"
+    },
+    {
+      "file": "/Users/eltjotimmerman/TERO-AI/dev/iberitax/tmp/gdpr/user1.txt",
+      "hits": 1,
+      "snippet": "Name: Ana Gómez\nEmail: ana.gomez@example.com\nNIF: 12345678Z\n"
+    },
+    {
+      "file": "/Users/eltjotimmerman/TERO-AI/dev/iberitax/tmp/gdpr/user2.txt",
+      "hits": 1,
+      "snippet": "Invoice for ana.gomez@example.com — IBAN: ES76207700"
+    }
+  ]
+}

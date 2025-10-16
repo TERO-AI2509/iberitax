@@ -1,0 +1,1 @@
+Command rule: POSIX-only, no inline comments, and do NOT use applypatch (forbidden). Use only `cat >` or `sed`.

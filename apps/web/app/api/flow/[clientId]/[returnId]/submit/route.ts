@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server"
-import { prisma } from "@/lib/server/prisma"
+import { prisma } from "@/lib/db/prisma"
 
 export async function POST(req: NextRequest, { params }: { params: { returnId: string } }) {
   const { acknowledgeUnsure } = await req.json().catch(()=>({}))

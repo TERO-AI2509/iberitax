@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server"
-import { prisma } from "@/lib/server/prisma"
+import { prisma } from "@/lib/db/prisma"
 export async function GET(_: NextRequest, { params }: { params: { id: string } }) {
   const rows = await prisma.unsureFlag.findMany({ where: { returnId: params.returnId, status: { in: ["open","waived"] } } })
   return NextResponse.json({ ok: true, data: rows })

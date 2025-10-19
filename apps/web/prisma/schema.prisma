@@ -11,7 +11,7 @@ model Answer {
   id        String   @id @default(uuid())
   returnId  String
   section   String
-  data      Json     @default("{}")
+  data      String @db.Text     @default("{}")
   version   Int      @default(1)
   updatedAt DateTime @updatedAt
 

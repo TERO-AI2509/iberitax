@@ -1,0 +1,11 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Salary",
+  "type": "object",
+  "properties": {
+    "salary": { "type": "number", "minimum": 0 },
+    "irpf": { "type": "number", "minimum": 0 },
+    "ss": { "type": "number", "minimum": 0 }
+  },
+  "required": []
+}

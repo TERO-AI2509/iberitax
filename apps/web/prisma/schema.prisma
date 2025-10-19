@@ -57,3 +57,28 @@ model VerificationToken {
 
   @@unique([identifier, token])
 }
+model Client {
+  id        String   @id @db.Text
+  userId    String   @map("user_id")
+  name      String?
+  paid      Boolean  @default(false)
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @default(now()) @map("updated_at")
+  returns   Return[]
+
+  @@map("clients")
+  @@index([userId])
+}
+
+model Return {
+  id        String   @id @db.Text
+  clientId  String   @map("client_id")
+  status    String   @default("draft")
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @default(now()) @map("updated_at")
+
+  client Client @relation(fields: [clientId], references: [id], onDelete: Cascade)
+
+  @@map("returns")
+  @@index([clientId])
+}

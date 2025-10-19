@@ -1,0 +1,15 @@
+apps/web/app/client/[clientId]/flow/[returnId]/layout.tsx
+apps/web/app/client/[clientId]/flow/[returnId]/income/salary/page.tsx
+apps/web/app/client/[clientId]/flow/[returnId]/summary/page.tsx
+apps/web/components/answers/SimpleAnswerForm.tsx
+apps/web/components/flow/BranchNavControls.tsx
+apps/web/components/summary/CasillaDeltas.tsx
+apps/web/components/suggestions/SuggestionsPanel.tsx
+apps/web/lib/api.ts
+apps/web/app/api/engagement/status/route.ts
+apps/web/app/api/answers/route.ts
+apps/web/app/api/return/[id]/questionnaire/tree/route.ts
+apps/web/app/api/return/[id]/navigate/route.ts
+apps/web/app/api/return/[id]/suggestions/route.ts
+apps/web/app/api/return/[id]/suggestions/apply/route.ts
+apps/web/app/api/return/[id]/casillas/deltas/route.ts

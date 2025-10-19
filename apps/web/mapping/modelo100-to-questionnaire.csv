@@ -1,0 +1,66 @@
+section,casilla_from,casilla_to,aeat_label,questionnaire_key,notes
+Datos personales,,,Identificación del contribuyente,personal.identity.,UI/profile linkage (no casillas)
+
+Familia,,,Estado civil,family.marital.,Affects joint/individual calc
+Familia,,,Hijos/descendientes,family.children.,Feeds mínimos familiares (verify exact casillas)
+Familia,,,Discapacidad,family.disability.,Mínimos/disability deductions (verify)
+Familia,,,Ascendientes/dependientes,family.dependents.,Mínimos ascendientes (verify)
+
+Trabajo,1,3,"Trabajo: bruto, retenciones, neto",income.salary.,Shown in Summary deltas; refine per Annex
+Trabajo,2,2,"Retenciones trabajo (detalle)",withholding.salary.,Optional separate key
+Trabajo,15,19,"Retribuciones en especie (vehículo empresa, etc.)",income.salary.perks.,Company car etc. (verify)
+
+Capital mobiliario,27,33,"Intereses y otros rendimientos del capital mobiliario",income.capital.interests.,Verify range
+Capital mobiliario,28,36,"Dividendos y participaciones",income.capital.dividends.,Verify range
+Capital mobiliario,37,45,"Planes/seguros/otros CM",income.capital.other.,Verify
+
+Capital inmobiliario,100,119,"Ingresos por alquiler",income.rental.income.,Verify sub-structure
+Capital inmobiliario,120,149,"Gastos alquiler (comunidad, IBI, seguros, reparaciones)",income.rental.expenses.,Verify
+Capital inmobiliario,150,159,"Intereses/préstamos vinculados",income.rental.mortgageInterest.,Verify
+Capital inmobiliario,160,169,"Amortización inmueble/muebles",income.rental.depreciation.,Verify
+Capital inmobiliario,170,179,"Reducciones/ajustes",income.rental.reductions.,Verify
+Capital inmobiliario,180,199,"Rendimiento neto capital inmobiliario",income.rental.net.,Verify
+
+Actividades económicas,200,299,"Actividades económicas (Estimación Directa)",income.selfemployment.direct.,Verify per model year
+Actividades económicas,300,349,"Actividades económicas (Módulos)",income.selfemployment.modules.,Verify per model year
+Actividades económicas,350,359,"Incentivos/reducciones autónomos",income.selfemployment.incentives.,Verify (bonificaciones)
+
+Ganancias patrimoniales,400,449,"Transmisión acciones/fondos (mercado)",income.gains.securities.,Verify
+Ganancias patrimoniales,450,499,"Fondos/ETFs traspasos",income.gains.funds.,Verify
+Ganancias patrimoniales,500,547,"Criptoactivos (ventas/permuta)",income.gains.crypto.,Verify
+Ganancias patrimoniales,650,699,"Transmisión de inmuebles",income.gains.property.,Verify
+
+Imputación rentas,700,719,"Imputación de rentas inmobiliarias",housing.imputed.,Verify
+
+Vivienda habitual,548,551,"Deducción por inversión en vivienda habitual",housing.mortgage.,Confirmed block 0548–0551 (Annex)
+
+Deducciones generales,600,649,"Deducciones estatales varias",deductions.general.,Approx coverage; verify split per item
+Deducciones autonómicas,800,899,"Deducciones autonómicas (CCAA)",deductions.regional.,Use region selector
+Deducciones autonómicas,820,829,"Arrendamiento vivienda habitual jóvenes (ej. Madrid)",deductions.regional.rent.young.,Exact casillas vary by CCAA; flag by region
+
+Pagos a cuenta,1100,1199,"Pagos fraccionados / NRC",payments.onaccount.,Verify labels/ranges
+key,casilla,label
+income.salary.gross,1,Salarios brutos
+income.salary.withholding,2,Retenciones IRPF
+income.salary.ss,3,Seguridad Social
+housing.mortgage.yearPrincipal,548,Amortización hipoteca
+housing.mortgage.yearInterest,549,Intereses hipoteca
+housing.mortgage.limitGeneral,550,Límite general
+housing.mortgage.limitAdditional,551,Límite adicional
+rental.property.rentGross,105,Alquileres percibidos
+rental.property.ibi,106,Gasto IBI
+rental.property.comunidad,107,Gasto comunidad
+rental.property.seguros,108,Gasto seguros
+rental.property.reparaciones,109,Reparaciones
+rental.property.intereses,110,Intereses
+rental.property.amortizacion,111,Amortización
+capm.dividends.gross,27,Dividendos brutos
+capm.dividends.withholding,28,Retenciones dividendos
+capm.dividends.doubleTaxCredit,29,Crédito doble imposición
+capm.interests.gross,30,Intereses brutos
+capm.interests.withholding,31,Retenciones intereses
+capm.interests.doubleTaxCredit,32,Crédito doble imposición
+gains.securities.proceeds,162,Transmisiones valores: ingresos
+gains.securities.acqCost,163,Transmisiones valores: costes
+gains.crypto.proceeds,170,Cripto transmisiones: ingresos
+gains.crypto.acqCost,171,Cripto transmisiones: costes

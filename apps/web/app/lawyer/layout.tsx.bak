@@ -1,0 +1,17 @@
+import "../globals.css";
+import HeaderBar from "../../components/app/HeaderBar";
+import SidebarNav from "../../components/nav/SidebarNav";
+
+export default function LawyerLayout({ children }: { children: React.ReactNode }) {
+  return (
+    <div className="min-h-screen">
+      <header className="sticky top-0 z-40 border-b bg-white">
+        <HeaderBar area="lawyer" />
+      </header>
+      <main className="mx-auto grid max-w-6xl grid-cols-1 gap-6 px-4 py-6 md:grid-cols-[220px_1fr]">
+        <aside className="hidden md:block"><SidebarNav area="lawyer" /></aside>
+        <section className="min-w-0">{children}</section>
+      </main>
+    </div>
+  );
+}

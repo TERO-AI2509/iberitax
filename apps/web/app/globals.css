@@ -53,3 +53,25 @@ html,body{background:var(--background);color:var(--foreground)}
 /* Step10 header rhythm */ .header-row{display:flex;align-items:center;justify-content:space-between;gap:.75rem}.header-stack{display:grid;row-gap:.375rem}.breadcrumbs-wrap{margin-top:.25rem;margin-bottom:.25rem}.page-head{margin-top:.25rem;margin-bottom:.75rem}
 
 
+.btn{display:inline-flex;align-items:center;gap:.5rem;padding:.5rem .75rem;border-radius:1rem;font-weight:500}
+.btn-primary{background:#111827;color:#fff}
+.btn-ghost{background:transparent;color:#111827}
+.btn:focus{outline:2px solid #11182722;outline-offset:2px}
+.btn{display:inline-flex;align-items:center;gap:.5rem;padding:.5rem .75rem;border-radius:1rem;font-weight:500}
+.btn-primary{background:#111827;color:#fff}
+.btn-ghost{background:transparent;color:#111827}
+.btn:focus{outline:2px solid #11182722;outline-offset:2px}
+.branch-nav a,.branch-nav button{display:inline-flex;align-items:center;gap:.5rem;padding:.5rem .75rem;border-radius:1rem;font-weight:500;text-decoration:none}
+.branch-nav a{background:transparent;color:#111827}
+.branch-nav .primary{background:#111827;color:#fff}
+.btn{display:inline-flex;align-items:center;gap:.5rem;padding:.5rem .75rem;border-radius:1rem;font-weight:500}
+.btn-primary{background:#111827;color:#fff}
+.btn-ghost{background:transparent;color:#111827}
+.btn:focus{outline:2px solid #11182722;outline-offset:2px}
+.branch-nav a,.branch-nav button{display:inline-flex;align-items:center;gap:.5rem;padding:.5rem .75rem;border-radius:1rem;font-weight:500;text-decoration:none}
+.branch-nav a{background:transparent;color:#111827}
+.branch-nav .primary{background:#111827;color:#fff}
+.btn{display:inline-flex;align-items:center;gap:.5rem;padding:.5rem .75rem;border-radius:1rem;font-weight:500}
+.btn-primary{background:#111827;color:#fff}
+.btn-ghost{background:transparent;color:#111827}
+.btn:focus{outline:2px solid #11182722;outline-offset:2px}

@@ -1,13 +1,19 @@
-"use client"
-export default function Page({ params }: { params: { clientId: string, returnId: string } }) {
-  async function submit() {
-    await fetch(`/api/flow/${params.clientId}/${params.returnId}/submit`, { method: "POST" })
-    window.location.reload()
-  }
+"use client";
+import { useParams } from "next/navigation";
+import BranchNavControls from "@/components/flow/BranchNavControls";
+import CasillaChips from "@/components/casillas/CasillaChips";
+import { CasillasByKey } from "@/components/casillas/casillas.map";
+export default function Page() {
+  const p = useParams() as any;
+  const clientId = p.clientId as string;
+  const returnId = p.returnId as string;
+  const ns = location.pathname.split("/client/")[1]?.split("/flow/")[1]?.split("/").slice(2).join(".") || "";
+  const k = ns.replace(/\//g, ".");
   return (
-    <div className="space-y-4">
-      <h1 className="text-2xl font-semibold">Review & Submit</h1>
-      <button className="px-4 py-2 rounded bg-black text-white" onClick={submit}>Submit & Lock</button>
+    <div className="space-y-6">
+      <h1 className="text-2xl font-semibold">Placeholder</h1>
+      <CasillaChips casillas={CasillasByKey[k] || []} />
+      <BranchNavControls clientId={clientId} returnId={returnId} nodeKey={k} />
     </div>
-  )
+  );
 }

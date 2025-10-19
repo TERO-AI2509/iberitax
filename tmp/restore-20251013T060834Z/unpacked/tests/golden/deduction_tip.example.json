@@ -1,7 +1,0 @@
-{
-  "id": "tip_mortgage",
-  "title": "Mortgage Interest Deduction",
-  "description": "You appear eligible for mortgage interest deduction.",
-  "eligibility": { "reason": "Detected mortgage payments", "meetsCriteria": true },
-  "estimatedSavings": 1200
-}

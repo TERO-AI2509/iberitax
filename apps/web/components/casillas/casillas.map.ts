@@ -1,0 +1,23 @@
+export const CasillasByKey: Record<string, Array<string | number>> = {
+  "family": [], "marital": [], "spouse": [], "children": [], "disability": [], "elderly": [],
+  "income.salary": [1, 2, 3],
+  "income.pensions": [8, 9],
+  "income.foreign": [15, 16],
+  "capital-mobiliario.dividends": [29, 30, 31],
+  "capital-mobiliario.interest": [32, 33],
+  "capital-inmobiliario.properties": [100, 101],
+  "gains.securities": [305, 306],
+  "gains.property": [310, 311],
+  "gains.crypto": [318, 319],
+  "self-employment.direct": [96, 97, 98],
+  "self-employment.modules": [120, 121],
+  "withholdings": [500, 501],
+  "imputed-income": [520, 521],
+  "housing.owner": [540],
+  "housing.tenant": [545],
+  "housing.mortgage": [547, 548],
+  "deductions.general": [600, 601],
+  "deductions.regional": [650, 651],
+  "summary": [],
+  "review": []
+};

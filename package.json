@@ -52,5 +52,8 @@
     "next-auth": "^4.24.11",
     "node-fetch": "3",
     "stripe": "^18.5.0"
+  },
+  "prisma": {
+    "schema": "apps/web/prisma/schema.prisma"
   }
 }

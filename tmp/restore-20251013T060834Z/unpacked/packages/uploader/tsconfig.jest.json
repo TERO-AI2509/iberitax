@@ -1,9 +1,0 @@
-{
-  "extends": "../../tsconfig.jest.json",
-  "compilerOptions": {
-    "module": "ESNext",
-    "moduleResolution": "NodeNext",
-    "noEmit": true
-  },
-  "include": ["src", "tests"]
-}

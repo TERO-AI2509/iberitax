@@ -1,0 +1,79 @@
+type TreeItem = { path: string; label: string; children?: TreeItem[] };
+
+export async function apiGetTree(_id: string): Promise<TreeItem> {
+  return {
+    path: "/overview",
+    label: "Overview",
+    children: [
+      { path: "/personal", label: "Personal data" },
+      {
+        path: "/family",
+        label: "Family",
+        children: [
+          { path: "/family/marital", label: "Marital status" },
+          { path: "/family/children", label: "Children" },
+          { path: "/family/disability", label: "Disability" },
+          { path: "/family/dependents", label: "Elderly or other dependents" }
+        ]
+      },
+      {
+        path: "/income",
+        label: "Income",
+        children: [
+          { path: "/income/salary", label: "Salary" },
+          {
+            path: "/income/investments",
+            label: "Investments",
+            children: [
+              { path: "/income/investments/securities", label: "Securities" },
+              { path: "/income/investments/funds", label: "Funds" },
+              { path: "/income/investments/dividends", label: "Dividends" },
+              { path: "/income/investments/interest", label: "Interest" },
+              { path: "/income/investments/crypto", label: "Crypto" }
+            ]
+          },
+          { path: "/income/rental", label: "Rental income" },
+          { path: "/income/business", label: "Self-employed / Business" },
+          { path: "/income/pensions", label: "Pensions" },
+          { path: "/income/other", label: "Other income" },
+          { path: "/income/imputed-income", label: "Imputed income" },
+          {
+            path: "/gains",
+            label: "Capital gains",
+            children: [
+              { path: "/gains/securities", label: "Gains – Securities" },
+              { path: "/gains/property", label: "Gains – Property" },
+              { path: "/gains/crypto", label: "Gains – Crypto" }
+            ]
+          },
+          { path: "/withholdings", label: "Withholdings" }
+        ]
+      },
+      {
+        path: "/deductions",
+        label: "Deductions",
+        children: [
+          { path: "/deductions/general", label: "General" },
+          { path: "/deductions/regional", label: "Regional" },
+          {
+            path: "/housing",
+            label: "Housing",
+            children: [
+              { path: "/housing/owner", label: "Owner" },
+              { path: "/housing/tenant", label: "Tenant" },
+              { path: "/housing/mortgage", label: "Mortgage" }
+            ]
+          },
+          { path: "/deductions/donations", label: "Donations" },
+          { path: "/deductions/education", label: "Education" },
+          { path: "/deductions/health", label: "Health" },
+          { path: "/family/benefits", label: "Family benefits" }
+        ]
+      },
+      { path: "/summary", label: "Summary" },
+      { path: "/review", label: "Review" },
+      { path: "/documents", label: "Documents" },
+      { path: "/submit", label: "Submit" }
+    ]
+  };
+}

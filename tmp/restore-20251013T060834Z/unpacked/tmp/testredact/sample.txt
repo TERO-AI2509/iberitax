@@ -1,4 +1,0 @@
-Email: [REDACTED]
-NIF: [REDACTED]
-IBAN: ES[REDACTED:*]5766
-Secret: sk_live_abcdEFGHijklMNOP123456

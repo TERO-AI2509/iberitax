@@ -1,6 +1,0 @@
-app/ops/layout.tsx
-app/ops/page.tsx
-app/lawyer/layout.tsx
-app/lawyer/page.tsx
-app/client/layout.tsx
-app/client/page.tsx

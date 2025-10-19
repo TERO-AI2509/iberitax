@@ -1,18 +1,13 @@
-"use client"
-import { useParams } from "next/navigation"
-import SimpleAnswerForm from "@/components/answers/SimpleAnswerForm"
-import SuggestionsPanel from "@/components/suggestions/SuggestionsPanel"
-import BranchNavControls from "@/components/flow/BranchNavControls"
-export default function Page(){
-  const p=useParams() as any
-  const clientId=p.clientId as string
-  const returnId=p.returnId as string
+"use client";
+import { useParams } from "next/navigation";
+import BranchNavControls from "@/components/flow/BranchNavControls";
+export default function Page() {
+  const p = useParams() as any;
   return (
     <div className="space-y-6">
       <h1 className="text-2xl font-semibold">Disability</h1>
-      <SimpleAnswerForm returnId={returnId} keyPath="family.disability" fields={[{name:"percent",label:"Disability percentage",type:"number"}]} />
-      <SuggestionsPanel returnId={returnId} section="family"/>
-      <BranchNavControls clientId={clientId} returnId={returnId}/>
+      <p>Placeholder page.</p>
+      <BranchNavControls clientId={p.clientId} returnId={p.returnId} nodeKey="disability" />
     </div>
-  )
+  );
 }

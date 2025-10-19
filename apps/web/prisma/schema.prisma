@@ -1,5 +1,11 @@
-datasource db { provider = "postgresql" url = env("DATABASE_URL") }
-generator client { provider = "prisma-client-js" }
+datasource db {
+  provider = "sqlite"
+  url      = "file:./dev.db"
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
 
 model Answer {
   id        String   @id @default(uuid())
@@ -8,30 +14,6 @@ model Answer {
   data      Json     @default("{}")
   version   Int      @default(1)
   updatedAt DateTime @updatedAt
+
   @@unique([returnId, section])
-}
-
-model UnsureFlag {
-  id         String   @id @default(uuid())
-  returnId   String
-  section    String
-  path       String
-  note       String?
-  status     String   @default("open")
-  createdAt  DateTime @default(now())
-  resolvedAt DateTime?
-}
-
-model DocumentMeta {
-  id         String   @id @default(uuid())
-  returnId   String
-  section    String
-  path       String?
-  fileKey    String
-  filename   String
-  mime       String
-  bytes      Int
-  ocrStatus  String   @default("n/a")
-  note       String?
-  uploadedAt DateTime @default(now())
 }

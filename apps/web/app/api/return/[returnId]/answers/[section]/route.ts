@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server"
-import { prisma } from "@/lib/server/prisma"
+import { prisma } from "../../../../../lib/server/prisma"
 import { env } from "@/lib/server/env"
 export async function GET(_: NextRequest, { params }: { params: { id: string, section: string } }) {
   if (env.NS4_PERSIST === "0") return NextResponse.json({ ok: true, data: {}, meta: { mock: true } })

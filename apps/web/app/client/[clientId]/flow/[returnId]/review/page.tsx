@@ -1,19 +1,17 @@
-"use client";
-import { useParams } from "next/navigation";
-import BranchNavControls from "@/components/flow/BranchNavControls";
-import CasillaChips from "@/components/casillas/CasillaChips";
-import { CasillasByKey } from "@/components/casillas/casillas.map";
-export default function Page() {
-  const p = useParams() as any;
-  const clientId = p.clientId as string;
-  const returnId = p.returnId as string;
-  const ns = location.pathname.split("/client/")[1]?.split("/flow/")[1]?.split("/").slice(2).join(".") || "";
-  const k = ns.replace(/\//g, ".");
+"use client"
+import useSWR from "swr"
+export default function Page({ params }: { params: { returnId: string, clientId: string } }) {
+  const { data, mutate } = useSWR(`/api/return/${params.returnId}/summary`, (u)=>fetch(u).then(r=>r.json()))
+  const open = data?.data?.openUnsureCount || 0
   return (
-    <div className="space-y-6">
-      <h1 className="text-2xl font-semibold">Placeholder</h1>
-      <CasillaChips casillas={CasillasByKey[k] || []} />
-      <BranchNavControls clientId={clientId} returnId={returnId} nodeKey={k} />
+    <div className="p-6 space-y-4">
+      <h1 className="text-2xl font-semibold">Review & Confirm</h1>
+      <div className="border rounded p-4">{open>0?`⚠ ${open} item(s) marked 'unsure'`:'✅ No unsure items'}</div>
+      <button className="px-4 py-2 rounded bg-black text-white" onClick={async()=>{
+        const body = open>0 ? { acknowledgeUnsure: true } : {}
+        const r = await fetch(`/api/flow/${params.clientId}/${params.returnId}/submit`, { method:"POST", headers:{ "Content-Type":"application/json" }, body: JSON.stringify(body) })
+        if(r.ok){ await mutate() }
+      }}>File my return</button>
     </div>
-  );
+  )
 }

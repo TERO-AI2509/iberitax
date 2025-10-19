@@ -1,34 +1,22 @@
-"use client";
-import { useParams } from "next/navigation";
-import SimpleAnswerForm from "@/components/answers/SimpleAnswerForm";
-import SuggestionsPanel from "@/components/suggestions/SuggestionsPanel";
-import BranchNavControls from "@/components/flow/BranchNavControls";
-import AutoPersist from "@/components/flow/AutoPersist";
-import CasillaChips from "@/components/casillas/CasillaChips";
-import { CasillasByKey } from "@/components/casillas/casillas.map";
-export default function Page() {
-  const p = useParams() as any;
-  const clientId = p.clientId as string;
-  const returnId = p.returnId as string;
-  const ns = "income.salary";
-  const fields = ["gross", "withheld", "perks.companyCar.value", "perks.companyCar.zeroEmission"];
+"use client"
+import { useState } from "react"
+import NotSureCheckbox from "@/components/flow/NotSureCheckbox"
+import { saveSectionDelta } from "@/components/flow/persist"
+export default function Page({ params }: { params: { clientId: string, returnId: string } }) {
+  const [employer,setEmployer]=useState("")
+  const [gross,setGross]=useState<number|''>("")
+  const [withholdings,setWithholdings]=useState<number|''>("")
   return (
-    <div className="space-y-6">
-      <h1 className="text-2xl font-semibold">Salary</h1>
-      <AutoPersist returnId={returnId} ns={ns} fields={fields} />
-      <SimpleAnswerForm
-        returnId={returnId}
-        keyPath={ns}
-        fields={[
-          { name: "gross", label: "Gross salary", type: "number" },
-          { name: "withheld", label: "Tax withheld", type: "number" },
-          { name: "perks.companyCar.value", label: "Company car (annual value in kind)", type: "number" },
-          { name: "perks.companyCar.zeroEmission", label: "Company car is zero-emission?", type: "checkbox" }
-        ]}
-      />
-      <CasillaChips casillas={CasillasByKey[ns] || []} />
-      <SuggestionsPanel returnId={returnId} section="salary" />
-      <BranchNavControls clientId={clientId} returnId={returnId} nodeKey={ns} />
+    <div className="p-6 space-y-6">
+      <h1 className="text-2xl font-semibold">Employment income</h1>
+      <div className="space-y-3">
+        <input className="border p-2 w-full" placeholder="Employer name" value={employer} onChange={e=>setEmployer(e.target.value)} onBlur={()=>saveSectionDelta(params.returnId,"income",{ salary:{ employer }})}/>
+        <input className="border p-2 w-full" placeholder="Gross salary (€)" inputMode="decimal" value={gross} onChange={e=>setGross(e.target.value as any)} onBlur={()=>saveSectionDelta(params.returnId,"income",{ salary:{ gross: Number(gross)||0 }})}/>
+        <div className="space-y-2">
+          <input className="border p-2 w-full" placeholder="Withholdings (IRPF) (€)" inputMode="decimal" value={withholdings} onChange={e=>setWithholdings(e.target.value as any)} onBlur={()=>saveSectionDelta(params.returnId,"income",{ salary:{ withholdings: Number(withholdings)||0 }})}/>
+          <NotSureCheckbox returnId={params.returnId} section="income" jsonPath="/income/salary/withholdings"/>
+        </div>
+      </div>
     </div>
-  );
+  )
 }
